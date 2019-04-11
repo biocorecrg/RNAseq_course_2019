@@ -8,15 +8,15 @@ Send survey to participants regarding cluster access and usage.
 
 ### Day 1
 * Introduction (lecture)
-  ** goals of course
-  ** goals of RNA-seq experiments
-  ** overview of platforms (Illumina, Nanopore, PacBio ?)
-  ** polyA, ribo0, total RNA, microRNA
-  ** stranded, unstranded
-  ** adaptors
-** read type: single, paired end; read length.
-** experimental / sequencing design
-** sequencing depth
+  * goals of course
+  * goals of RNA-seq experiments
+  * overview of platforms (Illumina, Nanopore, PacBio ?)
+  * polyA, ribo0, total RNA, microRNA
+  * stranded, unstranded
+  * adaptors
+  * read type: single, paired end; read length.
+  * experimental / sequencing design
+  * sequencing depth
 * Get raw data from public repository (Drosophila ?): check fastq file
 * Adaptor trimming
 * FastQC (compare what should be seen in genome versus transcriptome), FastqScreen, MultiQC
@@ -24,8 +24,8 @@ Send survey to participants regarding cluster access and usage.
 ### Day 2
 * Get reference genome: ENSEMBL, Gencode, UCSC
 * Map data to reference genome:
-** STAR
-** SALMON
+  * STAR
+  * SALMON
 * SAM / BAM formats (play with samtools)
 
 ### Day 3
@@ -40,9 +40,9 @@ Send survey to participants regarding cluster access and usage.
 * bigwig?
 * Conversion from UCSC chromosome naming convention to ENSEMBL's ?
 * Gene Ontology analysis:
-** enrichR
-** DAVID ?
-** GSEA
+  * enrichR
+  * DAVID ?
+  * GSEA
 
 ### Day 5
 * Mini project on small genome: provide link to public data
