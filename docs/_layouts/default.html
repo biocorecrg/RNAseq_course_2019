@@ -1,47 +1,42 @@
-<!DOCTYPE html>
-<html lang="en-us">
+---
+---
 
-  {% include head.html %}
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.16.0 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="{{ site.locale | slice: 0,2 | default: "en" }}" class="no-js">
+  <head>
+    {% include head.html %}
+    {% include head/custom.html %}
+  </head>
 
-  <body>
+  <body class="layout--{{ page.layout | default: layout.layout }}{% if page.classes or layout.classes %}{{ page.classes | default: layout.classes | join: ' ' | prepend: ' ' }}{% endif %}">
 
-    {% include sidebar.html %}
+    {% include_cached browser-upgrade.html %}
+    {% include_cached masthead.html %}
 
-    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
-         content to avoid any CSS collisions with our real content. -->
-    <div class="wrap">
-      <div class="masthead">
-        <div class="container">
-          <h3 class="masthead-title">
-            <a href="{{ site.baseurl }}/" title="Home">{{ site.title }}</a>
-            <small>{{ site.tagline }}</small>
-          </h3>
-        </div>
-      </div>
-
-      <div class="container content">
-        {{ content }}
-      </div>
+    <div class="initial-content">
+      {{ content }}
     </div>
 
-    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+    {% if site.search == true %}
+      <div class="search-content">
+        {% include_cached search/search_form.html %}
+      </div>
+    {% endif %}
 
-    <script>
-      (function(document) {
-        var toggle = document.querySelector('.sidebar-toggle');
-        var sidebar = document.querySelector('#sidebar');
-        var checkbox = document.querySelector('#sidebar-checkbox');
+    <div class="page__footer">
+      <footer>
+        {% include footer/custom.html %}
+        {% include_cached footer.html %}
+      </footer>
+    </div>
 
-        document.addEventListener('click', function(e) {
-          var target = e.target;
+    {% include scripts.html %}
 
-          if(!checkbox.checked ||
-             sidebar.contains(target) ||
-             (target === checkbox || target === toggle)) return;
-
-          checkbox.checked = false;
-        }, false);
-      })(document);
-    </script>
   </body>
 </html>
