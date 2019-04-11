@@ -8,12 +8,12 @@ Send survey to participants regarding cluster access and usage.
 
 ### Day 1
 * Introduction (lecture)
-** goals of course
-** goals of RNA-seq experiments
-** overview of platforms (Illumina, Nanopore, PacBio ?)
-** polyA, ribo0, total RNA, microRNA
-** stranded, unstranded
-** adaptors
+  ** goals of course
+  ** goals of RNA-seq experiments
+  ** overview of platforms (Illumina, Nanopore, PacBio ?)
+  ** polyA, ribo0, total RNA, microRNA
+  ** stranded, unstranded
+  ** adaptors
 ** read type: single, paired end; read length.
 ** experimental / sequencing design
 ** sequencing depth
