@@ -11,7 +11,7 @@ navigation: 1
 Dates:
 
 | Day  | Date  | Time  |
-| :---:  | :---  | :---  |
+| :---:  | :---  | ---:  |
 | 1 | Tuesday 13th of May 2019|9:30-13:30|
 | 2 | Thursday 14th of May 2019|9:30-13:30| 
 | 3 | Thursday 15th of May 2019|14:00-17:00| 
@@ -38,12 +38,12 @@ Material available at https://biocorecrg.github.io/RNAseq_course_2019/
 
 ##  Learning objectives
 At the end of the course, the participants will be able to:
-#	Understand the steps from raw reads to expression counts, differential expression and interpretation of gene lists using enrichment analysis
-#	Define a good experimental design, including experimental design, sequencing design, and quality control steps)
-#	Perform quality assessment of RNA-seq data, raw and processed
-#	Understand file formats commonly used in RNA-seq data analysis
-#	Gain an overview on common software tools for RNA-seq data analysis and their limitations
-#	Run RNA-seq pipeline to perform differential expression analysis
+*	Understand the steps from raw reads to expression counts, differential expression and interpretation of gene lists using enrichment analysis
+*	Define a good experimental design, including experimental design, sequencing design, and quality control steps)
+*	Perform quality assessment of RNA-seq data, raw and processed
+*	Understand file formats commonly used in RNA-seq data analysis
+*	Gain an overview on common software tools for RNA-seq data analysis and their limitations
+*	Run RNA-seq pipeline to perform differential expression analysis
 
 
 ##  Course Program
