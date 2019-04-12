@@ -12,11 +12,11 @@ Dates:
 
 | Day  | Date  | Time  |
 | :---:  | :---  | :---  |
-| 1 | Tuesday 13rd of May 2019|9:30-13:30|
-| 2 | Thursday 14st of May 2019|9:30-13:30| 
-| 3 | Thursday 15st of May 2019|10:00-13:00| 
-| 4 | Thursday 16st of May 2019|10:00-13:00| 
-| 5 | Thursday 27st of May 2019|10:00-13:00| 
+| 1 | Tuesday 13th of May 2019|9:30-13:30|
+| 2 | Thursday 14th of May 2019|9:30-13:30| 
+| 3 | Thursday 15th of May 2019|14:00-17:00| 
+| 4 | Thursday 16th of May 2019|14:00-17:00| 
+| 5 | Thursday 27th of May 2019|9:30-13:00| 
 
 
 Location:
