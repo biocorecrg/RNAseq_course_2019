@@ -1,6 +1,6 @@
-title: Millidocs Theme
-description: Documentation for small projects
-url: "https://github.com/alexander-heimbuch/millidocs" # the base hostname & protocol for your site, e.g. http://example.com
+title: Biocore's RNAseq course 2019
+description: Some description
+url: "https://biocorecrg.github.io/RNAseq_course_2019/" 
 
 # Build settings
 markdown: kramdown
