@@ -6,7 +6,7 @@ navigation: 1
 
 # Biocore's RNAseq course 2019
 
-# Dates, time & location
+## Dates, time & location
 
 Dates:
 
@@ -36,11 +36,16 @@ from the CRG [Bioinformatics core facility](https://biocore.crg.eu/) (office 460
 
 Material available at https://biocorecrg.github.io/RNAseq_course_2019/
 
-# Learning objectives
+##  Learning objectives
 To be able to:
 *
 *
 *
 
-# Program
+##  Program
 * Day 1
+* Day 2
+* Day 3
+* Day 4
+* Day 5
+
