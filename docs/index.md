@@ -37,15 +37,24 @@ from the CRG [Bioinformatics core facility](https://biocore.crg.eu/) (office 460
 Material available at https://biocorecrg.github.io/RNAseq_course_2019/
 
 ##  Learning objectives
-To be able to:
-*
-*
-*
+At the end of the course, the participants will be able to:
+#	Understand the steps from raw reads to expression counts, differential expression and interpretation of gene lists using enrichment analysis
+#	Define a good experimental design, including experimental design, sequencing design, and quality control steps)
+#	Perform quality assessment of RNA-seq data, raw and processed
+#	Understand file formats commonly used in RNA-seq data analysis
+#	Gain an overview on common software tools for RNA-seq data analysis and their limitations
+#	Run RNA-seq pipeline to perform differential expression analysis
 
-##  Program
-* Day 1
-* Day 2
-* Day 3
-* Day 4
-* Day 5
+
+##  Course Program
+*	Day 1: Download raw data, quality control of data
+*	Day 2: Read mapping to reference genome
+*	Day 3: Differential expression analysis
+*	Day 4: Genome browser, gene ontology enrichment analysis
+*	Day 5: Troubleshooting of a mini-project
+
+
+## Prerequisites
+Basic experience of command line Linux
+
 
