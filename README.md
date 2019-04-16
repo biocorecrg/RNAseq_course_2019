@@ -47,4 +47,5 @@ Send survey to participants regarding cluster access and usage.
 ### Day 5
 * Mini project on small genome: provide link to public data
 
+link to CRG course:  https://public-docs.crg.es/rguigo/courses/rnaseq/2017
 
