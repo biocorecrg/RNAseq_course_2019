@@ -61,7 +61,7 @@ At the end of the sequence an extra "A" is added at the 3' end to minimize the a
 
 
 
-<br/><br/>
+## References:
 
 1. https://en.wikipedia.org/wiki/Northern_blot
 2. https://en.wikipedia.org/wiki/Real-time_polymerase_chain_reaction
