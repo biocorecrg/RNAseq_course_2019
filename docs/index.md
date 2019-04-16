@@ -25,11 +25,8 @@ CRG Training center, PRBB building ground floor.
 
 <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11973.94726186489!2d2.1942455!3d41.3852331!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x81e449abea5aae0e!2sPRBB+Parc+de+Recerca+Biom%C3%A8dica+de+Barcelona!5e0!3m2!1sit!2ses!4v1551808726678" width="500" height="500" align="middle" frameborder="0" style="border:0" allowfullscreen></iframe>
 
-
-
-
-
-
+<br/>
+<br/>
 
 ## Instructors
 
