@@ -28,13 +28,14 @@ RNA-Seq can be performed on:
 * Only RNA molecules that are being transcribed in that moment (ribosomal profiling).
 
 Depending on the kind of sequencing the RNAseq can produce:
-* Single short reads: particularly used for gene quantification
+* Single short reads: particularly used for gene quantification (mainly **Illumina**, but also **Ion Torrent** and **BGISEQ**)
 * Paired end reads: useful for splicing detection and annotation refinement
 * Stranded or unstranded: the former allows detection of antisense molecules or genes on both directions, the latter is sometimes needed when very little amount of RNA is available. 
-* Single long reads (PACBio or Nanopore): used for de novo identification of new transcripts / improving transcriptome. 
+* Single long reads (**PACBio** or **Nanopore**): used for de novo identification of new transcripts / improving transcriptome. 
 
 ## mRNA sequencing
-RNA is extracted and then converted to cDNA by using a polyT adapter that binds the polyA tail. In this way you can exclude non poly-adenylated transcripts like rRNA, tRNA and the majority of long ncRNAs. Then     
+RNA is extracted and then converted to cDNA by using a polyT adapter that binds the polyA tail. In this way you non poly-adenylated transcripts like rRNA, tRNA and the majority of long ncRNAs are excluded from the reaction. 
+cDNA molecules are then fragmented and eventually amplified by PCR and then sequenced.
 
 |RNASeq protocol|
 | :---:  |
@@ -46,4 +47,4 @@ RNA is extracted and then converted to cDNA by using a polyT adapter that binds 
 1) https://en.wikipedia.org/wiki/Northern_blot
 2) https://en.wikipedia.org/wiki/Real-time_polymerase_chain_reaction
 3) https://en.wikipedia.org/wiki/DNA_microarray
-4) Wang Z, Gerstein M, Snyder M. RNA-Seq: a revolutionary tool for transcriptomics. Nat Rev Genet. 2009 Jan;10(1):57-63. doi: 10.1038/nrg2484.
+4) [Wang Z, Gerstein M, Snyder M. RNA-Seq: a revolutionary tool for transcriptomics. Nat Rev Genet. 2009 Jan;10(1):57-63. doi: 10.1038/nrg2484.](https://www.nature.com/articles/nrg2484)
