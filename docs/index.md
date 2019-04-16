@@ -58,6 +58,6 @@ At the end of the course, the participants will be able to:
 
 
 ## Prerequisites
-Basic experience of command line Linux
+[Basic experience of command line Linux](https://biocorecrg.github.io/advanced_linux_2019/)
 
 
