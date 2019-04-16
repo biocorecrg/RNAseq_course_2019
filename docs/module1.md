@@ -63,7 +63,7 @@ At the end of the sequence an extra "A" is added at the 3' end to minimize the a
 
 <br/><br/>
 
-1) https://en.wikipedia.org/wiki/Northern_blot
-2) https://en.wikipedia.org/wiki/Real-time_polymerase_chain_reaction
-3) https://en.wikipedia.org/wiki/DNA_microarray
-4) [Wang Z, Gerstein M, Snyder M. RNA-Seq: a revolutionary tool for transcriptomics. Nat Rev Genet. 2009 Jan;10(1):57-63. doi: 10.1038/nrg2484.](https://www.nature.com/articles/nrg2484)
+1. https://en.wikipedia.org/wiki/Northern_blot
+2. https://en.wikipedia.org/wiki/Real-time_polymerase_chain_reaction
+3. https://en.wikipedia.org/wiki/DNA_microarray
+4. [Wang Z, Gerstein M, Snyder M. RNA-Seq: a revolutionary tool for transcriptomics. Nat Rev Genet. 2009 Jan;10(1):57-63. doi: 10.1038/nrg2484.](https://www.nature.com/articles/nrg2484)
