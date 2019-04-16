@@ -7,7 +7,7 @@ navigation: 2
 # Module 1
 ## Introduction: what is RNA-Seq? 
 
-<img src="images/Double-stranded_RNA.gif" width="300"/>
+<img src="images/Double-stranded_RNA.gif" width="300" align="middle" />
 
 RNA sequencing by next-generation sequencing (NGS) is used to detect and quantify RNA molecules within biological samples in particular time / conditions. In few words this technology is used to analyze the transcriptome by revealing:
 * gene expression
