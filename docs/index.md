@@ -50,7 +50,7 @@ At the end of the course, the participants will be able to:
 
 
 ##  Course Program
-*	Day 1: Download raw data, quality control of data
+*	Day 1: Intorduction, download raw data, quality control of data
 *	Day 2: Read mapping to reference genome
 *	Day 3: Differential expression analysis
 *	Day 4: Genome browser, gene ontology enrichment analysis
