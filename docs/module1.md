@@ -59,6 +59,41 @@ At the end of the sequence an extra "A" is added at the 3' end to minimize the a
 <img src="images/illumina6.png" width="500" align="middle" />
 <br/>
 
+## Input data: fastq sequences
+
+Short (and long) reads coming from the sequencers are stored in **Fastq** format.
+This format contains both the information about sequence and the quality of that particular base (i.e. the probability that that base reading was true or not).
+
+<img src="images/fastq_format.png" width="500"/>
+
+The format contains four rows for sequence with:
+* a header containing **@** as the first character
+* the sequence content
+* a **spacer**
+* the quality encoded using ASCII characters.
+
+<img src="images/phred_quality.png" width="500"/>
+
+Currently most of the journals require the submissions of NGS raw data in a public repository upon publishing.
+
+The major repositories are:
+* [**SRA**](https://www.ncbi.nlm.nih.gov/sra) (Sequence Read Archive) from US
+* [**ENA**](https://www.ebi.ac.uk/ena) (European Nucleotide Archive) 
+* [**DDBJ-DRA**](https://www.ddbj.nig.ac.jp/dra/index-e.html) from Japan.
+
+They are interconnected and mirror the data among them and contain links to other databases that store the gene expression  such as [**GEO**](https://www.ncbi.nlm.nih.gov/geo/) and [**Array-express**](https://www.ebi.ac.uk/arrayexpress/).
+
+```{bash}
+fastq-dump --gzip --split-files SRR6466185
+
+Read 32345 spots for SRR6466185
+Written 32345 spots for SRR6466185
+
+ls -lh SRR*
+-rw-r--r-- 1 lcozzuto Bioinformatics_Unit 6.4M Mar  8 12:01 SRR6466185_1.fastq.gz
+-rw-r--r-- 1 lcozzuto Bioinformatics_Unit 7.5M Mar  8 12:01 SRR6466185_2.fastq.gz
+
+```
 
 
 ## References:
