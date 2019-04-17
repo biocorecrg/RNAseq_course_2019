@@ -12,10 +12,26 @@ ARG SKEWER_VERSION=0.2.2
 ARG MULTIQC_VERSION=1.7
 ARG SAMTOOLS_VERSION=1.9
 ARG BCFTOOLS_VERSION=1.9
+ARG FASTQSCREEN_VERSION=0.13.0
+ARG BOWTIE2_VERSION=2.3.5.1
+
+#upgrading pip
+RUN pip install --upgrade pip
 
 #INSTALLING FASTQC
 RUN bash -c 'curl -k -L https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v${FASTQC_VERSION}.zip > fastqc.zip'
 RUN unzip fastqc.zip; chmod 775 FastQC/fastqc; ln -s $PWD/FastQC/fastqc /usr/local/bin/fastqc
+
+#INSTALLING FASTQ_SCREEN
+RUN bash -c 'curl -k -L https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/fastq_screen_v${FASTQSCREEN_VERSION}.tar.gz > fastqc_screen.tar.gz'
+RUN tar -zvxf fastqc_screen.tar.gz
+RUN cp fastq_screen_v${FASTQSCREEN_VERSION}/fastq_screen /usr/local/bin/
+RUN rm fastqc_screen.tar.gz
+
+#INSTALLING BOWTIE2
+RUN yum install -y yum install tbb.x86_64
+RUN bash -c 'curl -k -L https://sourceforge.net/projects/bowtie-bio/files/bowtie2/${BOWTIE2_VERSION}/bowtie2-${BOWTIE2_VERSION}-linux-x86_64.zip/download > bowtie2.zip'
+RUN unzip bowtie2.zip; cd bowtie2-${BOWTIE2_VERSION}; mv bowtie2* /usr/local/bin/; cd ..
 
 
 # Installing Skewer
