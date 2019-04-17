@@ -86,25 +86,54 @@ They are interconnected and mirror the data among them and contain links to othe
 ```{bash}
 fastq-dump --gzip --split-files SRR-IDENTIFIER
 ```
-since this is a very slow step we downsampled the initial reads to the one mapping only the chromosome 10 of the human genome. You already have the files in this folder:
+since this is a very slow step we downsampled the initial reads to the one mapping only the chromosome 10 of the human genome. You already have the files at this link:
 
 ```{bash}
+wget https://public-docs.crg.es/biocore/projects/training/RNAseq_2019/resources.tar
+
+tar -vxf resources.tar 
+
+resources/
+resources/A549_0_3chr10_1.fastq.gz
+resources/A549_25_3chr10_2.fastq.gz
+resources/A549_25_1chr10_1.fastq.gz
+resources/A549_25_3chr10_1.fastq.gz
+resources/A549_0_3chr10_2.fastq.gz
+resources/A549_0_1chr10_1.fastq.gz
+resources/A549_0_1chr10_2.fastq.gz
+resources/A549_25_2chr10_1.fastq.gz
+resources/A549_25_1chr10_2.fastq.gz
+resources/A549_0_2chr10_1.fastq.gz
+resources/A549_0_2chr10_2.fastq.gz
+resources/A549_25_2chr10_2.fastq.gz
 
 ```
 
 You can inspect them, count their numbers or check the size by using simple linux commands:
 
 ```{bash}
-zcat FILE.fastq.gz |more
+zcat resources/A549_25_3chr10_2.fastq.gz |more 
 
+@D00137:455:HLFL3BCXY:1:1111:7527:60273/2
+GACAAACCCACAGCCAATATCATACTGAATGGGCAAAAACTGGAAGCATTC
++
+ADDDDIIFHHIIIIIIIIIIHHHHIIIIHIIHHGIIIGIIIHHIIHHGHHH
+@D00137:455:HLFL3BCXY:1:1111:3751:48736/2
+CTATGGTGACCTGAACCACCTGGTGTCTGCTACCATGAGTGGGGTCACCAC
++
+DDDDDIIIIIIIHIIHIIIIIIIIIIIIIHIIIIIIIIIIIIIHIIIIIIG
+@D00137:455:HLFL3BCXY:2:1214:18935:42305/2
+CTATGGTGACCTGAACCACCTGGTGTCTGCTACCATGAGTGGGGTCACCAC
++
+DDDDDIIIHIIIIIIIIIIIIIIIIIIIIIIHIIIIIGHIIHIIIIIIIII
 ...
 
-zcat FILE.fastq.gz |awk '{num++}END{print num/4}'
+zcat resources/A549_25_3chr10_2.fastq.gz  |awk '{num++}END{print num/4}'
 
-NUMBER
+2808343
 ....
 
-zcat FILE.fastq.gz |head -n 4| tail -n 1| awk '{print length($0)}'
+zcat resources/A549_25_3chr10_2.fastq.gz |head -n 4| tail -n 1| awk '{print length($0)}'
 
 51
 ```
@@ -115,28 +144,45 @@ To assess the quality of our input data we can use two tools: **FastQC**[5] and 
 The former gives us a number of statistics about the composition and the quality of the raw sequences while the latter looks for possible contaminations. 
 
 ```{bash}
-fastqc FILE.fastq.gz
+fastqc resources/A549_25_3chr10_*.fastq.gz
 
+Started analysis of A549_25_3chr10_1.fastq.gz
+Approx 5% complete for A549_25_3chr10_1.fastq.gz
+Approx 10% complete for A549_25_3chr10_1.fastq.gz
+Approx 15% complete for A549_25_3chr10_1.fastq.gz
+Approx 20% complete for A549_25_3chr10_1.fastq.gz
+...
+Approx 85% complete for A549_25_3chr10_2.fastq.gz
+Approx 90% complete for A549_25_3chr10_2.fastq.gz
+Approx 95% complete for A549_25_3chr10_2.fastq.gz
+Analysis complete for A549_25_3chr10_2.fastq.gz
 ```
+
+We can display the results with a browser like Firefox
+```{bash}
+firefox firefox resources/A549_25_3chr10_1_fastqc.html
+
+...
+
+firefox resources/A549_25_3chr10_2_fastqc.html
+```
+
+
 
 Fastq_screen requires a number of databases to be installed for aligning a subset of your reads. You can download some pre-generated ones by using the following command:
 
-```{bash}
+```
 fastq_screen --get_genomes
-
 ``` 
 
 This will download 11 genomes (arabidopsis, drosophila, E coli, human, lambda, mouse, mitochondria, phiX, rat, worm and yeast) and 3 collection of sequences (adapters, vectors, rRNA) indexed with bowtie2. This step is quite slow so we are not going to launch it now.
 
 
-### 
+
+
 
 
 --------------------
-
-
-
-
 
 
 ## References:
