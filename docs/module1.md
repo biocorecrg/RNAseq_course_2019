@@ -121,11 +121,16 @@ fastqc FILE.fastq.gz
 
 Fastq_screen requires a number of databases to be installed for aligning a subset of your reads. You can download some pre-generated ones by using the following command:
 
-```
+```{bash}
 fastq_screen --get_genomes
+
 ``` 
 
 This will download 11 genomes (arabidopsis, drosophila, E coli, human, lambda, mouse, mitochondria, phiX, rat, worm and yeast) and 3 collection of sequences (adapters, vectors, rRNA) indexed with bowtie2. This step is quite slow so we are not going to launch it now.
+
+
+### 
+
 
 --------------------
 
