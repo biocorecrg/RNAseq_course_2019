@@ -59,7 +59,7 @@ At the end of the sequence an extra "A" is added at the 3' end to minimize the a
 <img src="images/illumina6.png" width="500" align="middle" />
 <br/>
 
-## Input data: fastq sequences
+### Input data: fastq sequences
 
 Short (and long) reads coming from the sequencers are stored in **Fastq** format.
 This format contains both the information about sequence and the quality of that particular base (i.e. the probability that that base reading was true or not).
@@ -84,16 +84,54 @@ The major repositories are:
 They are interconnected and mirror the data among them and contain links to other databases that store the gene expression  such as [**GEO**](https://www.ncbi.nlm.nih.gov/geo/) and [**Array-express**](https://www.ebi.ac.uk/arrayexpress/).
 
 ```{bash}
-fastq-dump --gzip --split-files SRR6466185
+fastq-dump --gzip --split-files SRR-IDENTIFIER
+```
+since this is a very slow step we downsampled the initial reads to the one mapping only the chromosome 10 of the human genome. You already have the files in this folder:
 
-Read 32345 spots for SRR6466185
-Written 32345 spots for SRR6466185
-
-ls -lh SRR*
--rw-r--r-- 1 lcozzuto Bioinformatics_Unit 6.4M Mar  8 12:01 SRR6466185_1.fastq.gz
--rw-r--r-- 1 lcozzuto Bioinformatics_Unit 7.5M Mar  8 12:01 SRR6466185_2.fastq.gz
+```{bash}
 
 ```
+
+You can inspect them, count their numbers or check the size by using simple linux commands:
+
+```{bash}
+zcat FILE.fastq.gz |more
+
+...
+
+zcat FILE.fastq.gz |awk '{num++}END{print num/4}'
+
+NUMBER
+....
+
+zcat FILE.fastq.gz |head -n 4| tail -n 1| awk '{print length($0)}'
+
+51
+```
+
+### QC of input data
+To assess the quality of our input data we can use two tools: **FastQC**[5] and **Fastq Screen**[6]. 
+
+The former gives us a number of statistics about the composition and the quality of the raw sequences while the latter looks for possible contaminations. 
+
+```{bash}
+fastqc FILE.fastq.gz
+
+```
+
+Fastq_screen requires a number of databases to be installed for aligning a subset of your reads. You can download some pre-generated ones by using the following command:
+
+```
+fastq_screen --get_genomes
+``` 
+
+This will download 11 genomes (arabidopsis, drosophila, E coli, human, lambda, mouse, mitochondria, phiX, rat, worm and yeast) and 3 collection of sequences (adapters, vectors, rRNA) indexed with bowtie2. This step is quite slow so we are not going to launch it now.
+
+--------------------
+
+
+
+
 
 
 ## References:
@@ -102,3 +140,5 @@ ls -lh SRR*
 2. https://en.wikipedia.org/wiki/Real-time_polymerase_chain_reaction
 3. https://en.wikipedia.org/wiki/DNA_microarray
 4. [Wang Z, Gerstein M, Snyder M. RNA-Seq: a revolutionary tool for transcriptomics. Nat Rev Genet. 2009 Jan;10(1):57-63. doi: 10.1038/nrg2484.](https://www.nature.com/articles/nrg2484)
+5. [Andrews S. (2010). FastQC: a quality control tool for high throughput sequence data](http://www.bioinformatics.babraham.ac.uk/projects/fastqc)
+6. [Wingett SW, Andrews S. FastQ Screen: A tool for multi-genome mapping and quality control. Version 2. F1000Res. 2018 Aug 24](https://www.ncbi.nlm.nih.gov/pmc/articles/pmid/30254741/)
