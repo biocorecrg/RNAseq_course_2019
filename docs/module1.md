@@ -160,7 +160,7 @@ Analysis complete for A549_25_3chr10_2.fastq.gz
 
 We can display the results with a browser like Firefox
 ```{bash}
-firefox firefox resources/A549_25_3chr10_1_fastqc.html
+firefox resources/A549_25_3chr10_1_fastqc.html
 
 ...
 
@@ -205,8 +205,8 @@ Counting sequences in A549_0_1_1.fastq.gz
 Making reduced sequence file with ratio 711:1
 ...
 ``` 
-
-
+<img src="images/A549_0_1_1_screen_2.png" width="800"/>
+<img src="images/A549_0_1_1_screen_1.png" width="800"/>
 
 --------------------
 
