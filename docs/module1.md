@@ -169,6 +169,9 @@ firefox resources/A549_25_3chr10_2_fastqc.html
 
 <img src="images/fastqc.png" width="800"/>
 
+Here we provide an example of a **bad dataset**. As you can see the average quality drops towards the 3 prime.
+
+<img src="images/bad_fastqc.png" width="800"/>
 
 
 Fastq_screen requires a number of databases to be installed for aligning a subset of your reads. You can download some pre-generated ones by using the following command:
