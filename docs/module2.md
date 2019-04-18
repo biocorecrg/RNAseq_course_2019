@@ -4,7 +4,9 @@ title: Module 2
 navigation: 3
 ---
 
-# Module 2: Read mapping to reference transcriptome
+# Module 2
+
+## Read mapping to reference transcriptome
 
 |Mapping of short reads|
 | :---:  |
