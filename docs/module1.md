@@ -167,18 +167,44 @@ firefox firefox resources/A549_25_3chr10_1_fastqc.html
 firefox resources/A549_25_3chr10_2_fastqc.html
 ```
 
+<img src="images/fastqc.png" width="800"/>
+
 
 
 Fastq_screen requires a number of databases to be installed for aligning a subset of your reads. You can download some pre-generated ones by using the following command:
 
-```
+```{bash}
 fastq_screen --get_genomes
 ``` 
 
 This will download 11 genomes (arabidopsis, drosophila, E coli, human, lambda, mouse, mitochondria, phiX, rat, worm and yeast) and 3 collection of sequences (adapters, vectors, rRNA) indexed with bowtie2. This step is quite slow so we are not going to launch it now.
 
-
-
+```{bash}
+fastq_screen --conf fastq_screen.conf A549_0_1_1.fastq.gz 
+Using fastq_screen v0.13.0
+Reading configuration from 'aaa/FastQ_Screen_Genomes/fastq_screen2.conf'
+Aligner (--aligner) not specified, but Bowtie2 path and index files found: mapping with Bowtie2
+Adding database Human
+Adding database Mouse
+Adding database Rat
+Adding database Drosophila
+Adding database Worm
+Adding database Yeast
+Adding database Arabidopsis
+Adding database Ecoli
+Adding database rRNA
+Adding database MT
+Adding database PhiX
+Adding database Lambda
+Adding database Vectors
+Adding database Adapters
+Using 7 threads for searches
+Option --subset set to 100000 reads
+Processing A549_0_1_1.fastq.gz
+Counting sequences in A549_0_1_1.fastq.gz
+Making reduced sequence file with ratio 711:1
+...
+``` 
 
 
 
