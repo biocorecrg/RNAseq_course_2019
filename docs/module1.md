@@ -226,7 +226,8 @@ A typical case in which you do expect to have adapters is when you perform small
 
 
 ```{bash}
-fastqc subsample_to_trim.fq.gz 
+fastqc subsample_to_trim.fq.gz
+
 Started analysis of subsample_to_trim.fq.gz
 Approx 5% complete for subsample_to_trim.fq.gz
 Approx 10% complete for subsample_to_trim.fq.gz
@@ -240,11 +241,53 @@ Approx 25% complete for subsample_to_trim.fq.gz
 <img src="images/fastqc_small_rnas.png" width="800"/>
 
 
-We can remove the adapter using a number of tools. Here we show **skewer** indicating the Illumin's 
+We can remove the adapter using a number of tools. Here we show **skewer** indicating the Illumina small RNA 3' adapter.  
 
 ```{bash}
-skewer subsample_to_trim.fq.gz -x TGGAATTCTCGG
+skewer subsample_to_trim.fq.gz -x TGGAATTCTCGGGTGCCAAGG
+
+.--. .-.
+: .--': :.-.
+`. `. : `'.' .--. .-..-..-. .--. .--.
+_`, :: . `.' '_.': `; `; :' '_.': ..'
+`.__.':_;:_;`.__.'`.__.__.'`.__.':_;
+skewer v0.2.2 [April 4, 2016]
+Parameters used:
+-- 3' end adapter sequence (-x):	TGGAATTCTCGGGTGCCAAGG
+-- maximum error ratio allowed (-r):	0.100
+-- maximum indel error ratio allowed (-d):	0.030
+-- minimum read length allowed after trimming (-l):	18
+-- file format (-f):		Sanger/Illumina 1.8+ FASTQ (auto detected)
+-- minimum overlap length for adapter detection (-k):	3
+Thu Apr 18 17:51:18 2019 >> started
+|=================================================>| (100.00%)
+Thu Apr 18 17:51:25 2019 >> done (6.789s)
+1000000 reads processed; of these:
+  30171 ( 3.02%) short reads filtered out after trimming by size control
+   2220 ( 0.22%) empty reads filtered out after trimming by size control
+ 967609 (96.76%) reads available; of these:
+ 958360 (99.04%) trimmed reads available after processing
+   9249 ( 0.96%) untrimmed reads available after processing
+log has been saved to "subsample_to_trim.fq-trimmed.log".
 ```
+
+We can have a look at the read distribution after the trimming by inspecting the log or relaunching fastqc.
+
+```{bash}
+fastqc subsample_to_trim.fq-trimmed.fastq  
+
+Started analysis of subsample_to_trim.fq-trimmed.fastq
+Approx 5% complete for subsample_to_trim.fq-trimmed.fastq
+Approx 10% complete for subsample_to_trim.fq-trimmed.fastq
+Approx 15% complete for subsample_to_trim.fq-trimmed.fastq
+Approx 20% complete for subsample_to_trim.fq-trimmed.fastq
+Approx 25% complete for subsample_to_trim.fq-trimmed.fastq
+...
+
+```
+<img src="images/size_dist_small.png" width="800"/>
+<img src="images/adapter_removed.png" width="800"/>
+
 
 
 --------------------
