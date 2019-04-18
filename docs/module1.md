@@ -83,10 +83,13 @@ The major repositories are:
 
 They are interconnected and mirror the data among them and contain links to other databases that store the gene expression  such as [**GEO**](https://www.ncbi.nlm.nih.gov/geo/) and [**Array-express**](https://www.ebi.ac.uk/arrayexpress/).
 
+To download raw data from **SRA** it is mandatory to use **fastq-dump program** from [**SRA toolkit**](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc). You just need a SRA identifier and to specify whether your data are single or paired ends, otherwise paired ends will be downloaded a single interleaved file.   
+
 ```{bash}
 fastq-dump --gzip --split-files SRR-IDENTIFIER
 ```
-since this is a very slow step we downsampled the initial reads to the one mapping only the chromosome 10 of the human genome. You already have the files at this link:
+
+since this is a very slow step we downsampled the initial reads to the ones only mapping to the chromosome 10 of the human genome. You already have the files at this link:
 
 ```{bash}
 wget https://public-docs.crg.es/biocore/projects/training/RNAseq_2019/resources.tar
@@ -109,7 +112,7 @@ resources/A549_25_2chr10_2.fastq.gz
 
 ```
 
-You can inspect them, count their numbers or check the size by using simple linux commands:
+You can inspect them, count their numbers or check the read size by using simple linux commands:
 
 ```{bash}
 zcat resources/A549_25_3chr10_2.fastq.gz |more 
@@ -182,6 +185,8 @@ fastq_screen --get_genomes
 
 This will download 11 genomes (arabidopsis, drosophila, E coli, human, lambda, mouse, mitochondria, phiX, rat, worm and yeast) and 3 collection of sequences (adapters, vectors, rRNA) indexed with bowtie2. This step is quite slow so we are not going to launch it now.
 
+Here the command line to execute fastq_screen: 
+
 ```{bash}
 fastq_screen --conf fastq_screen.conf A549_0_1_1.fastq.gz 
 Using fastq_screen v0.13.0
@@ -209,14 +214,23 @@ Making reduced sequence file with ratio 711:1
 ...
 ```
 
-Here you have an example of the result. In brief you tested a sub-sample of your reads mapping them to different databases. In this way you can detect contaminations, failure of ribosomal depletion etc.  
+Here you have an example of the result. In brief you tested a sub-sample of your reads aligning to different databases. In this way you can detect contaminations, failure of ribosomal depletion etc.  
 
 <img src="images/A549_0_1_1_screen_2.png" />
 <img src="images/A549_0_1_1_screen_1.png" />
 
+## Trimming of reads.
+In case your dataset contains low quality reads and / or you sequenced also some adapters you might want to filter and trim your reads before performing the alignment. 
+As shown before both the presence of low quality reads and adapters is reported in the **fastqc** ouptut. 
+A typical case in which you do expect to have adapters is when you perform small RNAs sequencing. In that case your molecules are tipically shorter than 24 bps and the rest will be the Illumina's adapter.
+
+<img src="images/fastqc_small_rnas.png" width="800"/>
+
+
+
+
+
 --------------------
-
-
 ## References:
 
 1. https://en.wikipedia.org/wiki/Northern_blot
