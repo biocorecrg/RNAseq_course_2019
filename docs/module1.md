@@ -205,8 +205,8 @@ Counting sequences in A549_0_1_1.fastq.gz
 Making reduced sequence file with ratio 711:1
 ...
 ``` 
-<img src="images/A549_0_1_1_screen_2.png" width="800"/>
-<img src="images/A549_0_1_1_screen_1.png" width="800"/>
+<img src="images/A549_0_1_1_screen_2.png" width="1200"/>
+<img src="images/A549_0_1_1_screen_1.png" width="1200"/>
 
 --------------------
 
