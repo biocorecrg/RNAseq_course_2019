@@ -224,10 +224,27 @@ In case your dataset contains low quality reads and / or you sequenced also some
 As shown before both the presence of low quality reads and adapters is reported in the **fastqc** ouptut. 
 A typical case in which you do expect to have adapters is when you perform small RNAs sequencing. In that case your molecules are tipically shorter than 24 bps and the rest will be the Illumina's adapter.
 
+
+```{bash}
+fastqc subsample_to_trim.fq.gz 
+Started analysis of subsample_to_trim.fq.gz
+Approx 5% complete for subsample_to_trim.fq.gz
+Approx 10% complete for subsample_to_trim.fq.gz
+Approx 15% complete for subsample_to_trim.fq.gz
+Approx 20% complete for subsample_to_trim.fq.gz
+Approx 25% complete for subsample_to_trim.fq.gz
+...
+```
+
+
 <img src="images/fastqc_small_rnas.png" width="800"/>
 
 
+We can remove the adapter using a number of tools. Here we show **skewer** indicating the Illumin's 
 
+```{bash}
+skewer subsample_to_trim.fq.gz -x TGGAATTCTCGG
+```
 
 
 --------------------
