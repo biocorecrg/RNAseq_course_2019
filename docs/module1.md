@@ -208,8 +208,8 @@ Making reduced sequence file with ratio 711:1
 
 Here you have an example of the result. In brief you tested a sub-sample of your reads mapping them to different databases. In this way you can detect contaminations, failure of ribosomal depletion etc.   
 
-<img src="images/A549_0_1_1_screen_2.png" width="1200"/>
-<img src="images/A549_0_1_1_screen_1.png" width="1200"/>
+<img src="images/A549_0_1_1_screen_2.png" />
+<img src="images/A549_0_1_1_screen_1.png" />
 
 --------------------
 
