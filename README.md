@@ -30,7 +30,7 @@ Send survey to participants regarding cluster access and usage.
   * STAR
   * SALMON
 * SAM / BAM formats (play with samtools)
-* How to explore BAM files (e.g., using NCBI Genome Workbench https://www.ncbi.nlm.nih.gov/tools/gbench/tutorial6/; UCSC browser, else???)
+* How to explore BAM files (e.g., using NCBI Genome Workbench https://www.ncbi.nlm.nih.gov/tools/gbench/tutorial6/; UCSC browser https://genome.ucsc.edu/goldenPath/help/bam.html - which http server can be used in the class for this?)
 
 ### Day 3
 * DESeq2: import data from STAR and SALMON
