@@ -13,25 +13,27 @@ navigation: 2
 |from Wikipedia|
 
 
-RNA sequencing is a technique that allows to detect and quantify RNA molecules within biological samples by using next-generation sequencing (NGS). In few words this technology is used to analyze the transcriptome by revealing:
-* gene expression
-* alternative spliced transcripts 
-* gene fusion and SNPs
-* RNA editing
+RNA sequencing, aka RNA-seq, is a technique that allows to detect and quantify RNA molecules within biological samples by using next-generation sequencing (NGS). This technology is used to analyze the transcriptome by revealing
+* gene/transcript expression;
+* alternatively spliced transcripts;
+* gene fusion and SNPs;
+* post-translational modification;
 
-Other experiments used for assessing the RNA expression are Northern Blot [1], Real time PCR [2] and hybridization-based  microarray [3].
+Other technologies for assessing RNA expression are Northern Blot [1], real-time PCR [2] and hybridization-based  microarrays [3].
 
-RNA-Seq can be performed on:
-* Only messenger RNAs by performing polyA enrichment. 
-* total RNA, after a step of ribosomal depletion.
-* small RNAs, selecting the size of RNA molecule (usually < 100 nt)
-* Only RNA molecules that are being transcribed in that moment (ribosomal profiling).
+RNA-seq can be performed on
+* mRNA transcripts (by performing polyA enrichment of cellular RNA); 
+* total RNA; in this case a content of ribosomal RNA is very high;
+* rRNA depleted RNA (after removing ribosomal RNA);
+* small RNA, such as miRNA, tRNA (by selecting the size of RNA molecules; e.g., < 100 nt);
+* RNA molecules transcribed at a specific moment (ribosomal profiling);
+* specific RNA molecules (via hybridization with probes complementary to desired transcripts).
 
-Depending on the kind of sequencing the RNAseq can produce:
-* Single short reads: particularly used for gene quantification (mainly **Illumina**, but also **Ion Torrent** and **BGISEQ**)
-* Paired end reads: useful for splicing detection and annotation refinement
-* Stranded or unstranded: the former allows detection of antisense molecules or genes on both directions, the latter is sometimes needed when very little amount of RNA is available. 
-* Single long reads (**PACBio** or **Nanopore**): used for de novo identification of new transcripts / improving transcriptome. 
+Depending on the technology and the protocol, RNA-seq can produce
+* single-end short reads (50-450 nt), which are useful for gene expression quantification (mainly **Illumina**, but also **Ion Torrent** and **BGISEQ**);
+* paired-end reads (2 x 50-250 nt), which are useful for detecting splicing events and refinement of transcriptome annotation;
+* stranded or unstranded sequencing reads; the former allows detection of antisense molecules or genes in both 5' and 3' direction, the latter is sometimes needed when very little amount of RNA is available. 
+* single long reads (**PACBio** or **Nanopore**), which are used for the de novo identification of new transcripts and improving transcriptome assembly. 
 
 ## mRNA sequencing (Illumina)
 RNA is extracted and then converted to cDNA by using a polyT adapter that binds the polyA tail. In this way non poly-adenylated transcripts like rRNA, tRNA and the majority of long ncRNAs are excluded from the reaction. 
