@@ -13,21 +13,41 @@ navigation: 3
 |<img src="images/800px-Mapping_Reads.png" width="350" align="middle" />|
 |from Wikipedia|
 
-Once we tested the quality of our input reads we can proceed with the alignment to the reference transcriptome. 
-We can download an example of genome and annotation here:
+Once we tested the quality of our input reads we can proceed with the alignment to the reference transcriptome. So first of all we need to retrieve this information from one of the public databases that host genomic data. 
+
+### Public resources:
+
+1. [Gencode](https://www.gencodegenes.org/) contains a very accurate annotation for Human and Mouse. It contains also functional elements such as protein-coding loci with alternatively splices variants, non-coding loci and pseudogenes and the annotations are carried out by  manual curation, computational analysis and targeted experimental approaches.
+2. [Ensembl](https://www.ensembl.org/index.html) contains both automatically generated and manually curated annotations. They host different genomes and also comparative genomics data and variants. [Ensembl genomes](http://ensemblgenomes.org/) extends the genomic information across different taxonomic groups: bacteria, fungi, metazoa, plants, protists. Ensembl integrates also a genome browser.
+3. [UCSC Genome Browser](https://genome.ucsc.edu/) hosts information about different genomes and a genome browser. They integrates the Gencode information as additional tracks. 
+
+As an example we will show how to access the data for Gencode and Ensembl:
+
+|Gencode website|
+| :---:  |
+|<img src="images/gencode_1.png" width="800" align="middle" />|
+|<img src="images/gencode_2.png" width="800" align="middle" />|
+
+In Gencode we can retrieve the gene annotations in the first link (Comprehensive gene annotation, chr) and the genome where is indicated **Genome sequence, primary assembly (GRCh38)**. Transcript sequence is also available in case you want to use the transcriptome as a reference.
+
+|Ensembl website|
+| :---:  |
+|<img src="images/ensembl_1.png" width="800" align="middle" />|
+|<img src="images/ensembl_2.png" width="800" align="middle" />|
+|<img src="images/ensembl_3.png" width="800" align="middle" />|
+
+In Ensembl you can get the information after choosing the genome and clicking on **Download DNA sequence (FASTA)** and then **Homo_sapiens.GRCh38.dna_rm.primary_assembly.fa.gz** if you don't want to look at haplotypes and patches and instead **Homo_sapiens.GRCh38.dna_rm.toplevel.fa.gz** if you want to include them.
+
+
+### Data formats
+We can download an example of a single chromosome and the corresponding annotation from Gencode here:
 
 ```{bash}
 wget https://public-docs.crg.es/biocore/projects/training/RNAseq_2019/annotations.tar
 tar -xf annotations.tar
 ```
 
-### Data formats
-
-The genome is generally represented as a fasta file like the one described here:
-
-|Fasta format|
-| :---:  |
-|<img src="images/fasta_format.png" width="600" align="middle" />|
+The genome is generally represented as a fasta file with the header indicated by the "**>**":
 
 ```{bash}
 zcat annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz| head -n 5
