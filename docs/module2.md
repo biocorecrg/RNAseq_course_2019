@@ -10,7 +10,7 @@ navigation: 3
 
 |Mapping of short reads|
 | :---:  |
-|<img src="images/800px-Mapping_Reads.png" width="250" align="middle" />|
+|<img src="images/800px-Mapping_Reads.png" width="350" align="middle" />|
 |from Wikipedia|
 
 Once we tested the quality of our input reads... 
