@@ -22,11 +22,15 @@ Send survey to participants regarding cluster access and usage.
 * FastQC (compare what should be seen in genome versus transcriptome), FastqScreen, MultiQC
 
 ### Day 2
-* Get reference genome: ENSEMBL, Gencode, UCSC
+* Get reference genome or transcriptome: ENSEMBL, Gencode, UCSC
+* GTF format; a bit of exploration and excercises 
+* Map reads to genome or transcriptome? 
+* Existing approaches/methods to read mapping in an RNA-seq experiment: pros and cons, which to choose?
 * Map data to reference genome:
   * STAR
   * SALMON
 * SAM / BAM formats (play with samtools)
+* How to explore BAM files (e.g., using NCBI Genome Workbench https://www.ncbi.nlm.nih.gov/tools/gbench/tutorial6/; UCSC browser, else???)
 
 ### Day 3
 * DESeq2: import data from STAR and SALMON
