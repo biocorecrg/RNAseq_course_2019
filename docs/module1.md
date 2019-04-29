@@ -69,10 +69,9 @@ At the 3' end of the first strand sequence an extra "A" base is added. The produ
 <img src="images/illumina5.png" width="500" align="middle" />
 <img src="images/illumina6.png" width="500" align="middle" />
 
-<br/>
 
 
-### FASTQ-formatted files
+### FASTQ-format for sequencing reads
 
 Short (and long) sequencing reads coming from the sequencers are stored in **FASTQ** format.
 This format contains the information about sequence and the quality of each base, which encodes the probability that the corresponding base call is incorrect.
@@ -87,7 +86,8 @@ The format contains four rows per sequencing read:
 
 <img src="images/phred_quality.png" width="500"/>
 
-<br/>
+
+
 * The Q score of 10 (symbol '+') corresponds to the probability that the base call is incorrect of 0.1.
 * The Q score of 20 (symbol '5') corresponds to the probability that the base call is incorrect of 0.01.
 * The Q score of 30 (symbol '?') corresponds to the probability that the base call is incorrect of 0.001.
