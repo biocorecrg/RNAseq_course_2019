@@ -21,6 +21,7 @@ RNA sequencing, aka RNA-seq, is a technique that allows to detect and quantify R
 
 Other technologies for assessing RNA expression are Northern Blot [1], real-time PCR [2] and hybridization-based  microarrays [3].
 
+<br/>
 RNA-seq can be performed on
 * mRNA transcripts (by performing polyA enrichment of cellular RNA); 
 * total RNA; in this case a content of ribosomal RNA is very high;
@@ -29,15 +30,18 @@ RNA-seq can be performed on
 * RNA molecules transcribed at a specific moment (ribosomal profiling);
 * specific RNA molecules (via hybridization with probes complementary to desired transcripts).
 
+<br/>
 Depending on the technology and the protocol, RNA-seq can produce
 * single-end short reads (50-450 nt), which are useful for gene expression quantification (mainly **Illumina**, but also **Ion Torrent** and **BGISEQ**);
 * paired-end reads (2 x 50-250 nt), which are useful for detecting splicing events and refinement of transcriptome annotation;
-* stranded or unstranded sequencing reads; the former allows detection of antisense molecules or genes in both 5' and 3' direction, the latter is sometimes needed when very little amount of RNA is available. 
+* stranded or unstranded sequencing reads; the former allows detection of antisense molecules or genes in both 5' and 3' direction, the latter is sometimes used when very little amount of RNA is available. 
 * single long reads (**PACBio** or **Nanopore**), which are used for the de novo identification of new transcripts and improving transcriptome assembly. 
 
+<br/>
 ## mRNA sequencing (Illumina)
 RNA is isolated and converted to cDNA by using a polyT adapter that binds to the polyA tail. In this way non poly-adenylated transcripts like rRNA, tRNA and the majority of long ncRNAs are excluded from the reaction. 
 cDNA molecules are then fragmented, indexed with a hexamer or octamer barcode (so that cDNA from different samples can be pooled into a single lane for multiplexed sequencing), amplified by PCR and sequenced. The output of RNA-seq is then demultiplexed yielding either one fastq-file per sample (for single-end protocol) or two fastq-files per sample (for paired-end protocol).
+
 
 
 |RNASeq protocol|
@@ -46,24 +50,28 @@ cDNA molecules are then fragmented, indexed with a hexamer or octamer barcode (s
 |from Wang et al 2009 [4]|
 
 <br/>
-To sequence only one of the two cDNA strands (stranded protocol), the **Illumina's TruSeq Stranded mRNA** protocol uses the introduction of dUTP instead of dTTP during the amplification. The incorporation of dUTP in the second strand synthesis quenches the second strand during amplification, because the polymerase used in the assay is not incorporated past this nucleotide.  
+To sequence only one of the two cDNA strands (stranded protocol shown below), the **Illumina's TruSeq Stranded mRNA** protocol uses the introduction of dUTP instead of dTTP during the amplification. The incorporation of dUTP in the second strand synthesis quenches the second strand during amplification, because the polymerase used in the assay is not incorporated past this nucleotide.  
+
 <br/>
 <img src="images/illumina1.png" width="500" align="middle" />
 <img src="images/illumina2.png" width="500" align="middle" />
 <img src="images/illumina3.png" width="500" align="middle" />
+
 <br/>
 At the 3' end of the first strand sequence an extra "A" base is added. The products are then purified and enriched with PCR to create the final cDNA library. 
+
 <br/><br/>
 <img src="images/illumina4.png" width="500" align="middle" />
 <img src="images/illumina5.png" width="500" align="middle" />
 <img src="images/illumina6.png" width="500" align="middle" />
+
 <br/>
 
 
-### Input data: fastq sequences
+### FASTQ-formatted files
 
-Short (and long) reads coming from the sequencers are stored in **Fastq** format.
-This format contains both the information about sequence and the quality of each base, which encodes the probability that the corresponding base call is incorrect.
+Short (and long) sequencing reads coming from the sequencers are stored in **FASTQ** format.
+This format contains the information about sequence and the quality of each base, which encodes the probability that the corresponding base call is incorrect.
 
 <img src="images/fastq_format.png" width="500"/>
 
@@ -75,13 +83,22 @@ The format contains four rows per sequencing read:
 
 <img src="images/phred_quality.png" width="500"/>
 
+<br/>
+* The Q score of 10 (symbol '+') corresponds to the probability that the base call is incorrect of 0.1.
+* The Q score of 20 (symbol '5') corresponds to the probability that the base call is incorrect of 0.01.
+* The Q score of 30 (symbol '?') corresponds to the probability that the base call is incorrect of 0.001.
+* The Q score of 40 (symbol 'I') corresponds to the probability that the base call is incorrect of 0.0001 .
+
+<br/>
+
+
 Currently most of the journals require the submissions of NGS raw data in a public repository upon publishing.
 
-The major repositories are:
-* [**SRA**](https://www.ncbi.nlm.nih.gov/sra) (Sequence Read Archive) from US
+The major repositories of NGS raw data:
+* [**SRA**](https://www.ncbi.nlm.nih.gov/sra) (Sequence Read Archive) 
 * [**ENA**](https://www.ebi.ac.uk/ena) (European Nucleotide Archive) 
-* [**DDBJ-DRA**](https://www.ddbj.nig.ac.jp/dra/index-e.html) from Japan.
-
+* [**DDBJ-DRA**](https://www.ddbj.nig.ac.jp/dra/index-e.html) 
+<br/>
 They are interconnected and mirror the data among them and contain links to other databases that store the gene expression  such as [**GEO**](https://www.ncbi.nlm.nih.gov/geo/) and [**Array-express**](https://www.ebi.ac.uk/arrayexpress/).
 
 To download raw data from **SRA** it is mandatory to use **fastq-dump program** from [**SRA toolkit**](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc). You just need a SRA identifier and to specify whether your data are single or paired ends, otherwise paired ends will be downloaded a single interleaved file.   
