@@ -5,6 +5,7 @@ Material for the RNAseq course
 Send survey to participants regarding cluster access and usage.
 
 ## The plan (draft)
+The webpage is at https://biocorecrg.github.io/RNAseq_course_2019/ 
 
 ### Day 1
 * Introduction (lecture)
