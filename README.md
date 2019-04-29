@@ -31,7 +31,7 @@ The webpage is at https://biocorecrg.github.io/RNAseq_course_2019/
   * STAR
   * SALMON
 * SAM / BAM formats (play with samtools)
-* How to explore BAM files (e.g., using NCBI Genome Workbench https://www.ncbi.nlm.nih.gov/tools/gbench/tutorial6/; UCSC browser https://genome.ucsc.edu/goldenPath/help/bam.html - which http server can be used in the class for this?)
+* How to explore BAM files (e.g., using NCBI Genome Workbench https://www.ncbi.nlm.nih.gov/tools/gbench/tutorial6/; UCSC browser https://genome.ucsc.edu/goldenPath/help/bam.html - which http server can be used in the class for this?) other tools to view BAM file SeqMonk, RNAseqViewer, IGB,...
 * Make bigwig-files from BAMs and load into GenomeBrowser
 
 I suggest to move Genome Browser here to show its major functionality and to look at BAM and bigwig files. It can be ok to expand it to Day 3. Maybe, move SALMON to Day 3 and compare alignments from STAR ans SALMON using statistics on mapping and looking at bigwig-files in the borwser? 
