@@ -22,6 +22,7 @@ RNA sequencing, aka RNA-seq, is a technique that allows to detect and quantify R
 Other technologies for assessing RNA expression are Northern Blot [1], real-time PCR [2] and hybridization-based  microarrays [3].
 
 
+
 RNA-seq can be performed on
 * mRNA transcripts (by performing polyA enrichment of cellular RNA); 
 * total RNA; in this case a content of ribosomal RNA is very high;
@@ -30,7 +31,8 @@ RNA-seq can be performed on
 * RNA molecules transcribed at a specific moment (ribosomal profiling);
 * specific RNA molecules (via hybridization with probes complementary to desired transcripts).
 
-<br/>
+
+
 Depending on the technology and the protocol, RNA-seq can produce
 * single-end short reads (50-450 nt), which are useful for gene expression quantification (mainly **Illumina**, but also **Ion Torrent** and **BGISEQ**);
 * paired-end reads (2 x 50-250 nt), which are useful for detecting splicing events and refinement of transcriptome annotation;
