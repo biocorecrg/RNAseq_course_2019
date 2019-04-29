@@ -21,7 +21,7 @@ RNA sequencing, aka RNA-seq, is a technique that allows to detect and quantify R
 
 Other technologies for assessing RNA expression are Northern Blot [1], real-time PCR [2] and hybridization-based  microarrays [3].
 
-<br/>
+
 RNA-seq can be performed on
 * mRNA transcripts (by performing polyA enrichment of cellular RNA); 
 * total RNA; in this case a content of ribosomal RNA is very high;
