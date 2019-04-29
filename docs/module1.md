@@ -93,25 +93,25 @@ The format contains four rows per sequencing read:
 * The Q score of 30 (symbol '?') corresponds to the probability that the base call is incorrect of 0.001.
 * The Q score of 40 (symbol 'I') corresponds to the probability that the base call is incorrect of 0.0001 .
 
-<br/>
 
 
-Currently most of the journals require the submissions of NGS raw data in a public repository upon publishing.
+Most of the journals require the submissions of NGS raw data in a public repository upon publishing.
 
 The major repositories of NGS raw data:
 * [**SRA**](https://www.ncbi.nlm.nih.gov/sra) (Sequence Read Archive) 
 * [**ENA**](https://www.ebi.ac.uk/ena) (European Nucleotide Archive) 
 * [**DDBJ-DRA**](https://www.ddbj.nig.ac.jp/dra/index-e.html) 
-<br/>
-They are interconnected and mirror the data among them and contain links to other databases that store the gene expression  such as [**GEO**](https://www.ncbi.nlm.nih.gov/geo/) and [**Array-express**](https://www.ebi.ac.uk/arrayexpress/).
 
-To download raw data from **SRA** it is mandatory to use **fastq-dump program** from [**SRA toolkit**](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc). You just need a SRA identifier and to specify whether your data are single or paired ends, otherwise paired ends will be downloaded a single interleaved file.   
+
+These repositories are interconnected and contain links to other databases that store the gene expression data, such as [**GEO**](https://www.ncbi.nlm.nih.gov/geo/) and [**Array-express**](https://www.ebi.ac.uk/arrayexpress/).
+
+To download raw data from **SRA**, it is mandatory to use **fastq-dump program** from [**SRA toolkit**](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc). To download data, use a SRA identifier and to specify whether reads are single or paired-ends, otherwise paired ends will be downloaded a single interleaved file. For example, we have downloaded fastq-files for the experiment with SRA ID [?????] and specified that the paired-end reads were used in RNA-seq (option --split-files in fastq-dump).
 
 ```{bash}
-fastq-dump --gzip --split-files SRR-IDENTIFIER
+fastq-dump --gzip --split-files SRA-IDENTIFIER
 ```
 
-since this is a very slow step we downsampled the initial reads to the ones only mapping to the chromosome 10 of the human genome. You already have the files at this link:
+Since to download all fastq-files for this experiemnt takes a lot of time, we donwloaded the fastq-files and, to restrict the analysis computation time, selected reads that were mapped only to the chromosome 10. Here is how to obtain these files: 
 
 ```{bash}
 wget https://public-docs.crg.es/biocore/projects/training/RNAseq_2019/resources.tar
@@ -134,7 +134,7 @@ resources/A549_25_2chr10_2.fastq.gz
 
 ```
 
-You can inspect them, count their numbers or check the read size by using simple linux commands:
+Let's inspect these files, count the number of reads and check the read length:
 
 ```{bash}
 zcat resources/A549_25_3chr10_2.fastq.gz |more 
@@ -153,20 +153,21 @@ CTATGGTGACCTGAACCACCTGGTGTCTGCTACCATGAGTGGGGTCACCAC
 DDDDDIIIHIIIIIIIIIIIIIIIIIIIIIIHIIIIIGHIIHIIIIIIIII
 ...
 
-zcat resources/A549_25_3chr10_2.fastq.gz  |awk '{num++}END{print num/4}'
+zcat resources/A549_25_3chr10_2.fastq.gz | awk '{num++} END{print num/4}'
 
 2808343
 ....
 
-zcat resources/A549_25_3chr10_2.fastq.gz |head -n 4| tail -n 1| awk '{print length($0)}'
+zcat resources/A549_25_3chr10_2.fastq.gz | head -n 4 | tail -n 1 | awk '{print length($0)}'
 
 51
 ```
 
-### QC of input data
-To assess the quality of our input data we can use two tools: **FastQC**[5] and **Fastq Screen**[6]. 
 
-The former gives us a number of statistics about the composition and the quality of the raw sequences while the latter looks for possible contaminations. 
+### QC of sequencing reads
+To assess the quality of sequencing data, we will use **FastQC**[5] and **Fastq Screen**[6]. 
+
+FastQC calculates statistics about the composition and the quality of raw sequences, while Fasts Screen looks for possible contaminations. 
 
 ```{bash}
 fastqc resources/A549_25_3chr10_*.fastq.gz
@@ -183,7 +184,7 @@ Approx 95% complete for A549_25_3chr10_2.fastq.gz
 Analysis complete for A549_25_3chr10_2.fastq.gz
 ```
 
-We can display the results with a browser like Firefox
+We can display the results with a browser; e.g., Firefox for each file individually or all with one command:
 ```{bash}
 firefox resources/A549_25_3chr10_1_fastqc.html
 
@@ -194,20 +195,21 @@ firefox resources/A549_25_3chr10_2_fastqc.html
 
 <img src="images/fastqc.png" width="800"/>
 
-Here we provide an example of a **bad dataset**. As you can see the average quality drops towards the 3 prime.
+
+Here we provide an example of a **bad dataset**. As you can see the average quality drops towards the 3'-end.
 
 <img src="images/bad_fastqc.png" width="800"/>
 
 
-Fastq_screen requires a number of databases to be installed for aligning a subset of your reads. You can download some pre-generated ones by using the following command:
+Fastq_screen requires a number of databases to be installed for aligning a subset of your reads. You can download some pre-generated ones by using the following command (DO NOT LUNCH IT NOW!!!):
 
 ```{bash}
 fastq_screen --get_genomes
 ``` 
 
-This will download 11 genomes (arabidopsis, drosophila, E coli, human, lambda, mouse, mitochondria, phiX, rat, worm and yeast) and 3 collection of sequences (adapters, vectors, rRNA) indexed with bowtie2. This step is quite slow so we are not going to launch it now.
+This will download 11 genomes (arabidopsis, drosophila, E. coli, human, lambda, mouse, mitochondria, phiX, rat, worm and yeast) and 3 collection of sequences (adapters, vectors, rRNA) indexed with bowtie2. This step is quite slow so we are not going to launch it now.
 
-Here the command line to execute fastq_screen: 
+To execute fastq_screen: 
 
 ```{bash}
 fastq_screen --conf fastq_screen.conf A549_0_1_1.fastq.gz 
@@ -241,7 +243,8 @@ Here you have an example of the result. In brief you tested a sub-sample of your
 <img src="images/A549_0_1_1_screen_2.png" />
 <img src="images/A549_0_1_1_screen_1.png" />
 
-## Trimming of reads.
+
+## Trimming reads for quality and off adapters
 In case your dataset contains low quality reads and / or you sequenced also some adapters you might want to filter and trim your reads before performing the alignment. 
 As shown before both the presence of low quality reads and adapters is reported in the **fastqc** ouptut. 
 A typical case in which you do expect to have adapters is when you perform small RNAs sequencing. In that case your molecules are tipically shorter than 24 bps and the rest will be the Illumina's adapter.
