@@ -39,7 +39,8 @@ Depending on the technology and the protocol, RNA-seq can produce
 * stranded or unstranded sequencing reads; the former allows detection of antisense molecules or genes in both 5' and 3' direction, the latter is sometimes used when very little amount of RNA is available. 
 * single long reads (**PACBio** or **Nanopore**), which are used for the de novo identification of new transcripts and improving transcriptome assembly. 
 
-<br/>
+
+
 ## mRNA sequencing (Illumina)
 RNA is isolated and converted to cDNA by using a polyT adapter that binds to the polyA tail. In this way non poly-adenylated transcripts like rRNA, tRNA and the majority of long ncRNAs are excluded from the reaction. 
 cDNA molecules are then fragmented, indexed with a hexamer or octamer barcode (so that cDNA from different samples can be pooled into a single lane for multiplexed sequencing), amplified by PCR and sequenced. The output of RNA-seq is then demultiplexed yielding either one fastq-file per sample (for single-end protocol) or two fastq-files per sample (for paired-end protocol).
@@ -51,7 +52,8 @@ cDNA molecules are then fragmented, indexed with a hexamer or octamer barcode (s
 |<img src="images/tileshop.jpeg" align="middle" />|
 |from Wang et al 2009 [4]|
 
-<br/>
+
+
 To sequence only one of the two cDNA strands (stranded protocol shown below), the **Illumina's TruSeq Stranded mRNA** protocol uses the introduction of dUTP instead of dTTP during the amplification. The incorporation of dUTP in the second strand synthesis quenches the second strand during amplification, because the polymerase used in the assay is not incorporated past this nucleotide.  
 
 <br/>
