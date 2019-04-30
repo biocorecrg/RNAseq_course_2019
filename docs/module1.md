@@ -108,14 +108,14 @@ These repositoroes are linked to the repositories of NGS raw data:
 * [**ENA**](https://www.ebi.ac.uk/ena) (European Nucleotide Archive) 
 * [**DDBJ-DRA**](https://www.ddbj.nig.ac.jp/dra/index-e.html) 
 
-
+</br>
 
 **EXERCISE**
 </br>Let's explore one of the GEO records; that is https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE126535 
 </br>Which platform and protocol were used for sequencing?
 </br>What was sequenced?
 </br>How many samples were sequenced?
-</br>
+</br></br>
 
 **NOTE: You will need to download data from SRA for a homework project!**
 </br>To download raw data from **SRA**, it is possible to use **fastq-dump program** from [**SRA toolkit**](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc) or download from the NCBI ftp website using wget. For detail, see https://www.ncbi.nlm.nih.gov/books/NBK158899/#SRA_download.when_to_use_a_command_line.
@@ -138,7 +138,6 @@ qlogin -pe smp 5
 and then .....????
 ```
 
-
 </br></br>
 Another source of high quality data on gene expression in human and mouse is [The Encyclopedia of DNA Elements (ENCODE)](https://www.encodeproject.org/). Using ENCODE portal it is possible to access data produced by members of the ENCODE Consortium and use them for further analysis.
 
@@ -152,7 +151,7 @@ Another source of high quality data on gene expression in human and mouse is [Th
 |<img src="images/encode1.png" width="800" align="middle" />|
 |<img src="images/encode2.png" width="800" align="middle" />|
 
-
+</br>
 Since to download all fastq-files for this experiemnt takes a lot of time and to restrict the analysis computation time, we selected reads that are mapping only to the chromosome 10. Please run the following commands to obtain these files: 
 
 ```{bash}
@@ -204,10 +203,11 @@ zcat resources/A549_25_3chr10_2.fastq.gz | head -n 4 | tail -n 1 | awk '{print l
 
 51
 ```
+</br>
 
 **EXERCISE**
 </br>Count the number of reads and check the read length for the second paired read for the sample called A549_25_3chr10.
-
+</br></br>
 
 
 ### QC of sequencing reads
