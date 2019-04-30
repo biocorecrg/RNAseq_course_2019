@@ -96,7 +96,6 @@ The format contains four rows per sequencing read:
 
 
 ### RNA-seq data repositories
-Most of the journals require the submissions of NGS raw data in a public repository upon publishing.
 
 
 The major repositories for gene expression data:
@@ -120,7 +119,7 @@ These repositoroes are linked to the repositories of NGS raw data:
 
 **NOTE: You will need to download data from SRA for a homework project!**
 </br>To download raw data from **SRA**, it is possible to use **fastq-dump program** from [**SRA toolkit**](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc) or download from the NCBI ftp website using wget. For detail, see https://www.ncbi.nlm.nih.gov/books/NBK158899/#SRA_download.when_to_use_a_command_line.
-To download data, use a SRA identifier and to specify whether reads are single or paired-end, otherwise paired ends will be downloaded as a single interleaved file. For example, we can download fastq-files for any sample with a SRA ID and can specify whether they are paired- or single-end with the option --split-files in fastq-dump. Fastq-dump adds SRA ID to each read in the file, to avoid it, use option --origfmt. --gzip compresses fastq files. This will download fastq file(s) for one sample (for example, using SRR identifier SRR8571764 from the exercise above; it is slow - it might take up to 30 -40 minutes):
+</br>To download data, use a SRA identifier and to specify whether reads are single or paired-end, otherwise paired ends will be downloaded as a single interleaved file. For example, we can download fastq-files for any sample with a SRA ID and can specify whether they are paired- or single-end with the option --split-files in fastq-dump. Fastq-dump adds SRA ID to each read in the file, to avoid it, use option --origfmt. --gzip compresses fastq files. This will download fastq file(s) for one sample (for example, using SRR identifier SRR8571764 from the exercise above; it is slow - it might take up to 30 -40 minutes):
 
 ```{bash}
 fastq-dump --gzip --origfmt --split-files SRA-IDENTIFIER
@@ -140,10 +139,10 @@ and then .....????
 ```
 
 
+</br></br>
+Another source of high quality data on gene expression in human and mouse is [The Encyclopedia of DNA Elements (ENCODE)](https://www.encodeproject.org/). Using ENCODE portal it is possible to access data produced by members of the ENCODE Consortium and use them for further analysis.
 
-Another source of high quality data is [The Encyclopedia of DNA Elements (ENCODE)](https://www.encodeproject.org/), an international consortium which goal is to build a comprehensive list of functional elements in human and mouse. Using their portal is possible to access the data produced by members of the ENCODE Consortium and use them for further analysis.
-
-In our example we downloaded the data from Encode:
+</br>For the purpose of this course, we downloaded the following ENCODE data:
 
 1. [Homo sapiens A549 treated with 100 nM dexamethasone for 0 minutes](https://www.encodeproject.org/experiments/ENCSR937WIG/)
 2. [Homo sapiens A549 treated with 100 nM dexamethasone for 25 minutes](https://www.encodeproject.org/experiments/ENCSR525HSH/)
@@ -154,7 +153,7 @@ In our example we downloaded the data from Encode:
 |<img src="images/encode2.png" width="800" align="middle" />|
 
 
-Since to download all fastq-files for this experiemnt takes a lot of time and to restrict the analysis computation time, we selected reads that are mapping only to the chromosome 10. Here is how to obtain these files: 
+Since to download all fastq-files for this experiemnt takes a lot of time and to restrict the analysis computation time, we selected reads that are mapping only to the chromosome 10. Please run the following commands to obtain these files: 
 
 ```{bash}
 wget https://public-docs.crg.es/biocore/projects/training/RNAseq_2019/resources.tar
@@ -205,6 +204,10 @@ zcat resources/A549_25_3chr10_2.fastq.gz | head -n 4 | tail -n 1 | awk '{print l
 
 51
 ```
+
+**EXERCISE**
+</br>Count the number of reads and check the read length for the second paired read for the sample called A549_25_3chr10.
+
 
 
 ### QC of sequencing reads
