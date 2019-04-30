@@ -10,6 +10,7 @@ The webpage is at https://biocorecrg.github.io/RNAseq_course_2019/
 ### Day 1
 * Introduction (lecture)
   * goals of course
+  * SMALL INTRODUCTION ON HOW TO USE THE SINGULARITY IMAGE
   * goals of RNA-seq experiments
   * overview of platforms (Illumina, Nanopore, PacBio ?)
   * polyA, ribo0, total RNA, microRNA
