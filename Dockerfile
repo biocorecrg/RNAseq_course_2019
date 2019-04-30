@@ -14,6 +14,7 @@ ARG SAMTOOLS_VERSION=1.9
 ARG BCFTOOLS_VERSION=1.9
 ARG FASTQSCREEN_VERSION=0.13.0
 ARG BOWTIE2_VERSION=2.3.5.1
+ARG SALMON_VERSION=0.13.1
 
 #upgrading pip
 RUN pip install --upgrade pip
@@ -64,6 +65,11 @@ RUN cd samtools-${SAMTOOLS_VERSION}; ./configure; make; make install; cd ../
 RUN bash -c 'curl -k -L https://github.com/samtools/bcftools/releases/download/${BCFTOOLS_VERSION}/bcftools-${BCFTOOLS_VERSION}.tar.bz2 > bcftools.tar.bz2'
 RUN tar -jvxf bcftools.tar.bz2
 RUN cd bcftools-${BCFTOOLS_VERSION}; ./configure; make; make install; cd ../
+
+# Installing salmon
+RUN bash -c 'curl -k -L https://github.com/COMBINE-lab/salmon/releases/download/v${SALMON_VERSION}/salmon-${SALMON_VERSION}_linux_x86_64.tar.gz > salmon.tar.gz'
+RUN tar -zvxf salmon.tar.gz
+RUN cp salmon-latest_linux_x86_64/bin/salmon /usr/local/bin/ 
 
 
 
