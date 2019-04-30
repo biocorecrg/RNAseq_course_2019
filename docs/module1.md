@@ -95,28 +95,31 @@ The format contains four rows per sequencing read:
 
 
 
+### RNA-seq data repositories
 Most of the journals require the submissions of NGS raw data in a public repository upon publishing.
 
-The major repositories of NGS raw data:
-* [**SRA**](https://www.ncbi.nlm.nih.gov/sra) (Sequence Read Archive) 
-* [**ENA**](https://www.ebi.ac.uk/ena) (European Nucleotide Archive) 
-* [**DDBJ-DRA**](https://www.ddbj.nig.ac.jp/dra/index-e.html) 
 
 The major repositories for gene expression data:
 * [**GEO**](https://www.ncbi.nlm.nih.gov/geo/) 
 * [**Array-express**](https://www.ebi.ac.uk/arrayexpress/)
 * [**ENCODE**] (https://www.encodeproject.org)
 
-These repositoroes linked to each other. 
+These repositoroes are linked to the repositories of NGS raw data:
+* [**SRA**](https://www.ncbi.nlm.nih.gov/sra) (Sequence Read Archive) 
+* [**ENA**](https://www.ebi.ac.uk/ena) (European Nucleotide Archive) 
+* [**DDBJ-DRA**](https://www.ddbj.nig.ac.jp/dra/index-e.html) 
+
+
 
 **EXERCISE**
-Let's explore one of the GEO records; that is https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE126535 
-Which platform and protocol were used for sequencing?
-What was sequenced?
-How many samples were sequenced?
+</br>Let's explore one of the GEO records; that is https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE126535 
+</br>Which platform and protocol were used for sequencing?
+</br>What was sequenced?
+</br>How many samples were sequenced?
+</br>
 
-NOTE: You will need to download data from SRA for a homework project!
-To download raw data from **SRA**, it is possible to use **fastq-dump program** from [**SRA toolkit**](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc) or download from the NCBI ftp website using wget. For detail, see https://www.ncbi.nlm.nih.gov/books/NBK158899/#SRA_download.when_to_use_a_command_line.
+**NOTE: You will need to download data from SRA for a homework project!**
+</br>To download raw data from **SRA**, it is possible to use **fastq-dump program** from [**SRA toolkit**](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc) or download from the NCBI ftp website using wget. For detail, see https://www.ncbi.nlm.nih.gov/books/NBK158899/#SRA_download.when_to_use_a_command_line.
 To download data, use a SRA identifier and to specify whether reads are single or paired-end, otherwise paired ends will be downloaded as a single interleaved file. For example, we can download fastq-files for any sample with a SRA ID and can specify whether they are paired- or single-end with the option --split-files in fastq-dump. Fastq-dump adds SRA ID to each read in the file, to avoid it, use option --origfmt. --gzip compresses fastq files. This will download fastq file(s) for one sample (for example, using SRR identifier SRR8571764 from the exercise above; it is slow - it might take up to 30 -40 minutes):
 
 ```{bash}
