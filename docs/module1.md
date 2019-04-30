@@ -128,15 +128,13 @@ fastq-dump --gzip --origfmt --split-files SRA-IDENTIFIER
 To download all samples for a specific GEO experiment, use the SRA study identifier (e.g., for the GEO experiemnt considered above, it is SRP185848) and follow the following steps:
 * First, download a list of SRR identifiers for all samples in the study by going to the NCBI SRA page for this study https://www.ncbi.nlm.nih.gov/sra?LinkName=bioproject_sra_all&from_uid=522280 and clicking on the right top "Send" --> "File" --> "Accession List" --> "Save to file". That will give you the text file with all SRR identifiers for this study; save it for example as "sra_ids.txt". 
 * Second, run the following command:
-```{bash}
-fastq-dump --gzip --origfmt --split-files $(<sra_ids.txt)
-```
-To run the download in parallel on the CRG cluster, use qlogin requesting the number of cpu, for example, 5:
-```{bash}
-qlogin -pe smp 5
 
-and then .....????
+```{bash}
+
+fastq-dump --gzip --origfmt --split-files $(<sra_ids.txt)
+
 ```
+
 
 </br></br>
 Another source of high quality data on gene expression in human and mouse is [The Encyclopedia of DNA Elements (ENCODE)](https://www.encodeproject.org/). Using ENCODE portal it is possible to access data produced by members of the ENCODE Consortium and use them for further analysis.
@@ -206,8 +204,10 @@ zcat resources/A549_25_3chr10_2.fastq.gz | head -n 4 | tail -n 1 | awk '{print l
 </br>
 
 **EXERCISE**
-</br>Count the number of reads and check the read length for the second paired read for the sample called A549_25_3chr10.
-</br></br>
+* Count the number of reads and check the read length for the second paired read for the sample called A549_25_3chr10.
+* Count the number of reads for all fastq files (use for-loop).
+
+</br>
 
 
 ### QC of sequencing reads
@@ -230,13 +230,11 @@ Approx 95% complete for A549_25_3chr10_2.fastq.gz
 Analysis complete for A549_25_3chr10_2.fastq.gz
 ```
 
-We can display the results with a browser; e.g., Firefox for each file individually or all with one command:
+We can display the results with a browser; e.g., Firefox, for each file individually or all with one command:
 ```{bash}
 firefox resources/A549_25_3chr10_1_fastqc.html
 
-...
-
-firefox resources/A549_25_3chr10_2_fastqc.html
+firefox resources/*.html
 ```
 
 <img src="images/fastqc.png" width="800"/>
@@ -284,16 +282,18 @@ Making reduced sequence file with ratio 711:1
 ...
 ```
 
-Here you have an example of the result. In brief you tested a sub-sample of your reads aligning to different databases. In this way you can detect contaminations, failure of ribosomal depletion etc.  
+</br>Here you have an example of the result. In brief you tested a sub-sample of your reads aligning to different databases. In this way you can detect contaminations, failure of ribosomal depletion etc.  
 
 <img src="images/A549_0_1_1_screen_2.png" />
 <img src="images/A549_0_1_1_screen_1.png" />
 
 
-## Trimming reads for quality and off adapters
-In case your dataset contains low quality reads and / or you sequenced also some adapters you might want to filter and trim your reads before performing the alignment. 
-As shown before both the presence of low quality reads and adapters is reported in the **fastqc** ouptut. 
-A typical case in which you do expect to have adapters is when you perform small RNAs sequencing. In that case your molecules are tipically shorter than 24 bps and the rest will be the Illumina's adapter.
+## Trimming reads for quality, removing adapters and filtering low-quality reads
+In case when data contain low quality reads or adapter(s) it is advisable to filter and trim reads before mapping them to the genome or transcriptome. 
+
+As shown before, both the presence of low quality reads and adapters are reported in the **fastqc** output. 
+
+Adapters are usually expected in small RNA-seq because the molecules are tipically shorter than 24 bp while the reads are longer. Here is an example of a fastq file for small RNA-seq.
 
 
 ```{bash}
@@ -312,7 +312,15 @@ Approx 25% complete for subsample_to_trim.fq.gz
 <img src="images/fastqc_small_rnas.png" width="800"/>
 
 
-We can remove the adapter using a number of tools. Here we show **skewer[7]** indicating the Illumina small RNA 3' adapter.  
+There are many tools for trimming reads and removing adapters, such as ...
+
+**EXERCISE**
+Where to find out the sequence of the adapter to trim off?
+
+
+
+
+Here we show the usage of **skewer[7]** providing indicating the Illumina small RNA 3' adapter.  
 
 ```{bash}
 skewer subsample_to_trim.fq.gz -x TGGAATTCTCGGGTGCCAAGG
@@ -342,7 +350,7 @@ Thu Apr 18 17:51:25 2019 >> done (6.789s)
 log has been saved to "subsample_to_trim.fq-trimmed.log".
 ```
 
-We can have a look at the read distribution after the trimming by inspecting the log or relaunching fastqc.
+We can look at the read distribution after the trimming of the adapter by inspecting the log-file or relaunching FastQC.
 
 ```{bash}
 fastqc subsample_to_trim.fq-trimmed.fastq  
@@ -358,6 +366,13 @@ Approx 25% complete for subsample_to_trim.fq-trimmed.fastq
 ```
 <img src="images/size_dist_small.png" width="800"/>
 <img src="images/adapter_removed.png" width="800"/>
+
+
+**EXERCISE**
+Let's explore the tool **skewer[7]** in more detail using "skewer --help" command.
+* Which parameter indicates the minimum read length allowed after trimming? And what is its default value?
+* Which parameter indicates the threshold on the average read quality to be filtered out?
+* Using skewer filter out reads in "subsample_to_trim.fq-trimmed.fastq" that have average quality below ??? and trim them on 3' end until the base quality is reached ???. How many reads were filtered out and how many remained?
 
 
 
