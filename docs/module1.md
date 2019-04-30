@@ -102,16 +102,43 @@ The major repositories of NGS raw data:
 * [**ENA**](https://www.ebi.ac.uk/ena) (European Nucleotide Archive) 
 * [**DDBJ-DRA**](https://www.ddbj.nig.ac.jp/dra/index-e.html) 
 
+The major repositories for gene expression data:
+* [**GEO**](https://www.ncbi.nlm.nih.gov/geo/) 
+* [**Array-express**](https://www.ebi.ac.uk/arrayexpress/)
+* [**ENCODE**] (https://www.encodeproject.org)
 
-These repositories are interconnected and contain links to other databases that store the gene expression data, such as [**GEO**](https://www.ncbi.nlm.nih.gov/geo/) and [**Array-express**](https://www.ebi.ac.uk/arrayexpress/).
+These repositoroes linked to each other. 
 
-To download raw data from **SRA**, it is mandatory to use **fastq-dump program** from [**SRA toolkit**](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc). To download data, use a SRA identifier and to specify whether reads are single or paired-ends, otherwise paired ends will be downloaded a single interleaved file. For example, we can download fastq-files for any experiment with a SRA ID and can specify whether they are paired-end or single-end with the option --split-files in fastq-dump).
+**EXERCISE**
+Let's explore one of the GEO records; that is https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE126535 
+Which platform and protocol were used for sequencing?
+What was sequenced?
+How many samples were sequenced?
+
+NOTE: You will need to download data from SRA for a homework project!
+To download raw data from **SRA**, it is possible to use **fastq-dump program** from [**SRA toolkit**](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc) or download from the NCBI ftp website using wget. For detail, see https://www.ncbi.nlm.nih.gov/books/NBK158899/#SRA_download.when_to_use_a_command_line.
+To download data, use a SRA identifier and to specify whether reads are single or paired-end, otherwise paired ends will be downloaded as a single interleaved file. For example, we can download fastq-files for any sample with a SRA ID and can specify whether they are paired- or single-end with the option --split-files in fastq-dump. Fastq-dump adds SRA ID to each read in the file, to avoid it, use option --origfmt. --gzip compresses fastq files. This will download fastq file(s) for one sample (for example, using SRR identifier SRR8571764 from the exercise above; it is slow - it might take up to 30 -40 minutes):
 
 ```{bash}
-fastq-dump --gzip --split-files SRA-IDENTIFIER
+fastq-dump --gzip --origfmt --split-files SRA-IDENTIFIER
 ```
 
-Another source of high quality data is [The Encyclopedia of DNA Elements (ENCODE)](https://www.encodeproject.org/), an international consortium which goal is to build a comprehensive list of functional elements in the human genome. Using their portal is possible to access the data produced by members of the ENCODE Consortium and use them for further analysis.
+To download all samples for a specific GEO experiment, use the SRA study identifier (e.g., for the GEO experiemnt considered above, it is SRP185848) and follow the following steps:
+* First, download a list of SRR identifiers for all samples in the study by going to the NCBI SRA page for this study https://www.ncbi.nlm.nih.gov/sra?LinkName=bioproject_sra_all&from_uid=522280 and clicking on the right top "Send" --> "File" --> "Accession List" --> "Save to file". That will give you the text file with all SRR identifiers for this study; save it for example as "sra_ids.txt". 
+* Second, run the following command:
+```{bash}
+fastq-dump --gzip --origfmt --split-files $(<sra_ids.txt)
+```
+To run the download in parallel on the CRG cluster, use qlogin requesting the number of cpu, for example, 5:
+```{bash}
+qlogin -pe smp 5
+
+and then .....????
+```
+
+
+
+Another source of high quality data is [The Encyclopedia of DNA Elements (ENCODE)](https://www.encodeproject.org/), an international consortium which goal is to build a comprehensive list of functional elements in human and mouse. Using their portal is possible to access the data produced by members of the ENCODE Consortium and use them for further analysis.
 
 In our example we downloaded the data from Encode:
 
