@@ -160,7 +160,7 @@ drwxr-xr-x 2 lcozzuto Bioinformatics_Unit  253 Apr 30 17:37 .
 
 As a good practice is better to keep our files zipped as much as possible, you won't waste storage that is a precious resource when dealing with these analysis. You can see how much storage is wasted when using unzipped files:
 
-**PLEASE DO NOT UNZIP THE FILE!! THE FOLLOWING IS AN EXAMPLE!!**
+**PLEASE DO NOT UNZIP ALSO THE FILE gencode.v29.transcripts.fa!! THE FOLLOWING IS AN EXAMPLE!!**
 
 ```{bash}
 for i in *.gz; do gzip $i; done
@@ -173,41 +173,32 @@ drwxr-xr-x 10 lcozzuto Bioinformatics_Unit 1.7K Apr 30 17:49 ..
 -rw-r--r--  1 lcozzuto Bioinformatics_Unit 331M Apr 30 17:48 gencode.v29.transcripts.fa
 -rw-r--r--  1 lcozzuto Bioinformatics_Unit  43M Apr 30 17:48 gencode.v29.annotation_chr10.gtf
 ```
-Basically you are using 80% more space. Some of the tools cannot handle directly zipped files as an input (like the indexing step of **STAR**). To overcome that you can use a **FIFO special file**:
-
-```{bash}
-mkfifo genome
-mkfifo annotation
-
-zcat Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz > genome &
-[1] 14217
-zcat gencode.v29.annotation_chr10.gtf.gz > annotation &
-[2] 14317
-
-ls -alht
-total 136M
-drwxr-xr-x 2 lcozzuto Bioinformatics_Unit  305 Apr 30 17:55 .
-prw-r--r-- 1 lcozzuto Bioinformatics_Unit    0 Apr 30 17:55 annotation
-prw-r--r-- 1 lcozzuto Bioinformatics_Unit    0 Apr 30 17:55 genome
-drwxr-xr-x 9 lcozzuto Bioinformatics_Unit 1.6K Apr 30 17:52 ..
--rw-r--r-- 1 lcozzuto Bioinformatics_Unit  63M Apr 30 16:56 gencode.v29.transcripts.fa.gz
--rw-r--r-- 1 lcozzuto Bioinformatics_Unit  39M Apr 17 16:25 Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz
--rw-r--r-- 1 lcozzuto Bioinformatics_Unit 1.5M Apr 17 16:08 gencode.v29.annotation_chr10.gtf.gz
-```
-
-So the FIFO special file (a named pipe) is similar to a pipe, except that it is accessed as part of the filesystem. It can be opened by multiple processes for reading or writing. When processes are exchanging data via the FIFO, the kernel passes all data internally without writing it to the filesystem. Thus, the FIFO special file has no contents on the filesystem; the filesystem entry merely serves as a reference point so that processes can access the pipe using a name in the filesystem.
+Basically you are using 80% more space. Some of the tools cannot handle directly zipped files as an input (like the indexing step of **STAR**), so you can unzip them, use them and remove the uncompressed version.
 
 To indexing the genome with **STAR** we need to provide also the parameter **sjdbOverhang** that is needed for detecting possible splicing sites. It is generally the minimum read size minus 1 and tells **STAR** which is the maximum possible stretch of sequence that can be found on one side of the spicing site. In our case that every reads is 51 bases long we can accept maximum 50 bases on one side and one base on the other (so the value for this parameter is **50**).
 
 This step will require some minutes:
 
 ```{bash}
+mkdir chr10
 STAR --runMode genomeGenerate --genomeDir chr10 \
-            --genomeFastaFiles genome --sjdbGTFfile annotation \
+            --genomeFastaFiles Homo_sapiens.GRCh38.dna.chromosome.10.fa --sjdbGTFfile gencode.v29.annotation_chr10.gtf \
             --sjdbOverhang 50 --outFileNamePrefix chr10
-            
-Apr 30 18:10:26 ..... started STAR run
-Apr 30 18:10:26 ... starting to generate Genome files
+
+Apr 30 18:21:00 ..... started STAR run
+Apr 30 18:21:00 ... starting to generate Genome files
+Apr 30 18:21:05 ... starting to sort Suffix Array. This may take a long time...
+Apr 30 18:21:06 ... sorting Suffix Array chunks and saving them to disk...
+Apr 30 18:25:18 ... loading chunks from disk, packing SA...
+Apr 30 18:25:42 ... finished generating suffix array
+Apr 30 18:25:42 ... generating Suffix Array index
+Apr 30 18:26:37 ... completed Suffix Array index
+Apr 30 18:26:37 ..... processing annotations GTF
+Apr 30 18:26:38 ..... inserting junctions into the genome indices
+Apr 30 18:27:08 ... writing Genome to disk ...
+Apr 30 18:27:09 ... writing Suffix Array to disk ...
+Apr 30 18:27:16 ... writing SAindex to disk
+Apr 30 18:27:24 ..... finished successfully
 
 ```
 
@@ -219,9 +210,59 @@ Version Info: This is the most recent version of salmon.
 index ["transcripts"] did not previously exist  . . . creating it
 [2019-04-30 18:12:59.272] [jLog] [info] building index
 [2019-04-30 18:12:59.275] [jointLog] [info] [Step 1 of 4] : counting k-mers
-....
 
+[....]
+
+Elapsed time: 53.0026s
+processed 316,000,000 positions[2019-04-30 18:17:34.139] [jointLog] [info] khash had 132,046,162 keys
+[2019-04-30 18:17:34.143] [jointLog] [info] saving hash to disk . . . 
+[2019-04-30 18:18:01.144] [jointLog] [info] done
+Elapsed time: 27.0014s
+[2019-04-30 18:18:07.251] [jLog] [info] done building index
 ```
-As you can see we also added an extra paramters **--gencode** since we derived the data from that resource and has a particular header separator **"|"**
 
+As you can see we also added an extra paramters **--gencode** since we derived the data from that resource and has a particular header separator **"|"**. 
+
+### Aligning
+For aligning with **STAR** we need to specify the path of the files (reads and index folder) and if the reads are compressed or not (**--readFilesCommand zcat**). Then we can also specify the kind of outptut we want, in this xase we choose **BAM** format with alignment sorted by coordinates. We also indicated that we want to output gene counts too (**--quantMode GeneCounts**) that will be useful for differential analysis.
+
+```{bash}
+STAR --genomeDir annotations/chr10 \
+     --readFilesIn resources/A549_0_1chr10_1.fastq.gz resources/A549_0_1chr10_2.fastq.gz \
+      --readFilesCommand zcat \
+      --outSAMtype BAM SortedByCoordinate \
+      --quantMode GeneCounts \
+      --outFileNamePrefix A549_0_1
+      
+Apr 30 18:50:13 ..... started STAR run
+Apr 30 18:50:13 ..... loading genome
+Apr 30 18:50:52 ..... started mapping
+Apr 30 18:54:41 ..... started sorting BAM
+Apr 30 18:55:30 ..... finished successfully
+```
+
+**PLEASE EXPLAIN SAM/BAM FORMAT**
+
+Gene counts are reported within the file **PREFIX**ReadsPerGene.out.tab. It is a tab separated text with information about 1. gene id
+2. read counts per gene considering no strand
+3. considering the first strand and the second one. This is quite useful in case we don't know which kit was used for the sequencing step. At the beginning we also have number of unmapped reads, of reads that map to more than one position 
+
+```{bash}
+more A549_0_1ReadsPerGene.out.tab
+
+N_unmapped	26098	26098	26098
+N_multimapping	337723	337723	337723
+N_noFeature	211089	2547710	246034
+N_ambiguous	151810	4514	32331
+ENSG00000260370.1	0	0	0
+ENSG00000237297.1	0	0	0
+ENSG00000261456.5	13	0	13
+ENSG00000232420.2	0	0	0
+ENSG00000015171.19	6874	131	6743
+ENSG00000276662.1	6	6	0
+ENSG00000212331.1	0	0	0
+ENSG00000151240.16	1652	5	1664
+```
+
+For aligning with **Salmon** we need to specify the  ...
 
