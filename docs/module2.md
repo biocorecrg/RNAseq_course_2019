@@ -23,20 +23,20 @@ Once we tested the quality of our input reads we can proceed with the alignment 
 
 As an example we will show how to access the data for Gencode and Ensembl:
 
+In Gencode we can retrieve the gene annotations in the first link (Comprehensive gene annotation, chr) and the genome where is indicated **Genome sequence, primary assembly (GRCh38)**. Transcript sequence is also available in case you want to use the transcriptome as a reference. The data we are going to use are from version [**v29**](https://www.gencodegenes.org/human/release_29.html)
+
 |Gencode website|
 | :---:  |
 |<img src="images/gencode_1.png" width="800" align="middle" />|
 |<img src="images/gencode_2.png" width="800" align="middle" />|
 
-In Gencode we can retrieve the gene annotations in the first link (Comprehensive gene annotation, chr) and the genome where is indicated **Genome sequence, primary assembly (GRCh38)**. Transcript sequence is also available in case you want to use the transcriptome as a reference.
+In Ensembl you can get the information after choosing the genome and clicking on **Download DNA sequence (FASTA)** and then **Homo_sapiens.GRCh38.dna_rm.primary_assembly.fa.gz** if you don't want to look at haplotypes and patches and instead **Homo_sapiens.GRCh38.dna_rm.toplevel.fa.gz** if you want to include them.
 
 |Ensembl website|
 | :---:  |
 |<img src="images/ensembl_1.png" width="800" align="middle" />|
 |<img src="images/ensembl_2.png" width="800" align="middle" />|
 |<img src="images/ensembl_3.png" width="800" align="middle" />|
-
-In Ensembl you can get the information after choosing the genome and clicking on **Download DNA sequence (FASTA)** and then **Homo_sapiens.GRCh38.dna_rm.primary_assembly.fa.gz** if you don't want to look at haplotypes and patches and instead **Homo_sapiens.GRCh38.dna_rm.toplevel.fa.gz** if you want to include them.
 
 
 ### Data formats
@@ -122,7 +122,7 @@ zcat annotations/gencode.v29.annotation_chr10.gtf.gz| grep -v "#"| cut -f 3 | so
 In last 10 years several tools for mapping short reads to the reference have been developed. All of them requires to build an index of the reference genome / transcriptome using different algorithms. We can classify them in three groups:
 
 #### Fast aligners
-These tools can be used for aligning short reads to a trancriptome or genome reference, but in the latter case they cannot align in splicing junctions. They can be much faster than traditional aligners like [**Blast**](https://blast.ncbi.nlm.nih.gov/Blast.cgi) but less sensitive and have limitations due to the read size. 
+These tools can be used for aligning short reads to a trancriptome or genome reference, but in the latter case they cannot align in splicing junctions. They can be much faster than traditional aligners like [**Blast**](https://blast.ncbi.nlm.nih.gov/Blast.cgi) but less sensitive and may have limitations about the read size. 
 
 1. [**Bowtie**](http://bowtie-bio.sourceforge.net/index.shtml) is an ultrafast, memory-efficient short read aligner geared toward quickly aligning large sets of short DNA sequences (reads) to large genomes. Bowtie indexes the genome with a Burrows-Wheeler index. 
 2. [**Bowtie2**](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml) is an ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences. It is particularly good at aligning reads of about 50 up to 100s or 1,000s of characters, and particularly good at aligning to relatively long (e.g. mammalian) genomes. Bowtie 2 indexes the genome with an FM Index. 
@@ -130,16 +130,98 @@ These tools can be used for aligning short reads to a trancriptome or genome ref
 4. [**GEM**](https://github.com/smarco/gem3-mapper) is a high-performance mapping tool for aligning sequenced reads against large reference genomes. In particular, it is designed to obtain best results when mapping sequences up to 1K bases long. GEM3 indexes the reference genome using a custom FM-Index design and performs an adaptive gapped search based on the characteristics of the input and the user settings. 
 
 #### Splice-aware aligners 
-These aligners are able to map to the splicing junctions described in the annotation and even to detect novel ones. Some of them can detect gene fusions and SNPs and RNA editing.
+These aligners are able to map to the splicing junctions described in the annotation and even to detect novel ones. Some of them can detect gene fusions and SNPs and RNA editing. Downstream anslysis will require for some of them the assignation of the aligned reads to a given gene / transcript.
 
 1. [**Tophat**](https://ccb.jhu.edu/software/tophat/index.shtml) is a fast splice junction mapper for RNA-Seq reads. It aligns RNA-Seq reads to mammalian-sized genomes using the ultra high-throughput short read aligner Bowtie, and then analyzes the mapping results to identify splice junctions between exons.
 2. [**Hisat2**](http://ccb.jhu.edu/software/hisat2/index.shtml) is a fast and sensitive alignment program for mapping next-generation sequencing reads (both DNA and RNA) to a population of human genomes (as well as to a single reference genome). The reference transcriptome is indexed using a Hierarchical Graph FM index (HGFM). 
 3. [**STAR**](https://github.com/alexdobin/STAR) is an ultrafast universal RNA-seq aligner. It uses sequential maximum mappable seed search in uncompressed suffix arrays followed by seed clustering and stitching procedure. It is also able to search for gene fusions.
 
 #### Quasi-mapping aligners 
-These tools are way faster than the previous ones because they don't need to report the resulting alignments but only  associate a read to a given transcript for quantification.  
+These tools are way faster than the previous ones because they don't need to report the resulting alignments but only  associate a read to a given transcript for quantification. They don't discover novel transcript variants (or splicing events) or detect variations, etc.
 
 1. [**Salmon**](https://salmon.readthedocs.io/en/latest/index.html) is a tool for wicked-fast transcript quantification from RNA-seq data. It requires a set of target transcripts to quantify and a K-mer parameter to make the index (i.e. minimum acceptable alignment). 
 2. [**Kallisto**](https://pachterlab.github.io/kallisto/) is a program for quantifying abundances of transcripts from bulk and single-cell RNA-Seq data. It is based on the novel idea of pseudoalignment for rapidly determining the compatibility of reads with targets, without the need for alignment.
+
+
+### Creating indexes
+We will make indexes using two different programs **STAR** and **Salmon**. The former will need both genome in fasta format and annotation in GTF. The latter instead needs transcripts sequences in a fasta file.
+
+We can check the size of the files needed by the tools:
+
+```{bash}
+ls -alht annotations
+total 136M
+drwxr-xr-x 9 lcozzuto Bioinformatics_Unit 1.6K Apr 30 17:37 ..
+drwxr-xr-x 2 lcozzuto Bioinformatics_Unit  253 Apr 30 17:37 .
+-rw-r--r-- 1 lcozzuto Bioinformatics_Unit  63M Apr 30 16:56 gencode.v29.transcripts.fa.gz
+-rw-r--r-- 1 lcozzuto Bioinformatics_Unit  39M Apr 17 16:25 Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz
+-rw-r--r-- 1 lcozzuto Bioinformatics_Unit 1.5M Apr 17 16:08 gencode.v29.annotation_chr10.gtf.gz
+```
+
+As a good practice is better to keep our files zipped as much as possible, you won't waste storage that is a precious resource when dealing with these analysis. You can see how much storage is wasted when using unzipped files:
+
+**PLEASE DO NOT UNZIP THE FILE!! THE FOLLOWING IS AN EXAMPLE!!**
+
+```{bash}
+for i in *.gz; do gzip $i; done
+
+ls -alht
+total 617M
+drwxr-xr-x  2 lcozzuto Bioinformatics_Unit  244 Apr 30 17:49 .
+drwxr-xr-x 10 lcozzuto Bioinformatics_Unit 1.7K Apr 30 17:49 ..
+-rw-r--r--  1 lcozzuto Bioinformatics_Unit 130M Apr 30 17:48 Homo_sapiens.GRCh38.dna.chromosome.10.fa
+-rw-r--r--  1 lcozzuto Bioinformatics_Unit 331M Apr 30 17:48 gencode.v29.transcripts.fa
+-rw-r--r--  1 lcozzuto Bioinformatics_Unit  43M Apr 30 17:48 gencode.v29.annotation_chr10.gtf
+```
+Basically you are using 80% more space. Some of the tools cannot handle directly zipped files as an input (like the indexing step of **STAR**). To overcome that you can use a **FIFO special file**:
+
+```{bash}
+mkfifo genome
+mkfifo annotation
+
+zcat Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz > genome &
+[1] 14217
+zcat gencode.v29.annotation_chr10.gtf.gz > annotation &
+[2] 14317
+
+ls -alht
+total 136M
+drwxr-xr-x 2 lcozzuto Bioinformatics_Unit  305 Apr 30 17:55 .
+prw-r--r-- 1 lcozzuto Bioinformatics_Unit    0 Apr 30 17:55 annotation
+prw-r--r-- 1 lcozzuto Bioinformatics_Unit    0 Apr 30 17:55 genome
+drwxr-xr-x 9 lcozzuto Bioinformatics_Unit 1.6K Apr 30 17:52 ..
+-rw-r--r-- 1 lcozzuto Bioinformatics_Unit  63M Apr 30 16:56 gencode.v29.transcripts.fa.gz
+-rw-r--r-- 1 lcozzuto Bioinformatics_Unit  39M Apr 17 16:25 Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz
+-rw-r--r-- 1 lcozzuto Bioinformatics_Unit 1.5M Apr 17 16:08 gencode.v29.annotation_chr10.gtf.gz
+```
+
+So the FIFO special file (a named pipe) is similar to a pipe, except that it is accessed as part of the filesystem. It can be opened by multiple processes for reading or writing. When processes are exchanging data via the FIFO, the kernel passes all data internally without writing it to the filesystem. Thus, the FIFO special file has no contents on the filesystem; the filesystem entry merely serves as a reference point so that processes can access the pipe using a name in the filesystem.
+
+To indexing the genome with **STAR** we need to provide also the parameter **sjdbOverhang** that is needed for detecting possible splicing sites. It is generally the minimum read size minus 1 and tells **STAR** which is the maximum possible stretch of sequence that can be found on one side of the spicing site. In our case that every reads is 51 bases long we can accept maximum 50 bases on one side and one base on the other (so the value for this parameter is **50**).
+
+This step will require some minutes:
+
+```{bash}
+STAR --runMode genomeGenerate --genomeDir chr10 \
+            --genomeFastaFiles genome --sjdbGTFfile annotation \
+            --sjdbOverhang 50 --outFileNamePrefix chr10
+            
+Apr 30 18:10:26 ..... started STAR run
+Apr 30 18:10:26 ... starting to generate Genome files
+
+```
+
+**Salmon** does not need any decompression of the input so we can index by using this command:
+
+```{bash}
+salmon index -t gencode.v29.transcripts.fa.gz -i transcripts --gencode 
+Version Info: This is the most recent version of salmon.
+index ["transcripts"] did not previously exist  . . . creating it
+[2019-04-30 18:12:59.272] [jLog] [info] building index
+[2019-04-30 18:12:59.275] [jointLog] [info] [Step 1 of 4] : counting k-mers
+....
+
+```
+As you can see we also added an extra paramters **--gencode** since we derived the data from that resource and has a particular header separator **"|"**
 
 
