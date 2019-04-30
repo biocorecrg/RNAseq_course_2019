@@ -62,7 +62,7 @@ To sequence only one of the two cDNA strands (stranded protocol shown below), th
 <img src="images/illumina3.png" width="500" align="middle" />
 
 <br/>
-At the 3' end of the first strand sequence an extra "A" base is added. The products are then purified and enriched with PCR to create the final cDNA library. 
+At the 3' end of the first strand sequence an extra "A" base is added to avoid "blunt ends" that can be randomly merged generating chimaeras. The products are then purified and enriched with PCR to create the final cDNA library. 
 
 <br/><br/>
 <img src="images/illumina4.png" width="500" align="middle" />
@@ -105,13 +105,26 @@ The major repositories of NGS raw data:
 
 These repositories are interconnected and contain links to other databases that store the gene expression data, such as [**GEO**](https://www.ncbi.nlm.nih.gov/geo/) and [**Array-express**](https://www.ebi.ac.uk/arrayexpress/).
 
-To download raw data from **SRA**, it is mandatory to use **fastq-dump program** from [**SRA toolkit**](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc). To download data, use a SRA identifier and to specify whether reads are single or paired-ends, otherwise paired ends will be downloaded a single interleaved file. For example, we have downloaded fastq-files for the experiment with SRA ID [?????] and specified that the paired-end reads were used in RNA-seq (option --split-files in fastq-dump).
+To download raw data from **SRA**, it is mandatory to use **fastq-dump program** from [**SRA toolkit**](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc). To download data, use a SRA identifier and to specify whether reads are single or paired-ends, otherwise paired ends will be downloaded a single interleaved file. For example, we can download fastq-files for any experiment with a SRA ID and can specify whether they are paired-end or single-end with the option --split-files in fastq-dump).
 
 ```{bash}
 fastq-dump --gzip --split-files SRA-IDENTIFIER
 ```
 
-Since to download all fastq-files for this experiemnt takes a lot of time, we donwloaded the fastq-files and, to restrict the analysis computation time, selected reads that were mapped only to the chromosome 10. Here is how to obtain these files: 
+Another source of high quality data is [The Encyclopedia of DNA Elements (ENCODE)](https://www.encodeproject.org/), an international consortium which goal is to build a comprehensive list of functional elements in the human genome. Using their portal is possible to access the data produced by members of the ENCODE Consortium and use them for further analysis.
+
+In our example we downloaded the data from Encode:
+
+1. [Homo sapiens A549 treated with 100 nM dexamethasone for 0 minutes](https://www.encodeproject.org/experiments/ENCSR937WIG/)
+2. [Homo sapiens A549 treated with 100 nM dexamethasone for 25 minutes](https://www.encodeproject.org/experiments/ENCSR525HSH/)
+
+|Encode website|
+| :---:  |
+|<img src="images/encode1.png" width="800" align="middle" />|
+|<img src="images/encode2.png" width="800" align="middle" />|
+
+
+Since to download all fastq-files for this experiemnt takes a lot of time and to restrict the analysis computation time, we selected reads that are mapping only to the chromosome 10. Here is how to obtain these files: 
 
 ```{bash}
 wget https://public-docs.crg.es/biocore/projects/training/RNAseq_2019/resources.tar
