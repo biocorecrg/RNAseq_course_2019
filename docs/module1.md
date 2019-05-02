@@ -59,7 +59,7 @@ Depending on the technology and the protocol, RNA-Seq can produce
 
 <img src="images/transcription.jpg" width="500" align="middle" />
 
-During a typical RNAseq experiment the information about DNA strands is lost after both strands of cDNA are synthesized. There is however a number of methods for making stranded RNAseq libraries that preserve the strand information. (see for detail, https://galaxyproject.org/tutorials/rb_rnaseq/)
+During a typical RNAseq experiment the information about DNA strands is lost after both strands of cDNA are synthesized. There is however a number of methods for making stranded RNAseq libraries that preserve the strand information. (see for detail, [https://galaxyproject.org/tutorials/rb_rnaseq/](https://galaxyproject.org/tutorials/rb_rnaseq/))
 
 One of such methods (shown below) is implemented in the Illumina's TruSeq Stranded mRNA protocol that uses the introduction of dUTP instead of dTTP during the amplification. The incorporation of dUTP in the second strand synthesis quenches the second strand during amplification, because the polymerase used in the assay is not incorporated past this nucleotide.  
 Stranded protocol allows detection of antisense molecules or genes in both 5' and 3' direction. 
@@ -71,7 +71,7 @@ Note that in a stranded protocol shown here (in other protocols it can be differ
 |Read mapping in a stranded vs. unstranded sequencing|
 | :---:  |
 |<img src="images/stranded_vs_unstranded.jpg" width="900" align="middle" />|
-|from https://galaxyproject.org/tutorials/rb_rnaseq/|
+|from [https://galaxyproject.org/tutorials/rb_rnaseq/](https://galaxyproject.org/tutorials/rb_rnaseq/)|
 
 
 * **cDNA multiplexing** Fragmented cDNA is indexed with a hexamer or octamer barcode (so that cDNA from different samples can be pooled into a single lane for multiplexed sequencing).
@@ -79,7 +79,7 @@ Note that in a stranded protocol shown here (in other protocols it can be differ
 |cDNA multiplexing|
 | :---:  |
 |<img src="images/multiplexing.jpg" width="600" align="middle" />|
-|from https://github.com/hbctraining/rnaseq_overview|
+|from [https://github.com/hbctraining/rnaseq_overview](https://github.com/hbctraining/rnaseq_overview)|
 
 
 
@@ -97,7 +97,7 @@ The output of RNA-seq is then demultiplexed yielding either one fastq-file per s
 | Things to consider|
 | :---:  |
 |<img src="images/exp_design.jpg" width="700" align="middle" />|
-|from https://galaxyproject.org/tutorials/rb_rnaseq/|
+|from [https://galaxyproject.org/tutorials/rb_rnaseq/](https://galaxyproject.org/tutorials/rb_rnaseq/)|
 
 
 
