@@ -75,11 +75,13 @@ Note that in a stranded protocol shown here (in other protocols it can be differ
 
 * **cDNA multiplexing** Fragmented cDNA is indexed with a hexamer or octamer barcode (so that cDNA from different samples can be pooled into a single lane for multiplexed sequencing).
 
-<img src="images/multiplexing.jpg" width="800" align="middle" />
+<img src="images/multiplexing.jpg" width="600" align="middle" />
 
 
 
 * **cDNA amplification** 
+
+* **cDNA library quality control and fragment selection**
 
 , amplified by PCR and sequenced. The output of RNA-seq is then demultiplexed yielding either one fastq-file per sample (for single-end protocol) or two fastq-files per sample (for paired-end protocol).
 
