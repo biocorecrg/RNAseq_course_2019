@@ -76,6 +76,7 @@ Note that in a stranded protocol shown here (in other protocols it can be differ
 |<img src="images/stranded_vs_unstranded.jpg" width="900" align="middle" />|
 |from [https://galaxyproject.org/tutorials/rb_rnaseq/](https://galaxyproject.org/tutorials/rb_rnaseq/)|
 
+<br/>
 
 * **cDNA multiplexing** Fragmented cDNA is indexed with a hexamer or octamer barcode (so that cDNA from different samples can be pooled into a single lane for multiplexed sequencing).
 
@@ -102,7 +103,7 @@ The output of RNA-seq is then demultiplexed yielding either one fastq-file per s
 |<img src="images/exp_design.jpg" width="700" align="middle" />|
 |from [https://galaxyproject.org/tutorials/rb_rnaseq/](https://galaxyproject.org/tutorials/rb_rnaseq/)|
 
-
+<br/>
 
 **HOMEWORK (until tomorrow)**
 
@@ -134,13 +135,15 @@ The format contains four rows per sequencing read:
 * a **spacer**
 * the quality encoded using ASCII characters.
 
+<br/>
+
 <img src="images/phred_quality.png" width="500"/>
 
 <br/>
 
 * Score = 10 (symbol '+') => probability of incorrect base call = 0.1 => base call accuracy = 90%
 * Score = 20 (symbol '5') => probability of incorrect base call = 0.01 => base call accuracy = 99%
-* Score = 30 (symbol '?') => probability of incorrect base call = 0.001 => base call accuracy = 99.9%
+* Score = 30 (symbol '?') => probability of incorrect base call = 0.001 => base call accuracy = 99.9% - This is a commonly acceptable threshold for trimming.
 * Score = 40 (symbol 'I') => probability of incorrect base call = 0.0001 => base call accuracy = 99.99%
 
 <br/>
@@ -170,18 +173,16 @@ Let's explore [one of the GEO records](https://www.ncbi.nlm.nih.gov/geo/query/ac
 <br/>
 
 **NOTE: You will need to download data from SRA for an independent project after this week!**
-To download raw data from **SRA**, it is possible to use **fastq-dump program** from [**SRA toolkit**](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc) or to download files from the NCBI ftp website using wget. 
+To download raw data from **SRA**, it is possible to use **fastq-dump program** from [**SRA toolkit**](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc) or to download files from the NCBI ftp website using wget (for detail, see [https://www.ncbi.nlm.nih.gov/books/NBK158899/#SRA_download.when_to_use_a_command_line](https://www.ncbi.nlm.nih.gov/books/NBK158899/#SRA_download.when_to_use_a_command_line).
 
-For detail, see https://www.ncbi.nlm.nih.gov/books/NBK158899/#SRA_download.when_to_use_a_command_line.
-
-To download data, use a SRA identifier specifying whether reads are single or paired-end, otherwise paired ends will be downloaded as a single interleaved file; for paired-end reads use the parameter --split-files in fastq-dump. Fastq-dump adds SRA ID to each read in the file, to avoid it, use the parameter --origfmt. The parameter --gzip compresses fastq files immediately after download. The command below will download fastq-file(s) for one sample only (for example, using SRR identifier SRR8571764 from the exercise above; it is slow - it might take up to 30 -40 minutes):
+To download data, use the SRA identifier specifying whether reads are single or paired-end, otherwise paired-end reads will be downloaded as a single interleaved file; for paired-end reads use the parameter **--split-files in fastq-dump**. Fastq-dump adds SRA ID to each read in the file, to avoid it, use the parameter **--origfmt**. The parameter **--gzip** compresses fastq files immediately after download. The command below will download fastq-file(s) for one sample only (for example, using SRR identifier SRR8571764 from the exercise above; it is slow - it might take up to 30-40 minutes):
 
 ```{bash}
-fastq-dump --gzip --origfmt --split-files SRA-IDENTIFIER
+fastq-dump --gzip --origfmt --split-files SRR-IDENTIFIER
 ```
 
-To download all samples for a specific GEO experiment, use the SRA study identifier (e.g., for the GEO experiemnt considered above, it is SRP185848) and follow the following steps:
-* First, download a list of SRR identifiers for all samples in the study by going to the NCBI SRA page for this study https://www.ncbi.nlm.nih.gov/sra?LinkName=bioproject_sra_all&from_uid=522280 and clicking on the right top "Send" --> "File" --> "Accession List" --> "Save to file". That will give you the text file with all SRR identifiers for this study; save it for example as "sra_ids.txt". 
+To download all samples for a specific GEO experiment, use the SRA study identifier (e.g., for the GEO experiemnt considered above, it is SRP185848) and follow the steps:
+* First, download a list of SRR identifiers for all samples in the study by going to [the NCBI SRA page for this study](https://www.ncbi.nlm.nih.gov/sra?LinkName=bioproject_sra_all&from_uid=522280) and clicking on the right top "Send" --> "File" --> "Accession List" --> "Save to file". That will give you the text file with all SRR identifiers for this study; save it for example to the file "sra_ids.txt". 
 * Second, run the following command:
 
 ```{bash}
@@ -189,9 +190,9 @@ To download all samples for a specific GEO experiment, use the SRA study identif
 fastq-dump --gzip --origfmt --split-files $(<sra_ids.txt)
 
 ```
+<br/>
 
-
-Another source of high quality data on gene expression in human and mouse is [The Encyclopedia of DNA Elements (ENCODE)](https://www.encodeproject.org/). Using ENCODE portal it is possible to access data produced by members of the ENCODE Consortium and use them for further analysis.
+Another source of high quality data on gene expression in human and mouse is [The Encyclopedia of DNA Elements (ENCODE)](https://www.encodeproject.org/). Using the ENCODE portal one can access data produced by the ENCODE Consortium.
 
 For the purpose of this course, we downloaded the following ENCODE data:
 
@@ -255,14 +256,15 @@ zcat resources/A549_25_3chr10_2.fastq.gz | head -n 4 | tail -n 1 | awk '{print l
 
 51
 ```
+
 </br>
 
 **EXERCISE**
-* Count the number of reads and check the read length for the first paired read for the sample called A549_25_3chr10.
+* Count the number of reads and check the read length for the Read 1 for the sample called A549_25_3chr10.
 * Count the number of reads in all fastq files (use for-loop).
 
 
-
+<br/>
 
 ### QC of sequencing reads
 To assess the quality of sequencing data, we will use the programms **FastQC**[5] and **Fastq Screen**[6]. 
@@ -293,13 +295,14 @@ firefox resources/*.html
 
 <img src="images/fastqc.png" width="800"/>
 
+<br/>
 
-Here we provide an example of a **bad sequencing**. As you can see, the average quality drops towards the 3'-end.
+Below is an example of a poor quality dataset. As you can see, the average quality drops dramatically towards the 3'-end.
 
 <img src="images/bad_fastqc.png" width="800"/>
 
 
-Fastq_screen requires a number of databases to be installed for aligning a subset of your reads. You can download some pre-generated ones by using the following command (DO NOT LUNCH IT NOW!!!):
+**Fastq Screen** requires a number of databases to be installed. A number of prepared by the authors of the program databases can be downloaded by using the following command (DO NOT LUNCH IT NOW!!!):
 
 ```{bash}
 fastq_screen --get_genomes
@@ -307,7 +310,7 @@ fastq_screen --get_genomes
 
 This will download 11 genomes (arabidopsis, drosophila, E. coli, human, lambda, mouse, mitochondria, phiX, rat, worm and yeast) and 3 collection of sequences (adapters, vectors, rRNA) indexed with bowtie2. This step is quite slow so we are not going to launch it now.
 
-To execute fastq_screen: 
+To execute Fastq Screen: 
 
 ```{bash}
 fastq_screen --conf fastq_screen.conf A549_0_1_1.fastq.gz 
@@ -341,10 +344,11 @@ Below is shown an example of the result aligning reads from fastq_screen.conf A5
 <img src="images/A549_0_1_1_screen_2.png" />
 <img src="images/A549_0_1_1_screen_1.png" />
 
+<br/>
 
 ## Initial processing of sequencing reads
 
-Before mapping reads to the genome/transcriptome or de novo assemblying them, the reads must be pre-rocessed as follows: 
+Before mapping reads to the genome/transcriptome or performing a de novo assembly, the reads must be pre-processed as follows: 
 * Demultiplex by index or barcode (it is usually done in the sequencing facility)
 * Remove adapter sequences
 * Trim reads by quality
@@ -354,7 +358,7 @@ Before mapping reads to the genome/transcriptome or de novo assemblying them, th
 
 As shown before, both the presence of low quality reads and adapters are reported in the **fastqc** output. 
 
-Adapters are usually expected in small RNA-Seq because the molecules are tipically shorter than the reads which leasds to sequencing an adapter at 3'-end. Let's run FastQC on a fastq file for small RNA-Seq.
+Adapters are usually expected in small RNA-Seq because the molecules are tipically shorter than the reads, and that makes an adapter to be present at 3'-end. Let's run FastQC on a fastq file for small RNA-Seq.
 
 
 ```{bash}
@@ -372,14 +376,16 @@ Approx 25% complete for subsample_to_trim.fq.gz
 
 <img src="images/fastqc_small_rnas.png" width="800"/>
 
-
-There are many tools for trimming reads and removing adapters, such as **Trim Galore!**, **Trimmomatic**, **Cutadapt**, **skewer**, **AlienTrimmer**, **BBDuk**, and the most recent **SOAPnuke** and **fastp** (https://www.ncbi.nlm.nih.gov/pubmed/30423086). 
+<br/>
 
 **EXERCISE**
-Once you got the FastQC report (above), how to find out the sequence of the adapter to trim the reads?
+Once you got the FastQC report (above), how to find out the sequence(s) of the adapter(s) that needs to be trimmed?
 
 
-Here we show the usage of **skewer[7]** indicating the Illumina small RNA 3' adapter.  
+
+There are many tools for trimming reads and removing adapters, such as **Trim Galore!**, **Trimmomatic**, **Cutadapt**, **skewer**, **AlienTrimmer**, **BBDuk**, and the most recent **SOAPnuke** and [**fastp**](https://www.ncbi.nlm.nih.gov/pubmed/30423086). 
+
+Let's use **skewer[7]** to trim the Illumina small RNA 3' adapter.  
 
 ```{bash}
 skewer subsample_to_trim.fq.gz -x TGGAATTCTCGGGTGCCAAGG
@@ -409,7 +415,7 @@ Thu Apr 18 17:51:25 2019 >> done (6.789s)
 log has been saved to "subsample_to_trim.fq-trimmed.log".
 ```
 
-We can look at the read distribution after the trimming of the adapter by inspecting the log-file or relaunching FastQC.
+We can look at the read distribution after the trimming of the adapter by inspecting the log-file or re-launching FastQC.
 
 ```{bash}
 fastqc subsample_to_trim.fq-trimmed.fastq  
@@ -426,9 +432,10 @@ Approx 25% complete for subsample_to_trim.fq-trimmed.fastq
 <img src="images/size_dist_small.png" width="800"/>
 <img src="images/adapter_removed.png" width="800"/>
 
+<br/>
 
 **EXERCISE**
-Let's explore the tool **skewer[7]** in more detail using "skewer --help" command.
+Let's explore the tool **skewer[7]** in more detail, using "skewer --help" command.
 * Which parameter indicates the minimum read length allowed after trimming? And what is its default value?
 * Which parameter indicates the threshold on the average read quality to be filtered out?
 * Using skewer filter out reads in "subsample_to_trim.fq-trimmed.fastq" that have average quality below 40 and trim them on 3'-end until the base quality is reached 40. How many reads were filtered out and how many remained?
@@ -439,8 +446,8 @@ Let's explore the tool **skewer[7]** in more detail using "skewer --help" comman
 ## References:
 
 1. [https://en.wikipedia.org/wiki/Northern_blot](https://en.wikipedia.org/wiki/Northern_blot)
-2. https://en.wikipedia.org/wiki/Real-time_polymerase_chain_reaction
-3. https://en.wikipedia.org/wiki/DNA_microarray
+2. [https://en.wikipedia.org/wiki/Real-time_polymerase_chain_reaction](https://en.wikipedia.org/wiki/Real-time_polymerase_chain_reaction)
+3. [https://en.wikipedia.org/wiki/DNA_microarray](https://en.wikipedia.org/wiki/DNA_microarray)
 4. [Wang Z, Gerstein M, Snyder M. RNA-Seq: a revolutionary tool for transcriptomics. Nat Rev Genet. 2009 Jan;10(1):57-63. doi: 10.1038/nrg2484.](https://www.nature.com/articles/nrg2484)
 5. [Andrews S. (2010). FastQC: a quality control tool for high throughput sequence data](http://www.bioinformatics.babraham.ac.uk/projects/fastqc)
 6. [Wingett SW, Andrews S. FastQ Screen: A tool for multi-genome mapping and quality control. Version 2. F1000Res. 2018 Aug 24](https://www.ncbi.nlm.nih.gov/pmc/articles/pmid/30254741/)
