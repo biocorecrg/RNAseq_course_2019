@@ -115,8 +115,7 @@ The output of RNA-seq is then demultiplexed yielding either one fastq-file per s
 ### mRNA-Seq data analysis workflow
 
 
-
-**put here a BIG PICTURE of data analysis**
+<img src="images/RNAseq_workflow.png" width="800"/>
 
 
 <br/>
