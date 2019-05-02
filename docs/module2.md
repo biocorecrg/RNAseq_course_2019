@@ -272,7 +272,7 @@ The rest is the proper alignment.
 | Field|Value |   
 | :---- | ----: |
 |Query name 	|D00137:453:HLFY2BCXY:2:1115:10428:98737|
-|FLAG 	|419|
+|FLAG 	|419 * |
 |Reference name 	|chr10|
 |Leftmost mapping position 	|35442|
 |Mapping quality 	|3 **(p=0.5)**|
@@ -282,6 +282,8 @@ The rest is the proper alignment.
 |Template length| 	201473|
 |Sequence |AGCTGTTATTGAACAAGAAGGGATTGGTTGCCAGGAGATGAGATTAGCATT|
 |Quality	|@DDD?<1D1CGEE11<C@GHIIH?@E?G@CHH?FH@0GH@C<<<@1DFCHH|
+
+\* the flag 419 means: read paired, read mapped in proper pair, mate on the reverse strand, second in pair, not primary alignment. You can use this useful website for the translation of this value in plain English (http://blog.biochen.com/FlagExplain.html).
 
 Extra fields are often present and are different among aligner tools (https://samtools.github.io/hts-specs/SAMtags.pdf). In our case we have:
 
