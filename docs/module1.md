@@ -75,8 +75,9 @@ Note that in a stranded protocol shown here (in other protocols it can be differ
 
 * **cDNA multiplexing** Fragmented cDNA is indexed with a hexamer or octamer barcode (so that cDNA from different samples can be pooled into a single lane for multiplexed sequencing).
 
-|<img src="images/multiplexing.jpg.jpg" width="800" align="middle" />|
-|from https://hbctraining.github.io/GCC-BOSC-2018/slides/library_prep.pdf|
+<img src="images/multiplexing.jpg" width="800" align="middle" />
+
+
 
 * **cDNA amplification** 
 
@@ -93,7 +94,7 @@ At the 3' end of the first strand sequence an extra "A" base is added to avoid "
 
 
 
-### FASTQ-format for sequencing reads
+### FASTQ format for sequencing reads
 
 Short (and long) sequencing reads coming from the sequencers are stored in **FASTQ** format.
 This format contains the information about sequence and the quality of each base, which encodes the probability that the corresponding base call is incorrect.
