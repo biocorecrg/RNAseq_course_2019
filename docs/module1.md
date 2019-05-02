@@ -43,7 +43,7 @@ Depending on the technology and the protocol, RNA-Seq can produce
 ## mRNA-Seq protocol (Illumina)
 
 
-|RNASeq protocol|
+|mRNA-Seq protocol|
 | :---:  |
 |<img src="images/tileshop.jpeg" align="middle" />|
 |from Wang et al 2009 [4]|
@@ -68,7 +68,7 @@ Stranded protocol allows detection of antisense molecules or genes in both 5' an
 
 Note that in a stranded protocol shown here (in other protocols it can be different), Read 1 is mapped to the antisense strand (this is also true for single-end reads), while Read 2, to the sense strand.
 
-
+|Implication of a stranded vs. unstranded sequencing|
 | :---:  |
 |<img src="images/stranded_vs_unstranded.jpg" width="900" align="middle" />|
 |from https://galaxyproject.org/tutorials/rb_rnaseq/|
