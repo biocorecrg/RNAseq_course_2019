@@ -297,11 +297,42 @@ Extra fields are often present and are different among aligner tools (https://sa
 \* *Note that historically this has been ill-defined and both data and tools exist that disagree with this
 definition.*
 
+Let's now convert BAM to SAM:
+
+```{bash}
+samtools view -h A549_0_1Aligned.sortedByCoord.out.bam > A549_0_1.sam
+
+ls -alht A549_0_1*[sb]am
+-rw-r--r-- 1 lcozzuto Bioinformatics_Unit 1.5G May  2 18:34 A549_0_1.sam
+-rw-r--r-- 1 lcozzuto Bioinformatics_Unit 320M Apr 30 18:55 A549_0_1Aligned.sortedByCoord.out.bam
+```
+
+We can see that the SAM alignment is 5 times bigger than the sam one. A more efficient way to store the alignment is to use the [**CRAM format**](https://samtools.github.io/hts-specs/CRAMv3.pdf). For converting a **bam** to **cram** we need to have unzipped and indexed version of our genome.
+
+```{bash}
+gunzip annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz
+
+samtools faidx annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa
+
+samtools view -C A549_0_1Aligned.sortedByCoord.out.bam -T annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa > A549_0_1.cram
+
+ls -alht A549_0_1*.*am
+-rw-r--r-- 1 lcozzuto Bioinformatics_Unit 1.5G May  2 18:59 A549_0_1.sam
+-rw-r--r-- 1 lcozzuto Bioinformatics_Unit 167M May  2 18:58 A549_0_1.cram
+-rw-r--r-- 1 lcozzuto Bioinformatics_Unit 320M Apr 30 18:55 A549_0_1Aligned.sortedByCoord.out.bam
+```
+
+We saved in this way 50% more space than using the **bam** format.
+
+Gene counts are reported within the file **PREFIX**ReadsPerGene.out.tab. It is a tab separated text with information about 
+
+| | | | |   
+| :---- | :---- | :---- |  :---- |
+|gene id| read counts per gene (no strand) | read counts per gene (forward)|read counts per gene (reverse)| 
+|N_unmapped|	26098|	26098|	26098|
 
 
-Gene counts are reported within the file **PREFIX**ReadsPerGene.out.tab. It is a tab separated text with information about 1. gene id
-2. read counts per gene considering no strand
-3. considering the first strand and the second one. This is quite useful in case we don't know which kit was used for the sequencing step. At the beginning we also have number of unmapped reads, of reads that map to more than one position 
+This is quite useful in case we don't know which kit was used for the sequencing step. At the beginning we also have number of unmapped reads, of reads that map to more than one position 
 
 ```{bash}
 more A549_0_1ReadsPerGene.out.tab
@@ -318,7 +349,10 @@ ENSG00000015171.19	6874	131	6743
 ENSG00000276662.1	6	6	0
 ENSG00000212331.1	0	0	0
 ENSG00000151240.16	1652	5	1664
+...
 ```
+
+We can count the number of reads mapping to 
 
 For aligning with **Salmon** we need to specify the  ...
 
