@@ -7,6 +7,7 @@ navigation: 3
 # Module 1
 ## Introduction: What is RNA-Seq? 
 
+ciao 
 |RNA molecule|
 | :---:  |
 |<img src="images/Double-stranded_RNA.gif" width="300" align="middle" />|
