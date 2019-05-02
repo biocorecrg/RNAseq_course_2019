@@ -431,7 +431,7 @@ Let's explore the tool **skewer[7]** in more detail using "skewer --help" comman
 --------------------
 ## References:
 
-1. https://en.wikipedia.org/wiki/Northern_blot
+1. [https://en.wikipedia.org/wiki/Northern_blot](https://en.wikipedia.org/wiki/Northern_blot)
 2. https://en.wikipedia.org/wiki/Real-time_polymerase_chain_reaction
 3. https://en.wikipedia.org/wiki/DNA_microarray
 4. [Wang Z, Gerstein M, Snyder M. RNA-Seq: a revolutionary tool for transcriptomics. Nat Rev Genet. 2009 Jan;10(1):57-63. doi: 10.1038/nrg2484.](https://www.nature.com/articles/nrg2484)
