@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Module 2
-navigation: 3
+navigation: 4
 ---
 
 # Module 2
