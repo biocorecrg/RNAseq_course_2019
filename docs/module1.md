@@ -68,7 +68,7 @@ Stranded protocol allows detection of antisense molecules or genes in both 5' an
 
 Note that in a stranded protocol shown here (in other protocols it can be different), Read 1 is mapped to the antisense strand (this is also true for single-end reads), while Read 2, to the sense strand.
 
-|Implication of a stranded vs. unstranded sequencing|
+|Read mapping in a stranded vs. unstranded sequencing|
 | :---:  |
 |<img src="images/stranded_vs_unstranded.jpg" width="900" align="middle" />|
 |from https://galaxyproject.org/tutorials/rb_rnaseq/|
@@ -78,7 +78,10 @@ Note that in a stranded protocol shown here (in other protocols it can be differ
 
 * **cDNA multiplexing** Fragmented cDNA is indexed with a hexamer or octamer barcode (so that cDNA from different samples can be pooled into a single lane for multiplexed sequencing).
 
-<img src="images/multiplexing.jpg" width="500" align="middle" />
+|cDNA multiplexing|
+| :---:  |
+|<img src="images/multiplexing.jpg" width="600" align="middle" />|
+|from https://github.com/hbctraining/rnaseq_overview|
 
 
 
@@ -86,16 +89,26 @@ Note that in a stranded protocol shown here (in other protocols it can be differ
 
 * **cDNA library quality control and fragment selection**
 
-, amplified by PCR and sequenced. The output of RNA-seq is then demultiplexed yielding either one fastq-file per sample (for single-end protocol) or two fastq-files per sample (for paired-end protocol).
+* **Sequencing**
+
+The output of RNA-seq is then demultiplexed yielding either one fastq-file per sample (for single-end reads protocol) or two fastq-files per sample (for paired-end reads protocol).
+
+
+### Experimental design
+| |
+| :---:  |
+|<img src="images/exp_design.jpg" width="700" align="middle" />|
+|from https://galaxyproject.org/tutorials/rb_rnaseq/|
 
 
 
-At the 3' end of the first strand sequence an extra "A" base is added to avoid "blunt ends" that can be randomly merged generating chimaeras. The products are then purified and enriched with PCR to create the final cDNA library. 
+**HOMEWORK (until tomorrow)**
 
-<br/><br/>
-<img src="images/illumina4.png" width="500" align="middle" />
-<img src="images/illumina5.png" width="500" align="middle" />
-<img src="images/illumina6.png" width="500" align="middle" />
+
+### mRNA-Seq data analysis workflow
+
+
+[put here a BIG PICTURE of data analysis]
 
 
 
