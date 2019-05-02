@@ -6,56 +6,9 @@ navigation: 5
 
 # Module 3
 
-## Experimental design
-
-main (and great) source: https://github.com/hbctraining/rnaseq_overview/blob/master/lessons/experimental_planning_considerations.md
-
-
-### Number of replicates
-
-Replicates can be technical or biological.
-
-* Technical replicates: use the same biological sample (e.g. one mouse) to repeat the technical or experimental steps in order to measure technical variation.
-
-* Biological replicates: use different biological samples (e.g. different mice) of the same experimental condition to measure the biological variation between samples.
-
-Biological replicates are essential: the more biological replcates, the better the estimate of biological variation and the more precise our estimates of the mean expression levels.
-
-source: https://github.com/hbctraining/rnaseq_overview/blob/master/lessons/experimental_planning_considerations.md
-
-
-### Depth of sequencing
-
-
-Note that increasing the number of biological replicates tends to return more differentially expressed genes than increasing the sequencing depth.
-
-
-### Confounding
-
-A confounded RNA-Seq experiment is one where you cannot distinguish the separate effects of two different sources of variation in the data.
-
-For example, we know that sex has large effects on gene expression, and if all of our control mice were female and all of the treatment mice were male, then our treatment effect would be confounded by sex. We could not differentiate the effect of treatment from the effect of sex.
-
-<img src="images/confounded_design.png" width="400"/>
-
-To avoid confounding, make sure the animals are all the same sex, age, litter, and batch.
-If not possible, then ensure to split the animals equally between conditions
-
-<img src="images/non_confounded_design.png" width="400"/>
-
-### Batch effect
-
-
-<img src="images/batch_effect_pca.png" width="800"/>
-
-Image credit: [Hicks SC, et al., bioRxiv (2015)](https://www.biorxiv.org/content/early/2015/08/25/025528)
-
-
-
 ## Differential expression analysis
 
 Differential expression analysis means to perform statistical analysis to try and discover changes in expression levels (genes, transcripts) between experimental groups.<br>
-
 
 
 ### DESeq2
@@ -66,7 +19,7 @@ It is based on the negative binomial distribution.<br>
 Describes the distribution of draws with replacement. The number of failures is fixed.
 <br>
 The package DESeq2 provides methods to test for differential expression by use of negative binomial generalized linear models.
-
+<br>
 This DESeq2 tutorial is widely inspired from the [RNA-seq workflow](http://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html) developped by the authors of the tool.
 
 
@@ -107,13 +60,16 @@ The "ReadsPerGene" output files of STAR (from option --quantMode GeneCounts) con
 * column 3: counts for the 1st read strand aligned with RNA (htseq-count option -s yes)
 * column 4: counts for the 2nd read strand aligned with RNA (htseq-count option -s reverse): the most common protocol.
 
+```
 for i in `ls -d */`
 do echo $i
 # retrieve the gene ID and 2nd read strand count information corresponding columns
 cut -f1,4 $i/*ReadsPerGene.out.tab | grep -v "_" > counts_star/`basename $i/*PerGene.out.tab ReadsPerGene.out.tab`_counts.txt
 done
+```
 
-ddsMat <- DESeqDataSetFromMatrix(countData = countdata,
+```{r}
+se <- DESeqDataSetFromMatrix(countData = countdata,
                                   colData = coldata,
                                   design = ~ group)
 
@@ -121,37 +77,57 @@ se <- DESeqDataSetFromHTSeqCount(sampleTable = sampleTable,
                         directory = countsdir,
                         design = ~ group)
 
+```
 
 * Load counts data from SALMON
 
+```{r}
 files <- file.path(dir,"salmon", samples$run, "quant.sf.gz")
 names(files) <- samples$run
 tx2gene <- read_csv(file.path(dir, "tx2gene.gencode.v27.csv"))
 txi <- tximport(files, type="salmon", tx2gene=tx2gene)
+```
 
-* 
+Filter out rows which have sum 0 or 1 across all samples
 
-se1 <- DESeq(se)
+```{r}
+se1 <- se[rowSums(counts(se)) > 1, ] # 25393 versus 50600 the initial 
+```
 
-# filter out rows which have sum 0 or 1 across all samples
-se2 <- se1[rowSums(counts(se1)) > 1, ] # 25393 versus 50600 the initial 
+
+
+```{r}
+se2 <- DESeq(se1)
+
+```
 
 
 * Samples correlation
 
 Sample-to-sample distances
 
+```{r}
+sampleDists <- dist(t(assay(vsd)))
+
+library("RColorBrewer")
+sampleDistMatrix <- as.matrix(sampleDists)
+rownames(sampleDistMatrix) <- paste(vsd$condition, vsd$type, sep="-")
+colnames(sampleDistMatrix) <- NULL
+colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
 pheatmap(sampleDistMatrix,
-         clustering_distance_rows = sampleDists,
-         clustering_distance_cols = sampleDists,
-         col = colors)
+         clustering_distance_rows=sampleDists,
+         clustering_distance_cols=sampleDists,
+         col=colors)
+
+```
 
 * Principal Component Analysis
 
 Reduction of dimensionality to be able to retrieve main differences between samples
 
+```{r}
 plotPCA(vsd, intgroup = "group")
-
+```
 
 * Running differential expression analysis
 
@@ -169,7 +145,18 @@ Rscript deseq2_salmon.R sampletable_salmon.txt
 
 * DESeq2 output
 
+log2FoldChange: 
 
+To generate more accurate log2 foldchange estimates, DESeq2 allows for the shrinkage of the LFC estimates toward zero when the information for a gene is low, which could include:
+*Low counts
+*High dispersion values
+
+*log2 fold change (MAP=Maximum A Posteriori estimate of dispersion). A positive fold change indicates an increase of expression while a negative fold change indicates a decrease in expression for a given comparison.
+This value is reported in a logarithmic scale (base 2): for example, a log2 fold change of 1.5 in the "Ko vs Wt comparison" means that the expression of that gene is increased, in the Ko relative to the Wt, by a multiplicative factor of 2^1.5 ≈ 2.82.
+
+*pvalue: Wald statisticial test p-value: Indicate whether the gene analysed is likely to be differentially expressed in that comparison. The lower the more significant.
+
+*padj: Bonferroni-Hochberg adjusted p-values (FDR): the lower the more significant. More robust that the regular p-value. 
 
 
 ### Online tool
