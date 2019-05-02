@@ -1,3 +1,9 @@
+---
+layout: page
+title: Module 0
+navigation: 2
+---
+
 # Basic concepts on Linux Containers
 During this course we will use a number of tools that have been stored within a [**Linux Container**](https://en.wikipedia.org/wiki/LXC). 
 
