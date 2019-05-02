@@ -8,9 +8,40 @@ navigation: 5
 
 ## Experimental design
 
+main (and great) source: https://github.com/hbctraining/rnaseq_overview/blob/master/lessons/experimental_planning_considerations.md
+
+
 ### Number of replicates
 
+Replicates can be technical or biological.
+
+* Technical replicates: use the same biological sample (e.g. one mouse) to repeat the technical or experimental steps in order to measure technical variation.
+
+* Biological replicates: use different biological samples (e.g. different mice) of the same experimental condition to measure the biological variation between samples.
+
+Biological replicates are essential: the more biological replcates, the better the estimate of biological variation and the more precise our estimates of the mean expression levels.
+
+source: https://github.com/hbctraining/rnaseq_overview/blob/master/lessons/experimental_planning_considerations.md
+
+
 ### Depth of sequencing
+
+
+Note that increasing the number of biological replicates tends to return more differentially expressed genes than increasing the sequencing depth.
+
+
+### Confounding
+
+A confounded RNA-Seq experiment is one where you cannot distinguish the separate effects of two different sources of variation in the data.
+
+For example, we know that sex has large effects on gene expression, and if all of our control mice were female and all of the treatment mice were male, then our treatment effect would be confounded by sex. We could not differentiate the effect of treatment from the effect of sex.
+
+<img src="images/confounded_design.png.jpg" width="400"/>
+
+To avoid confounding, make sure the animals are all the same sex, age, litter, and batch.
+If not possible, then ensure to split the animals equally between conditions
+
+<img src="images/non_confounded_design.png" width="400"/>
 
 
 
