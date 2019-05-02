@@ -25,7 +25,9 @@ pre {
 a {
 	text-decoration: none;
 	color: inherit;
-	link: red;
+	&:link{ 
+		color: red;
+	}
 	&:hover {
 		color: $link-color;
 		text-decoration: none;
