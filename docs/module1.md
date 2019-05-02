@@ -93,6 +93,7 @@ The output of RNA-seq is then demultiplexed yielding either one fastq-file per s
 
 
 ### Experimental design
+
 | Things to consider|
 | :---:  |
 |<img src="images/exp_design.jpg" width="700" align="middle" />|
@@ -101,6 +102,7 @@ The output of RNA-seq is then demultiplexed yielding either one fastq-file per s
 
 
 **HOMEWORK (until tomorrow)**
+
 * Read and do an exercise from https://github.com/hbctraining/rnaseq_overview/blob/master/lessons/experimental_planning_considerations.md
 * Read https://rawgit.com/bioinformatics-core-shared-training/experimental-design/master/ExperimentalDesignManual.pdf
 
@@ -109,7 +111,8 @@ The output of RNA-seq is then demultiplexed yielding either one fastq-file per s
 ### mRNA-Seq data analysis workflow
 
 
-[put here a BIG PICTURE of data analysis]
+
+**put here a BIG PICTURE of data analysis**
 
 
 
@@ -143,7 +146,7 @@ The format contains four rows per sequencing read:
 The major repositories for gene expression data:
 * [**GEO**](https://www.ncbi.nlm.nih.gov/geo/) 
 * [**Array-express**](https://www.ebi.ac.uk/arrayexpress/)
-* [**ENCODE**] (https://www.encodeproject.org/)
+* [**ENCODE**](https://www.encodeproject.org/)
 
 These repositoroes are linked to the repositories of NGS raw data (Fastq files):
 * [**SRA**](https://www.ncbi.nlm.nih.gov/sra) (Sequence Read Archive) 
@@ -160,7 +163,10 @@ Let's explore one of the GEO records; that is https://www.ncbi.nlm.nih.gov/geo/q
 
 
 **NOTE: You will need to download data from SRA for an independent project after this week!**
-To download raw data from **SRA**, it is possible to use **fastq-dump program** from [**SRA toolkit**](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc) or to download files from the NCBI ftp website using wget. For detail, see https://www.ncbi.nlm.nih.gov/books/NBK158899/#SRA_download.when_to_use_a_command_line.
+To download raw data from **SRA**, it is possible to use **fastq-dump program** from [**SRA toolkit**](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc) or to download files from the NCBI ftp website using wget. 
+
+For detail, see https://www.ncbi.nlm.nih.gov/books/NBK158899/#SRA_download.when_to_use_a_command_line.
+
 To download data, use a SRA identifier specifying whether reads are single or paired-end, otherwise paired ends will be downloaded as a single interleaved file; for paired-end reads use the parameter --split-files in fastq-dump. Fastq-dump adds SRA ID to each read in the file, to avoid it, use the parameter --origfmt. The parameter --gzip compresses fastq files immediately after download. The command below will download fastq-file(s) for one sample only (for example, using SRR identifier SRR8571764 from the exercise above; it is slow - it might take up to 30 -40 minutes):
 
 ```{bash}
@@ -176,7 +182,6 @@ To download all samples for a specific GEO experiment, use the SRA study identif
 fastq-dump --gzip --origfmt --split-files $(<sra_ids.txt)
 
 ```
-
 
 
 Another source of high quality data on gene expression in human and mouse is [The Encyclopedia of DNA Elements (ENCODE)](https://www.encodeproject.org/). Using ENCODE portal it is possible to access data produced by members of the ENCODE Consortium and use them for further analysis.
