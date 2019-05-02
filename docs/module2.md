@@ -221,7 +221,7 @@ Elapsed time: 27.0014s
 [2019-04-30 18:18:07.251] [jLog] [info] done building index
 ```
 
-As you can see we also added an extra paramters **--gencode** since we derived the data from that resource and has a particular header separator **"|"**. 
+As you can see we also added an extra paramters **--gencode** since we derived the data from that resource and has a particular header separator **"\|"**. 
 
 ### Aligning
 For aligning with **STAR** we need to specify the path of the files (reads and index folder) and if the reads are compressed or not (**--readFilesCommand zcat**). Then we can also specify the kind of outptut we want, in this case we choose **BAM** format with alignment sorted by coordinates. We also indicated that we want to output gene counts too (**--quantMode GeneCounts**) that will be useful for differential analysis.
