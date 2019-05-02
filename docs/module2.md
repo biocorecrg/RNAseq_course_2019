@@ -241,7 +241,7 @@ Apr 30 18:54:41 ..... started sorting BAM
 Apr 30 18:55:30 ..... finished successfully
 ```
 
-We cannot inspect directly the output file since the **BAM** format is a compressed version of the [**SAM**](https://samtools.github.io/hts-specs/SAMv1.pdf) (that is plain text). We can convert BAM to SAM by using [**samtools**](http://samtools.sourceforge.net/).
+We cannot inspect directly the output file since the **BAM** format is a compressed version of the [**SAM**](https://samtools.github.io/hts-specs/SAMv1.pdf) (that is plain text). We can convert BAM to SAM by using [**samtools**](http://samtools.sourceforge.net/). Note that we use the parameter **-h** to show also the header that is hidden by default. 
 
 ```{bash}
 samtools view -h A549_0_1Aligned.sortedByCoord.out.bam |head -n 10
@@ -258,14 +258,42 @@ D00137:453:HLFY2BCXY:2:2208:10640:12788	339	chr10	37323	0	51M	=	37161	-213	GCACT
 D00137:453:HLFY2BCXY:1:1214:7640:70489	419	chr10	37872	3	51M	=	37978	156	TGGGAGACTTTAACACCCCACTGTCAACATTAGACAGCTCAACAAGACAGA	DDDDDHDHIIIIIIIIIIIIIIHIIFHGIIIIIIIIIIIIGHIIIIIIIHI	NH:i:2	HI:i:1	AS:i:99	nM:i:0
 ```
 
-The first part indicated by the first character **@** is the header:
+The first part indicated by the first character **@** in each row is the header:
 
 | Symbol|  |  |   
 | :---- | :---- | :---- |
 | **@HD** header line	| **VN:1.4** version of the SAM format|	**SO:coordinate** sorting order|
 | **@SQ** reference sequence dictionary 	| **SN:chr10** sequence name|	**LN:133797422** sequence length|
 | **@PG** program used|	**ID:STAR** **PN:STAR**	**VN:STAR_2.5.3a** version| **CL:STAR   --genomeDir annotations/chr10   --readFilesIn resources/A549_0_1chr10_1.fastq.gz   resources/A549_0_1chr10_2.fastq.gz      --readFilesCommand zcat      --outFileNamePrefix A549_0_1   --outSAMtype BAM   SortedByCoordinate      --quantMode GeneCounts** command line|
-|**@CO** ||**user command line: STAR --genomeDir annotations/chr10 --readFilesIn resources/A549_0_1chr10_1.fastq.gz resources/A549_0_1chr10_2.fastq.gz --readFilesCommand zcat --outSAMtype BAM SortedByCoordinate --quantMode GeneCounts --outFileNamePrefix A549_0_1**|
+|**@CO** One-line text comment||**user command line: STAR --genomeDir annotations/chr10 --readFilesIn resources/A549_0_1chr10_1.fastq.gz resources/A549_0_1chr10_2.fastq.gz --readFilesCommand zcat --outSAMtype BAM SortedByCoordinate --quantMode GeneCounts --outFileNamePrefix A549_0_1**|
+
+The rest is the proper alignment. 
+
+| Field|Value |   
+| :---- | ----: |
+|Query name 	|D00137:453:HLFY2BCXY:2:1115:10428:98737|
+|FLAG 	|419|
+|Reference name 	|chr10|
+|Leftmost mapping position 	|35442|
+|Mapping quality 	|3 **(p=0.5)**|
+|CIGAR string 	|13M174562N32M6S **13 bases equal to the reference (M), 174562 not mapping = 1 insertion (N) 32 mapping (M) 6 soft clipped (S)|
+|Reference name for mate read |	= **same chromosome**|
+|Position of the mate| 	236864|
+|Template length| 	201473|
+|Sequence |AGCTGTTATTGAACAAGAAGGGATTGGTTGCCAGGAGATGAGATTAGCATT|
+|Quality	|@DDD?<1D1CGEE11<C@GHIIH?@E?G@CHH?FH@0GH@C<<<@1DFCHH|
+
+Extra fields are often present and are different among aligner tools (https://samtools.github.io/hts-specs/SAMtags.pdf). In our case we have:
+
+| Field|Meaning |   
+| :---- | ----: |
+|NH:i:2|number of mapping to the reference|
+|HI:i:2|which aligmnent is the reported one (in this case is the second one)|	
+|AS:i:74|Alignment score calculate by the aligner|
+|nM:i:9|number of difference with the reference*|
+
+\* *Note that historically this has been ill-defined and both data and tools exist that disagree with this
+definition.*
 
 
 
