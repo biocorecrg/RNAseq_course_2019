@@ -69,13 +69,16 @@ Stranded protocol allows detection of antisense molecules or genes in both 5' an
 Note that in a stranded protocol shown here (in other protocols it can be different), Read 1 is mapped to the antisense strand (this is also true for single-end reads), while Read 2, to the sense strand.
 
 
-<img src="images/stranded_vs_unstranded.jpg" width="800" align="middle" />
+| :---:  |
+|<img src="images/stranded_vs_unstranded.jpg" width="900" align="middle" />|
+|from https://galaxyproject.org/tutorials/rb_rnaseq/|
+
 
 
 
 * **cDNA multiplexing** Fragmented cDNA is indexed with a hexamer or octamer barcode (so that cDNA from different samples can be pooled into a single lane for multiplexed sequencing).
 
-<img src="images/multiplexing.jpg" width="600" align="middle" />
+<img src="images/multiplexing.jpg" width="500" align="middle" />
 
 
 
