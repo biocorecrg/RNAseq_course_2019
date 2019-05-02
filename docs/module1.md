@@ -39,6 +39,7 @@ Depending on the technology and the protocol, RNA-Seq can produce
 * single long reads (**PACBio** or **Nanopore**), which are used for the de novo identification of new transcripts and improving transcriptome assembly. 
 
 
+<br/>
 
 ## mRNA-Seq protocol (Illumina)
 
@@ -47,6 +48,7 @@ Depending on the technology and the protocol, RNA-Seq can produce
 | :---:  |
 |<img src="images/tileshop.jpeg" align="middle" />|
 |from Wang et al 2009 [4]|
+<br/>
 
 ### Library preparation
 
@@ -103,8 +105,8 @@ The output of RNA-seq is then demultiplexed yielding either one fastq-file per s
 
 **HOMEWORK (until tomorrow)**
 
-* Read and do an exercise from https://github.com/hbctraining/rnaseq_overview/blob/master/lessons/experimental_planning_considerations.md
-* Read https://rawgit.com/bioinformatics-core-shared-training/experimental-design/master/ExperimentalDesignManual.pdf
+* Read and do an exercise from [https://github.com/hbctraining/rnaseq_overview/blob/master/lessons/experimental_planning_considerations.md] (https://github.com/hbctraining/rnaseq_overview/blob/master/lessons/experimental_planning_considerations.md).
+* Read [https://rawgit.com/bioinformatics-core-shared-training/experimental-design/master/ExperimentalDesignManual.pdf] (https://rawgit.com/bioinformatics-core-shared-training/experimental-design/master/ExperimentalDesignManual.pdf).
 
 
 
