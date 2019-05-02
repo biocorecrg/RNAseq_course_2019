@@ -57,20 +57,20 @@ Depending on the technology and the protocol, RNA-Seq can produce
 
 * **RNA is converted to cDNA**
 
-<img src="images/transcription.jpg" width="500" align="middle" />
+<img src="images/transcription.jpg" width="500" align="left" />
 
 During a typical RNAseq experiment the information about DNA strands is lost after both strands of cDNA are synthesized. There is however a number of methods for making stranded RNAseq libraries that preserve the strand information. (see for detail, https://galaxyproject.org/tutorials/rb_rnaseq/)
 
 One of such methods (shown below) is implemented in the Illumina's TruSeq Stranded mRNA protocol that uses the introduction of dUTP instead of dTTP during the amplification. The incorporation of dUTP in the second strand synthesis quenches the second strand during amplification, because the polymerase used in the assay is not incorporated past this nucleotide.  
 Stranded protocol allows detection of antisense molecules or genes in both 5' and 3' direction. 
 
-<img src="images/stranded_protocol.png" width="500" align="middle" />
+<img src="images/stranded_protocol.png" width="500" align="left" />
 
 Note that in a stranded protocol shown here (in other protocols it can be different), Read 1 is mapped to the antisense strand (this is also true for single-end reads), while Read 2, to the sense strand.
 
 |Read mapping in a stranded vs. unstranded sequencing|
 | :---:  |
-|<img src="images/stranded_vs_unstranded.jpg" width="900" align="middle" />|
+|<img src="images/stranded_vs_unstranded.jpg" width="900" align="left" />|
 |from https://galaxyproject.org/tutorials/rb_rnaseq/|
 
 
@@ -78,7 +78,7 @@ Note that in a stranded protocol shown here (in other protocols it can be differ
 
 |cDNA multiplexing|
 | :---:  |
-|<img src="images/multiplexing.jpg" width="600" align="middle" />|
+|<img src="images/multiplexing.jpg" width="600" align="left" />|
 |from https://github.com/hbctraining/rnaseq_overview|
 
 
@@ -93,14 +93,16 @@ The output of RNA-seq is then demultiplexed yielding either one fastq-file per s
 
 
 ### Experimental design
+
 | Things to consider|
 | :---:  |
-|<img src="images/exp_design.jpg" width="700" align="middle" />|
+|<img src="images/exp_design.jpg" width="700" align="left" />|
 |from https://galaxyproject.org/tutorials/rb_rnaseq/|
 
 
 
 **HOMEWORK (until tomorrow)**
+
 * Read and do an exercise from https://github.com/hbctraining/rnaseq_overview/blob/master/lessons/experimental_planning_considerations.md
 * Read https://rawgit.com/bioinformatics-core-shared-training/experimental-design/master/ExperimentalDesignManual.pdf
 
@@ -109,7 +111,8 @@ The output of RNA-seq is then demultiplexed yielding either one fastq-file per s
 ### mRNA-Seq data analysis workflow
 
 
-[put here a BIG PICTURE of data analysis]
+
+#[put here a BIG PICTURE of data analysis]
 
 
 
