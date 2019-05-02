@@ -63,8 +63,9 @@ At the end of the course, the participants will be able to:
 ## Basic concepts on Linux Containers
 During this course we will use a number of tools that have been stored within a [**Linux Container**](https://en.wikipedia.org/wiki/LXC). 
 
-A Linux Container can be seen as minimal virtual environment that can be used in any Linux compatible machine, this allows us to save a lot of time / resources related to installation of tools and libraries and improves the reproducbility of an analysis. In particular we created a [**Docker**](https://www.docker.com/) image and stored it in [DockerHub](https://cloud.docker.com/u/biocorecrg/repository/docker/biocorecrg/rnaseq2019). 
+A Linux Container can be seen as minimal virtual environment that can be used in any Linux compatible machine, this allows us to save a lot of time / resources related to installation of tools and libraries and improves the reproducbility of an analysis. In brief you will nedd to install (or ask your IT to have installed) just one program.
 
+In particular we created a [**Docker**](https://www.docker.com/) image and stored it in [DockerHub](https://cloud.docker.com/u/biocorecrg/repository/docker/biocorecrg/rnaseq2019). 
 
 This image can be downloaded and used in computers running Linux or Mac OS or can be converted into a another Linux Container called [**Singularity**](https://www.sylabs.io/docs/) that is the one that will be used in this course. 
 
