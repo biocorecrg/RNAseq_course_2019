@@ -59,11 +59,13 @@ Depending on the technology and the protocol, RNA-Seq can produce
 
 To sequence only one of the two cDNA strands (that is, applying a stranded protocol shown below), the **Illumina's TruSeq Stranded mRNA** protocol uses the introduction of dUTP instead of dTTP during the amplification. The incorporation of dUTP in the second strand synthesis quenches the second strand during amplification, because the polymerase used in the assay is not incorporated past this nucleotide.  
 Stranded protocol allows detection of antisense molecules or genes in both 5' and 3' direction; while unstranded protocol is sometimes used when very little amount of RNA is available. 
+Note, in a stranded protocol, Read 1 is mapped to the antisense strand (this is also true for signle-end reads), while Read 2, to the sense strand.
 
+<img src="images/transcription.jpg" width="500" align="middle" />
 <img src="images/stranded_protocol.png" width="500" align="middle" />
 
 
-<img src="images/illumina3.png" width="500" align="middle" />
+
 
 cDNA molecules are then fragmented, indexed with a hexamer or octamer barcode (so that cDNA from different samples can be pooled into a single lane for multiplexed sequencing), amplified by PCR and sequenced. The output of RNA-seq is then demultiplexed yielding either one fastq-file per sample (for single-end protocol) or two fastq-files per sample (for paired-end protocol).
 
