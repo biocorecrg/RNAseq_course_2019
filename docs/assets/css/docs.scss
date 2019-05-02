@@ -25,15 +25,6 @@ pre {
 a {
 	text-decoration: none;
 	color: inherit;
-	&:link{ 
-		color: red;
-	}
-        &:visited {
-                color: red;
-        }
-        &:active {
-                color: red;
-        } 
 	&:hover {
 		color: green;
 		text-decoration: none;
