@@ -5,7 +5,7 @@ navigation: 2
 ---
 
 # Module 1
-## Introduction: what is RNA-Seq? 
+## Introduction: What is RNA-Seq? 
 
 |RNA molecule|
 | :---:  |
@@ -13,38 +13,34 @@ navigation: 2
 |from Wikipedia|
 
 
-RNA sequencing, aka RNA-seq, is a technique that allows to detect and quantify RNA molecules within biological samples by using next-generation sequencing (NGS). This technology is used to analyze the transcriptome by revealing
-* gene/transcript expression;
+RNA sequencing, aka RNA-Seq, is a technique that allows to detect and quantify RNA molecules within biological samples by using next-generation sequencing (NGS). This technology is used to analyze RNA by revealing
+* RNA/gene/transcript expression;
 * alternatively spliced transcripts;
 * gene fusion and SNPs;
-* post-translational modification;
+* post-translational modification.
 
 Other technologies for assessing RNA expression are Northern Blot [1], real-time PCR [2] and hybridization-based  microarrays [3].
 
 
 
-RNA-seq can be performed on
-* mRNA transcripts (by performing polyA enrichment of cellular RNA); 
-* total RNA; in this case a content of ribosomal RNA is very high;
+RNA-Seq can be performed using
+* total RNA (in this case the content of ribosomal RNA is about 80%);
 * rRNA depleted RNA (after removing ribosomal RNA);
+* mRNA transcripts (by performing polyA enrichment of RNA); 
 * small RNA, such as miRNA, tRNA (by selecting the size of RNA molecules; e.g., < 100 nt);
-* RNA molecules transcribed at a specific moment (ribosomal profiling);
+* RNA molecules transcribed at a specific time (ribosomal profiling);
 * specific RNA molecules (via hybridization with probes complementary to desired transcripts).
 
 
 
-Depending on the technology and the protocol, RNA-seq can produce
+Depending on the technology and the protocol, RNA-Seq can produce
 * single-end short reads (50-450 nt), which are useful for gene expression quantification (mainly **Illumina**, but also **Ion Torrent** and **BGISEQ**);
 * paired-end reads (2 x 50-250 nt), which are useful for detecting splicing events and refinement of transcriptome annotation;
-* stranded or unstranded sequencing reads; the former allows detection of antisense molecules or genes in both 5' and 3' direction, the latter is sometimes used when very little amount of RNA is available. 
 * single long reads (**PACBio** or **Nanopore**), which are used for the de novo identification of new transcripts and improving transcriptome assembly. 
 
 
 
-## mRNA sequencing (Illumina)
-RNA is isolated and converted to cDNA by using a polyT adapter that binds to the polyA tail. In this way non poly-adenylated transcripts like rRNA, tRNA and the majority of long ncRNAs are excluded from the reaction. 
-cDNA molecules are then fragmented, indexed with a hexamer or octamer barcode (so that cDNA from different samples can be pooled into a single lane for multiplexed sequencing), amplified by PCR and sequenced. The output of RNA-seq is then demultiplexed yielding either one fastq-file per sample (for single-end protocol) or two fastq-files per sample (for paired-end protocol).
-
+## mRNA-Seq protocol (Illumina)
 
 
 |RNASeq protocol|
@@ -52,16 +48,25 @@ cDNA molecules are then fragmented, indexed with a hexamer or octamer barcode (s
 |<img src="images/tileshop.jpeg" align="middle" />|
 |from Wang et al 2009 [4]|
 
+### Library preparation
 
+* **mRNA purification.** mRNA is isolated using a polyT adapter that binds to the polyA tail of RNA. In the result, non poly-adenylated transcripts - rRNA, tRNA, long ncRNAs, miRNA, histone mRNA, degraded RNA, bacterial transcripts, and many viral trascripts - are excluded from the reaction (washed away). 
 
-To sequence only one of the two cDNA strands (stranded protocol shown below), the **Illumina's TruSeq Stranded mRNA** protocol uses the introduction of dUTP instead of dTTP during the amplification. The incorporation of dUTP in the second strand synthesis quenches the second strand during amplification, because the polymerase used in the assay is not incorporated past this nucleotide.  
+* **RNA quantification, quality control and fragmentation**
+* **RNA is converted to cDNA**
+
+To sequence only one of the two cDNA strands (that is, applying a stranded protocol shown below), the **Illumina's TruSeq Stranded mRNA** protocol uses the introduction of dUTP instead of dTTP during the amplification. The incorporation of dUTP in the second strand synthesis quenches the second strand during amplification, because the polymerase used in the assay is not incorporated past this nucleotide.  
+Stranded protocol allows detection of antisense molecules or genes in both 5' and 3' direction; while unstranded protocol is sometimes used when very little amount of RNA is available. 
 
 <br/>
 <img src="images/illumina1.png" width="500" align="middle" />
 <img src="images/illumina2.png" width="500" align="middle" />
 <img src="images/illumina3.png" width="500" align="middle" />
 
-<br/>
+cDNA molecules are then fragmented, indexed with a hexamer or octamer barcode (so that cDNA from different samples can be pooled into a single lane for multiplexed sequencing), amplified by PCR and sequenced. The output of RNA-seq is then demultiplexed yielding either one fastq-file per sample (for single-end protocol) or two fastq-files per sample (for paired-end protocol).
+
+
+
 At the 3' end of the first strand sequence an extra "A" base is added to avoid "blunt ends" that can be randomly merged generating chimaeras. The products are then purified and enriched with PCR to create the final cDNA library. 
 
 <br/><br/>
