@@ -20,7 +20,6 @@ RNA sequencing, aka RNA-Seq, is a technique that allows to detect and quantify R
 * post-translational modification.
 
 Other technologies for assessing RNA expression are Northern Blot [1], real-time PCR [2] and hybridization-based  microarrays [3].
-
 <br/>
 
 RNA-Seq can be performed using
@@ -30,8 +29,7 @@ RNA-Seq can be performed using
 * small RNA, such as miRNA, tRNA (by selecting the size of RNA molecules; e.g., < 100 nt);
 * RNA molecules transcribed at a specific time (ribosomal profiling);
 * specific RNA molecules (via hybridization with probes complementary to desired transcripts).
-
-
+<br/>
 
 Depending on the technology and the protocol, RNA-Seq can produce
 * single-end short reads (50-450 nt), which are useful for gene expression quantification (mainly **Illumina**, but also **Ion Torrent** and **BGISEQ**);
@@ -105,8 +103,8 @@ The output of RNA-seq is then demultiplexed yielding either one fastq-file per s
 
 **HOMEWORK (until tomorrow)**
 
-* Read and do an exercise from [https://github.com/hbctraining/rnaseq_overview/blob/master/lessons/experimental_planning_considerations.md] (https://github.com/hbctraining/rnaseq_overview/blob/master/lessons/experimental_planning_considerations.md).
-* Read [https://rawgit.com/bioinformatics-core-shared-training/experimental-design/master/ExperimentalDesignManual.pdf] (https://rawgit.com/bioinformatics-core-shared-training/experimental-design/master/ExperimentalDesignManual.pdf).
+* Read and do an exercise from [https://github.com/hbctraining/rnaseq_overview/blob/master/lessons/experimental_planning_considerations.md] (https://github.com/hbctraining/rnaseq_overview/blob/master/lessons/experimental_planning_considerations.md/).
+* Read [https://rawgit.com/bioinformatics-core-shared-training/experimental-design/master/ExperimentalDesignManual.pdf] (https://rawgit.com/bioinformatics-core-shared-training/experimental-design/master/ExperimentalDesignManual.pdf/).
 
 
 
