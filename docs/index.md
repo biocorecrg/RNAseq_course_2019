@@ -10,6 +10,7 @@ navigation: 1
 
 Dates:
 
+
 | Day  | Date  | Time  |
 | :---:  | :---  | ---:  |
 | 1 | Tuesday 13th of May 2019|9:30-13:30|
