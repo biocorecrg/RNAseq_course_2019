@@ -25,13 +25,13 @@ pre {
 a {
 	text-decoration: none;
 	color: inherit;
-	&a:link{ 
+	&:link{ 
 		color: red;
 	}
-        &a:visited {
+        &:visited {
                 color: red;
         }
-        &a:active {
+        &:active {
                 color: red;
         } 
 	&:hover {
