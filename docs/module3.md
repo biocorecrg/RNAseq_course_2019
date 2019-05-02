@@ -36,12 +36,19 @@ A confounded RNA-Seq experiment is one where you cannot distinguish the separate
 
 For example, we know that sex has large effects on gene expression, and if all of our control mice were female and all of the treatment mice were male, then our treatment effect would be confounded by sex. We could not differentiate the effect of treatment from the effect of sex.
 
-<img src="images/confounded_design.png.jpg" width="400"/>
+<img src="images/confounded_design.png" width="400"/>
 
 To avoid confounding, make sure the animals are all the same sex, age, litter, and batch.
 If not possible, then ensure to split the animals equally between conditions
 
 <img src="images/non_confounded_design.png" width="400"/>
+
+### Batch effect
+
+
+<img src="images/batch_effect_pca.png" width="800"/>
+
+Image credit: [Hicks SC, et al., bioRxiv (2015)](https://www.biorxiv.org/content/early/2015/08/25/025528)
 
 
 
@@ -159,6 +166,9 @@ DESeq2 performs for each gene a hypothesis test to see whether evidence is suffi
 
 Rscript deseq2_star.R sampletable_star.txt
 Rscript deseq2_salmon.R sampletable_salmon.txt
+
+* DESeq2 output
+
 
 
 
