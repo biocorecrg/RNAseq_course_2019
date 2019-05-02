@@ -20,6 +20,7 @@ RNA sequencing, aka RNA-Seq, is a technique that allows to detect and quantify R
 * post-translational modification.
 
 Other technologies for assessing RNA expression are Northern Blot [1], real-time PCR [2] and hybridization-based  microarrays [3].
+
 <br/>
 
 RNA-Seq can be performed using
@@ -29,6 +30,7 @@ RNA-Seq can be performed using
 * small RNA, such as miRNA, tRNA (by selecting the size of RNA molecules; e.g., < 100 nt);
 * RNA molecules transcribed at a specific time (ribosomal profiling);
 * specific RNA molecules (via hybridization with probes complementary to desired transcripts).
+
 <br/>
 
 Depending on the technology and the protocol, RNA-Seq can produce
@@ -46,6 +48,7 @@ Depending on the technology and the protocol, RNA-Seq can produce
 | :---:  |
 |<img src="images/tileshop.jpeg" align="middle" />|
 |from Wang et al 2009 [4]|
+
 <br/>
 
 ### Library preparation
@@ -82,7 +85,6 @@ Note that in a stranded protocol shown here (in other protocols it can be differ
 |from [https://github.com/hbctraining/rnaseq_overview](https://github.com/hbctraining/rnaseq_overview)|
 
 
-
 * **cDNA amplification** 
 
 * **cDNA library quality control and fragment selection**
@@ -91,6 +93,7 @@ Note that in a stranded protocol shown here (in other protocols it can be differ
 
 The output of RNA-seq is then demultiplexed yielding either one fastq-file per sample (for single-end reads protocol) or two fastq-files per sample (for paired-end reads protocol).
 
+<br/>
 
 ### Experimental design
 
@@ -103,10 +106,10 @@ The output of RNA-seq is then demultiplexed yielding either one fastq-file per s
 
 **HOMEWORK (until tomorrow)**
 
-* Read and do an exercise from [https://github.com/hbctraining/rnaseq_overview/blob/master/lessons/experimental_planning_considerations.md] (https://github.com/hbctraining/rnaseq_overview/blob/master/lessons/experimental_planning_considerations.md/).
-* Read [https://rawgit.com/bioinformatics-core-shared-training/experimental-design/master/ExperimentalDesignManual.pdf] (https://rawgit.com/bioinformatics-core-shared-training/experimental-design/master/ExperimentalDesignManual.pdf/).
+* Read and do an exercise from [https://github.com/hbctraining/rnaseq_overview/blob/master/lessons/experimental_planning_considerations.md](https://github.com/hbctraining/rnaseq_overview/blob/master/lessons/experimental_planning_considerations.md).
+* Read [https://rawgit.com/bioinformatics-core-shared-training/experimental-design/master/ExperimentalDesignManual.pdf](https://rawgit.com/bioinformatics-core-shared-training/experimental-design/master/ExperimentalDesignManual.pdf).
 
-
+<br/>
 
 ### mRNA-Seq data analysis workflow
 
@@ -115,11 +118,13 @@ The output of RNA-seq is then demultiplexed yielding either one fastq-file per s
 **put here a BIG PICTURE of data analysis**
 
 
+<br/>
 
 ### FASTQ format for sequencing reads
 
 Short (and long) sequencing reads coming from the sequencers are stored in **FASTQ** format.
 This format contains the information about sequence and the quality of each base, which encodes the probability that the corresponding base call is incorrect.
+<br/>
 
 <img src="images/fastq_format.png" width="500"/>
 
@@ -131,13 +136,14 @@ The format contains four rows per sequencing read:
 
 <img src="images/phred_quality.png" width="500"/>
 
+<br/>
 
+* Score = 10 (symbol '+') => probability of incorrect base call = 0.1 => base call accuracy = 90%
+* Score = 20 (symbol '5') => probability of incorrect base call = 0.01 => base call accuracy = 99%
+* Score = 30 (symbol '?') => probability of incorrect base call = 0.001 => base call accuracy = 99.9%
+* Score = 40 (symbol 'I') => probability of incorrect base call = 0.0001 => base call accuracy = 99.99%
 
-* The Q score of 10 (symbol '+') corresponds to the probability that the base call is incorrect of 0.1.
-* The Q score of 20 (symbol '5') corresponds to the probability that the base call is incorrect of 0.01.
-* The Q score of 30 (symbol '?') corresponds to the probability that the base call is incorrect of 0.001.
-* The Q score of 40 (symbol 'I') corresponds to the probability that the base call is incorrect of 0.0001 .
-
+<br/>
 
 
 ### RNA-Seq data repositories
@@ -153,14 +159,15 @@ These repositoroes are linked to the repositories of NGS raw data (Fastq files):
 * [**ENA**](https://www.ebi.ac.uk/ena) (European Nucleotide Archive) 
 * [**DDBJ-DRA**](https://www.ddbj.nig.ac.jp/dra/index-e.html) 
 
-
+<br/>
 
 **EXERCISE**
-Let's explore one of the GEO records; that is https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE126535 
+Let's explore [one of the GEO records](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE126535)
 * Which platform and protocol were used for sequencing?
 * What type of RNA was sequenced?
 * How many samples were sequenced?
 
+<br/>
 
 **NOTE: You will need to download data from SRA for an independent project after this week!**
 To download raw data from **SRA**, it is possible to use **fastq-dump program** from [**SRA toolkit**](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc) or to download files from the NCBI ftp website using wget. 
