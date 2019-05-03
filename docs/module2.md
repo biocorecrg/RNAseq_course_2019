@@ -383,10 +383,10 @@ We can check the final report again with a browser like firefox:
 firefox QC/qualimapReport.html
 ```
 
-<img src="images/qualimap1.png" width="1200" align="middle" />
-<img src="images/qualimap2.png" width="1200" align="middle" />
-<img src="images/qualimap3.png" width="1200" align="middle" />
-<img src="images/qualimap4.png" width="1200" align="middle" />
+<img src="images/qualimap1.png"  align="middle" />
+<img src="images/qualimap2.png"  align="middle" />
+<img src="images/qualimap3.png"  align="middle" />
+<img src="images/qualimap4.png"  align="middle" />
 
 
 For aligning with **Salmon** we need to specify the strandess of the library (**Fragment Library Types**). In brief you have to specify three letters:
