@@ -16,19 +16,19 @@ This image can be downloaded and used in computers running Linux or Mac OS or ca
 The Singularity image is basically a file that can be accessed by the program Singulairty for executing any software is installed within that image. You can create this image to use the tools we will show in this course at your convenience by using the following command:
 
 ```{bash}
-singularity pull docker://biocorecrg/rnaseq2019:X.X
+singularity pull docker://biocorecrg/rnaseq2019:1.5
 ```
 
 And access it in the following way 
 
 ```{bash}
-export RUN="singularity exec ./rnaseq2019-1.0.simg"
+export RUN="singularity exec $PWD/rnaseq2019-1.5.simg"
 $RUN STAR --help
 ```
 
 If you are a CRG user with access to our cluster you can just access it at this path:
 
 ```{bash}
-export RUN="singularity exec $PATH/rnaseq2019-1.0.simg"
+export RUN="singularity exec $PATH/rnaseq2019-1.5.simg"
 $RUN STAR --help
 ```
