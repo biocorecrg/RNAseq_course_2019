@@ -21,14 +21,13 @@ The best performing tools tend to be:
 * [limma (voom)](https://bioconductor.org/packages/release/bioc/html/limma.html)
 
 See [Schurch et al, 2015; arXiv:1505.02017](https://arxiv.org/abs/1505.02017).
-<br>
+<br><br>
 In this tutorial, we will give you an overview of the **DESeq2** pipeline to find differentially expressed **genes**.
 
 ### DESeq2
 
 [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) is an R/Bioconductor implemented method to detect differentially expressed features.<br>
-It is based on the negative binomial distribution.<br>
-
+It is based on the negative binomial distribution.
 <br>
 The package DESeq2 provides methods to test for differential expression by use of negative binomial generalized linear models.
 <br>
@@ -59,7 +58,7 @@ The **ReadsPerGene.out.tab** output files of STAR (from option --quantMode GeneC
 The protocol used to prepare the libraries for the A549 ENCODE samples is **reverse stranded**, so we need to extract the 4th column of each of the "ReadsPerGene" files, along with the column containing the <b>gene names</b>.
 
 
-```
+```{bash}
 # retrieve the 1rst column, containing the gene IDs
 cut -f 1 A549_0_1ReadsPerGene.out.tab | grep -v "_" > gene_column.txt
 
@@ -76,13 +75,13 @@ sed -i -e "1igene_name\t$(ls A549_0_*ReadsPerGene.out.tab | tr '\n' '\t' | sed '
 
 * **Option 2**: one file per sample, each file containing the raw counts of all genes:
 
-File A549_0_1chr10_counts.txt:
+File **A549_0_1chr10_counts.txt**:
 
 | ENSG00000260370.1 | 0 |
 | ENSG00000237297.1 | 10 |
 | ENSG00000261456.5 | 210 |
 
-File A549_0_2chr10_counts.txt:
+File **A549_0_2chr10_counts.txt**:
 
 | ENSG00000260370.1 | 0 |
 | ENSG00000237297.1 | 8 |
@@ -96,12 +95,12 @@ Let's prepare the 6 files needed for our analysis, from the STAR output, that we
 <br>
 Create directory
 
-```
+```{bash}
 mkdir counts_star
 ```
 
 
-```
+```{bash}
 for i in *ReadsPerGene.out.tab
 do echo $i
 # retrieve the first (gene name) and fourth column (raw reads)
@@ -281,6 +280,9 @@ Rscript deseq2_salmon.R sampletable_salmon.txt
 ### Online tool
 
 This [online tool](http://52.90.192.24:3838/rnaseq2g/) provides a way to process differential expression analysis using some of the popular tools in the field (among which DESeq2, edgeR, limma), starting from raw counts, via a user Interface.
+
+<img src="images/rnaseq2g_UI.png" width="1100"/>
+
 
 * Prepare the matrix of raw counts
 
