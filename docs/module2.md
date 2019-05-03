@@ -259,7 +259,7 @@ D00137:453:HLFY2BCXY:1:1214:7640:70489	419	chr10	37872	3	51M	=	37978	156	TGGGAGA
 The first part indicated by the first character **@** in each row is the header:
 
 | Symbol|  |  |   
-| :---- | :---- | :---- |
+| :----: | :---- | :---- |
 | **@HD** header line	| **VN:1.4** version of the SAM format|	**SO:coordinate** sorting order|
 | **@SQ** reference sequence dictionary 	| **SN:chr10** sequence name|	**LN:133797422** sequence length|
 | **@PG** program used|	**ID:STAR** **PN:STAR**	**VN:STAR_2.5.3a** version| **CL:STAR   --genomeDir annotations/chr10   --readFilesIn resources/A549_0_1chr10_1.fastq.gz   resources/A549_0_1chr10_2.fastq.gz      --readFilesCommand zcat      --outFileNamePrefix A549_0_1   --outSAMtype BAM   SortedByCoordinate      --quantMode GeneCounts** command line|
@@ -268,7 +268,7 @@ The first part indicated by the first character **@** in each row is the header:
 The rest is the proper alignment. 
 
 | Field|Value |   
-| :---- | ----: |
+| :----: | :---- |
 |Query name 	|D00137:453:HLFY2BCXY:2:1115:10428:98737|
 |FLAG 	|419 * |
 |Reference name 	|chr10|
@@ -286,7 +286,7 @@ The rest is the proper alignment.
 Extra fields are often present and are different among aligner tools (https://samtools.github.io/hts-specs/SAMtags.pdf). In our case we have:
 
 | Field|Meaning |   
-| :---- | ----: |
+| :----: | :---- |
 |NH:i:2|number of mapping to the reference|
 |HI:i:2|which aligmnent is the reported one (in this case is the second one)|	
 |AS:i:74|Alignment score calculate by the aligner|
@@ -327,7 +327,7 @@ rm alignments/*.sam
 Gene counts are reported within the file **PREFIX**ReadsPerGene.out.tab. It is a tab separated text with information about 
 
 | | | | |   
-| :---- | :---- | :---- |  :---- |
+| :----: | :----: | :----: |  :----: |
 |gene id| read counts per gene (no strand) | read counts per gene (forward)|read counts per gene (reverse)| 
 |N_unmapped|	26098|	26098|	26098|
 |...|	...|	...|	...|
@@ -365,17 +365,17 @@ So we can confirm that the protocol used is sequencing the reverse complement of
 For aligning with **Salmon** we need to specify the strandess of the library (**Fragment Library Types**). In brief you have to specify three letters:
 
 The first:
-I = inward   -> ... <- 
-O = outward  <- ... ->
-M = matching -> ... ->
+* I = inward   -> ... <- 
+* O = outward  <- ... ->
+* M = matching -> ... ->
 
 The second:
-S = stranded
-U = unstranded
+* S = stranded
+* U = unstranded
 
 The third:
-F = read 1 (or single-end read) comes from the forward strand
-R = read 1 (or single-end read) comes from the reverse strand
+* F = read 1 (or single-end read) comes from the forward strand
+* R = read 1 (or single-end read) comes from the reverse strand
 
 In our case we have **Inward**, **Stranded** and **Reverse**. Moreover if we want to assign the reads to the genes too we need to provide a GTF file with correlation between transcripts and genes (otpion **-g**).
 
@@ -385,6 +385,7 @@ $RUN salmon quant -i indexes/transcripts -l ISR \
     -2 resources/A549_0_1chr10_2.fastq.gz \
     -o alignments/salmon_A549_0_1 \
     -g annotations/gencode.v29.annotation_chr10.gtf \
+    --seqBias \
     --validateMappings 
 
 Version Info: This is the most recent version of salmon.
@@ -406,10 +407,28 @@ And in particular the file **quant.genes.sf**, that is a tabular file with the f
 
 
 |Column |Meaning |   
-| :---- | :---- |
-|||
-|||
+| :----: | :---- |
+|Name| Gene name|
+|Length| Gene length|
+|EffectiveLength| Effective length after considering biases|
+|TPM|Transcripts Per Million|
+|NumReads|Estimated number of reads considering both univocally and multimapping reads|
 
+```{bash}
+head -n 5 alignments/salmon_A549_0_1/quant.genes.sf 
 
+Name	Length	EffectiveLength	TPM	NumReads
+ENSG00000285803.1	1152	1116.21	7.96961	15.764
+ENSG00000285712.1	1590	1545.58	2.19064	6
+ENSG00000285824.1	1120	860.855	6.91601	10.551
+ENSG00000285884.1	790	515.683	3.28285	3
+
+head -n 5 alignments/salmon_A549_0_1/quant.sf 
+Name	Length	EffectiveLength	TPM	NumReads
+ENST00000016171.5	2356	1970.742	659.861626	2304.468
+ENST00000020673.5	4183	5925.497	0.000000	0.000
+ENST00000173785.4	925	868.802	0.000000	0.000
+ENST00000181796.6	3785	3216.057	0.000000	0.000
+```
 
 
