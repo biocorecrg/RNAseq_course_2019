@@ -101,7 +101,7 @@ GSEA is a Java-based tool.
 
 GSEA doesn't require a threshold: the whole set of genes is considered.
 
-<img src="images/gsea_paper1.jpg" width="800" align="middle" />
+<img src="images/gsea_paper.jpg" width="800" align="middle" />
 
 
 (A) An expression data set sorted by correlation with phenotype, the corresponding heat map, and the “gene tags,” i.e., location of genes from a set S within the sorted list. (B) Plot of the running sum for S in the data set, including the location of the maximum enrichment score (ES) and the leading-edge subset.
@@ -115,6 +115,7 @@ The algorithm consists of 3 key elements:
 The Enrichment Score (ES) reflects the degree to which a gene set is overrepresented at the extremes (top or bottom) of the entire ranked gene list.
 2. **Estimation of Significance Level of ES** 
 The statistical significant (nominal p-value) of the ES is estimated by using an empirical phenotype-based permutation test procedure.
+
 3. **Adjustment for Multiple Hypothesis Testing**
 When an entire database of gene sets is evaluated, we adjust the estimated significance level to account for multiple hypothesis testing. We first normalize the ES for each gene set to account for the size of the set, yielding a normalized enrichment score (NES). We then control the proportion of false positives by calculating the false discovery rate (FDR) (8, 9) corresponding to each NES. The FDR is the estimated probability that a set with a given NES represents a false positive finding; it is computed by comparing the tails of the observed and null distributions for the NES.
 
