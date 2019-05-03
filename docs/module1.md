@@ -271,7 +271,8 @@ To assess the quality of sequencing data, we will use the programms **FastQC**[5
 FastQC calculates statistics about the composition and quality of raw sequences, while Fastq Screen looks for possible contaminations. 
 
 ```{bash}
-fastqc resources/A549_25_3chr10_*.fastq.gz
+mkdir QC
+$RUN fastqc resources/A549_25_3chr10_*.fastq.gz -o QC/
 
 Started analysis of A549_25_3chr10_1.fastq.gz
 Approx 5% complete for A549_25_3chr10_1.fastq.gz
@@ -287,9 +288,9 @@ Analysis complete for A549_25_3chr10_2.fastq.gz
 
 We can display the results with a browser; e.g., Firefox, for each file individually or all files with one command:
 ```{bash}
-firefox resources/A549_25_3chr10_1_fastqc.html
+firefox QC/A549_25_3chr10_1_fastqc.html
 
-firefox resources/*.html
+firefox QC/*.html
 ```
 
 <img src="images/fastqc.png" width="800"/>
@@ -301,10 +302,10 @@ Below is an example of a poor quality dataset. As you can see, the average quali
 <img src="images/bad_fastqc.png" width="800"/>
 
 
-**Fastq Screen** requires a number of databases to be installed. A number of prepared by the authors of the program databases can be downloaded by using the following command (DO NOT LUNCH IT NOW!!!):
+**Fastq Screen** requires a number of databases to be installed. A number of prepared by the authors of the program databases can be downloaded by using the following command (**DO NOT LAUNCH IT NOW!!!**):
 
 ```{bash}
-fastq_screen --get_genomes
+$RUN fastq_screen --get_genomes
 ``` 
 
 This will download 11 genomes (arabidopsis, drosophila, E. coli, human, lambda, mouse, mitochondria, phiX, rat, worm and yeast) and 3 collection of sequences (adapters, vectors, rRNA) indexed with bowtie2. This step is quite slow so we are not going to launch it now.
@@ -312,7 +313,7 @@ This will download 11 genomes (arabidopsis, drosophila, E. coli, human, lambda, 
 To execute Fastq Screen: 
 
 ```{bash}
-fastq_screen --conf fastq_screen.conf A549_0_1_1.fastq.gz 
+$RUN fastq_screen --conf fastq_screen.conf A549_0_1_1.fastq.gz 
 Using fastq_screen v0.13.0
 Reading configuration from 'fastq_screen.conf'
 Aligner (--aligner) not specified, but Bowtie2 path and index files found: mapping with Bowtie2
@@ -361,7 +362,7 @@ Adapters are usually expected in small RNA-Seq because the molecules are tipical
 
 
 ```{bash}
-fastqc subsample_to_trim.fq.gz
+$RUN fastqc resources/subsample_to_trim.fq.gz -o /QC
 
 Started analysis of subsample_to_trim.fq.gz
 Approx 5% complete for subsample_to_trim.fq.gz
@@ -387,7 +388,7 @@ There are many tools for trimming reads and removing adapters, such as **Trim Ga
 Let's use **skewer[7]** to trim the Illumina small RNA 3' adapter.  
 
 ```{bash}
-skewer subsample_to_trim.fq.gz -x TGGAATTCTCGGGTGCCAAGG
+$RUN skewer resources/subsample_to_trim.fq.gz -x TGGAATTCTCGGGTGCCAAGG -o QC/subsample_to_trim
 
 .--. .-.
 : .--': :.-.
@@ -411,20 +412,21 @@ Thu Apr 18 17:51:25 2019 >> done (6.789s)
  967609 (96.76%) reads available; of these:
  958360 (99.04%) trimmed reads available after processing
    9249 ( 0.96%) untrimmed reads available after processing
-log has been saved to "subsample_to_trim.fq-trimmed.log".
+log has been saved to "QC/subsample_to_trim-trimmed.log".
 ```
 
 We can look at the read distribution after the trimming of the adapter by inspecting the log-file or re-launching FastQC.
 
 ```{bash}
-fastqc subsample_to_trim.fq-trimmed.fastq  
+$RUN fastqc QC/subsample_to_trim-trimmed.fastq -o QC
 
-Started analysis of subsample_to_trim.fq-trimmed.fastq
-Approx 5% complete for subsample_to_trim.fq-trimmed.fastq
-Approx 10% complete for subsample_to_trim.fq-trimmed.fastq
-Approx 15% complete for subsample_to_trim.fq-trimmed.fastq
-Approx 20% complete for subsample_to_trim.fq-trimmed.fastq
-Approx 25% complete for subsample_to_trim.fq-trimmed.fastq
+Started analysis of subsample_to_trim-trimmed.fastq
+Approx 5% complete for subsample_to_trim-trimmed.fastq
+Approx 10% complete for subsample_to_trim-trimmed.fastq
+Approx 15% complete for subsample_to_trim-trimmed.fastq
+Approx 20% complete for subsample_to_trim-trimmed.fastq
+Approx 25% complete for subsample_to_trim-trimmed.fastq
+Approx 30% complete for subsample_to_trim-trimmed.fastq
 ...
 
 ```
