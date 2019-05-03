@@ -399,18 +399,27 @@ Finally we can check that most of our reads map to the exonic part, with little 
 
 For aligning with **Salmon** we need to specify the strandess of the library (**Fragment Library Types**). In brief you have to specify three letters:
 
-The first:
-* I = inward   -> ... <- 
-* O = outward  <- ... ->
-* M = matching -> ... ->
+**The first:**
 
-The second:
-* S = stranded
-* U = unstranded
+|Symbol |Meaning | Reads|  
+| :---: | :----: |:----: |
+|I|inward|-> ... <- |
+|O|outward|<- ... ->|
+|M|matching|> ... ->|
 
-The third:
-* F = read 1 (or single-end read) comes from the forward strand
-* R = read 1 (or single-end read) comes from the reverse strand
+**The second:**
+
+|Symbol |Meaning |
+| :---: | :----: |
+|S|stranded|
+|U|unstranded|
+
+**The third:**
+
+|Symbol |Meaning |
+| :---: | :----: |
+|F|read 1 (or single-end read) comes from the forward strand|
+|R|read 1 (or single-end read) comes from the reverse strand|
 
 In our case we have **Inward**, **Stranded** and **Reverse**. Moreover if we want to assign the reads to the genes too we need to provide a GTF file with correlation between transcripts and genes (otpion **-g**).
 
