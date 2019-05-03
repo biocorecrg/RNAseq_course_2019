@@ -163,7 +163,7 @@ As a good practice is better to keep our files zipped as much as possible, you w
 **PLEASE DO NOT UNZIP ALSO THE FILE gencode.v29.transcripts.fa!! THE FOLLOWING IS AN EXAMPLE!!**
 
 ```{bash}
-for i in *.gz; do gzip $i; done
+for i in *.gz; do gunzip $i; done
 
 ls -alht
 total 617M
@@ -180,9 +180,11 @@ To indexing the genome with **STAR** we need to provide also the parameter **sjd
 This step will require some minutes:
 
 ```{bash}
-mkdir chr10
-STAR --runMode genomeGenerate --genomeDir chr10 \
-            --genomeFastaFiles Homo_sapiens.GRCh38.dna.chromosome.10.fa --sjdbGTFfile gencode.v29.annotation_chr10.gtf \
+mkdir indexes
+mkdir indexes/chr10
+$RUN STAR --runMode genomeGenerate --genomeDir indexes/chr10 \
+            --genomeFastaFiles annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa \
+            --sjdbGTFfile annotations/gencode.v29.annotation_chr10.gtf \
             --sjdbOverhang 50 --outFileNamePrefix chr10
 
 Apr 30 18:21:00 ..... started STAR run
@@ -205,7 +207,8 @@ Apr 30 18:27:24 ..... finished successfully
 **Salmon** does not need any decompression of the input so we can index by using this command:
 
 ```{bash}
-salmon index -t gencode.v29.transcripts.fa.gz -i transcripts --gencode 
+$RUN salmon index --gencode -t annotations/gencode.v29.transcripts.fa.gz -i indexes/transcripts
+
 Version Info: This is the most recent version of salmon.
 index ["transcripts"] did not previously exist  . . . creating it
 [2019-04-30 18:12:59.272] [jLog] [info] building index
@@ -227,12 +230,14 @@ As you can see we also added an extra paramters **--gencode** since we derived t
 For aligning with **STAR** we need to specify the path of the files (reads and index folder) and if the reads are compressed or not (**--readFilesCommand zcat**). Then we can also specify the kind of outptut we want, in this case we choose **BAM** format with alignment sorted by coordinates. We also indicated that we want to output gene counts too (**--quantMode GeneCounts**) that will be useful for differential analysis.
 
 ```{bash}
-STAR --genomeDir annotations/chr10 \
-     --readFilesIn resources/A549_0_1chr10_1.fastq.gz resources/A549_0_1chr10_2.fastq.gz \
+mkdir alignments
+
+$RUN STAR --genomeDir indexes/chr10 \
+      --readFilesIn resources/A549_0_1chr10_1.fastq.gz resources/A549_0_1chr10_2.fastq.gz \
       --readFilesCommand zcat \
       --outSAMtype BAM SortedByCoordinate \
       --quantMode GeneCounts \
-      --outFileNamePrefix A549_0_1
+      --outFileNamePrefix alignments/A549_0_1
       
 Apr 30 18:50:13 ..... started STAR run
 Apr 30 18:50:13 ..... loading genome
@@ -244,7 +249,7 @@ Apr 30 18:55:30 ..... finished successfully
 We cannot inspect directly the output file since the **BAM** format is a compressed version of the [**SAM**](https://samtools.github.io/hts-specs/SAMv1.pdf) (that is plain text). We can convert BAM to SAM by using [**samtools**](http://samtools.sourceforge.net/). Note that we use the parameter **-h** to show also the header that is hidden by default. 
 
 ```{bash}
-samtools view -h A549_0_1Aligned.sortedByCoord.out.bam |head -n 10
+$RUN samtools view -h alignments/A549_0_1Aligned.sortedByCoord.out.bam |head -n 10
 
 @HD	VN:1.4	SO:coordinate
 @SQ	SN:chr10	LN:133797422
@@ -275,9 +280,9 @@ The rest is the proper alignment.
 |FLAG 	|419 * |
 |Reference name 	|chr10|
 |Leftmost mapping position 	|35442|
-|Mapping quality 	|3 **(p=0.5)**|
-|CIGAR string 	|13M174562N32M6S **13 bases equal to the reference (M), 174562 not mapping = 1 insertion (N) 32 mapping (M) 6 soft clipped (S)|
-|Reference name for mate read |	= **same chromosome**|
+|Mapping quality 	|3 *(p=0.5)* |
+|CIGAR string 	|13M174562N32M6S *13 bases equal to the reference (M), 174562 not mapping = 1 insertion (N) 32 mapping (M) 6 soft clipped (S)*|
+|Reference name for mate read |	= *same chromosome*|
 |Position of the mate| 	236864|
 |Template length| 	201473|
 |Sequence |AGCTGTTATTGAACAAGAAGGGATTGGTTGCCAGGAGATGAGATTAGCATT|
@@ -300,9 +305,9 @@ definition.*
 Let's now convert BAM to SAM:
 
 ```{bash}
-samtools view -h A549_0_1Aligned.sortedByCoord.out.bam > A549_0_1.sam
+$RUN samtools view -h alignments/A549_0_1Aligned.sortedByCoord.out.bam > alignments/A549_0_1.sam
 
-ls -alht A549_0_1*[sb]am
+ls -alht alignments/A549_0_1*[sb]am
 -rw-r--r-- 1 lcozzuto Bioinformatics_Unit 1.5G May  2 18:34 A549_0_1.sam
 -rw-r--r-- 1 lcozzuto Bioinformatics_Unit 320M Apr 30 18:55 A549_0_1Aligned.sortedByCoord.out.bam
 ```
@@ -310,11 +315,9 @@ ls -alht A549_0_1*[sb]am
 We can see that the SAM alignment is 5 times bigger than the sam one. A more efficient way to store the alignment is to use the [**CRAM format**](https://samtools.github.io/hts-specs/CRAMv3.pdf). For converting a **bam** to **cram** we need to have unzipped and indexed version of our genome.
 
 ```{bash}
-gunzip annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz
+$RUN samtools faidx annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa
 
-samtools faidx annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa
-
-samtools view -C A549_0_1Aligned.sortedByCoord.out.bam -T annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa > A549_0_1.cram
+$RUN samtools view -C alignments/A549_0_1Aligned.sortedByCoord.out.bam -T annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa > alignments/A549_0_1.cram
 
 ls -alht A549_0_1*.*am
 -rw-r--r-- 1 lcozzuto Bioinformatics_Unit 1.5G May  2 18:59 A549_0_1.sam
@@ -322,7 +325,11 @@ ls -alht A549_0_1*.*am
 -rw-r--r-- 1 lcozzuto Bioinformatics_Unit 320M Apr 30 18:55 A549_0_1Aligned.sortedByCoord.out.bam
 ```
 
-We saved in this way 50% more space than using the **bam** format.
+We saved in this way 50% more space than using the **bam** format. Let's remove the sam format.
+```{bash}
+rm alignments/*.sam 
+```
+
 
 Gene counts are reported within the file **PREFIX**ReadsPerGene.out.tab. It is a tab separated text with information about 
 
@@ -330,12 +337,13 @@ Gene counts are reported within the file **PREFIX**ReadsPerGene.out.tab. It is a
 | :---- | :---- | :---- |  :---- |
 |gene id| read counts per gene (no strand) | read counts per gene (forward)|read counts per gene (reverse)| 
 |N_unmapped|	26098|	26098|	26098|
-
+|...|	...|	...|	...|
+|ENSG00000261456.5|	13|	0|	13|
 
 This is quite useful in case we don't know which kit was used for the sequencing step. At the beginning we also have number of unmapped reads, of reads that map to more than one position 
 
 ```{bash}
-more A549_0_1ReadsPerGene.out.tab
+more alignments/A549_0_1ReadsPerGene.out.tab
 
 N_unmapped	26098	26098	26098
 N_multimapping	337723	337723	337723
@@ -352,7 +360,15 @@ ENSG00000151240.16	1652	5	1664
 ...
 ```
 
-We can count the number of reads mapping to 
+We can count the number of reads mapping to each strand by using a simple awk script:
+
+```{bash}
+grep -v "N_" alignments/A549_0_1ReadsPerGene.out.tab | awk '{unst+=$2;forw+=$3;rev+=$4}END{print unst,forw,rev}'
+
+2343002 153677 2427536
+```
+So we can confirm that the protocol used is sequencing the reverse complement of input mRNAs.
+
 
 For aligning with **Salmon** we need to specify the  ...
 
