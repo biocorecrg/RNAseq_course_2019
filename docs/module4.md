@@ -34,7 +34,7 @@ http://software.broadinstitute.org/gsea/msigdb/index.jsp
 ### Enrichment analysis based on gene selection
 
 * Gene Universe: in our example: all genes present in our annotation, on chromosome 10
-* List of genes selected from the universe: our selection of genes, give the criteria we defined: padj < 0.01, |log2FoldChange| >= 1
+* List of genes selected from the universe: our selection of genes, give the criteria we defined: padj < 0.01, &#124;log2FoldChange&#124; >= 1
 
 #### Hypergeometric test
 
@@ -66,6 +66,7 @@ https://www.bioconductor.org/packages/release/bioc/vignettes/GOstats/inst/doc/GO
 
 https://bioconductor.org/packages/release/bioc/vignettes/topGO/inst/doc/topGO.pdf
 
+```{r}
 library("topGO")
 library("org.Hs.eg.db")
 
@@ -87,7 +88,7 @@ library("org.Hs.eg.db")
                    annot = annFUN.org, 
                    mapping = "org.Hs.eg.db",
                    ID = "entrez") 
-
+```
 
 ### Enrichment based on ranked lists of genes
 
