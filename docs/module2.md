@@ -68,7 +68,7 @@ zcat annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz| grep -v ">"| tr -d
 The annotation is stored in **G**eneral **T**ransfer **F**ormat (**GTF**) format: a tabular format with one line per feature, each one containing 9 columns of data. In general it has a header indicated by the first character **"#"** and one row per feature composed by 9 columns:
 
 | Column number | Column name | Details |
-| :----: | :----: | :----: |
+| ----: | :---- | :---- |
 | 1 | seqname | name of the chromosome or scaffold; chromosome names can be given with or without the 'chr' prefix. |
 | 2 | source | name of the program that generated this feature, or the data source (database or project name) |
 | 3 | feature | feature type name, e.g. Gene, Variation, Similarity |
@@ -207,7 +207,7 @@ Apr 30 18:27:24 ..... finished successfully
 **Salmon** does not need any decompression of the input so we can index by using this command:
 
 ```{bash}
-$RUN salmon index --gencode -t annotations/gencode.v29.transcripts.fa.gz -i indexes/transcripts
+$RUN salmon index -t annotations/gencode.v29.transcripts.fa.gz -i indexes/transcripts
 
 Version Info: This is the most recent version of salmon.
 index ["transcripts"] did not previously exist  . . . creating it
@@ -215,16 +215,9 @@ index ["transcripts"] did not previously exist  . . . creating it
 [2019-04-30 18:12:59.275] [jointLog] [info] [Step 1 of 4] : counting k-mers
 
 [....]
-
-Elapsed time: 53.0026s
-processed 316,000,000 positions[2019-04-30 18:17:34.139] [jointLog] [info] khash had 132,046,162 keys
-[2019-04-30 18:17:34.143] [jointLog] [info] saving hash to disk . . . 
-[2019-04-30 18:18:01.144] [jointLog] [info] done
-Elapsed time: 27.0014s
 [2019-04-30 18:18:07.251] [jLog] [info] done building index
 ```
 
-As you can see we also added an extra paramters **--gencode** since we derived the data from that resource and has a particular header separator **"\|"**. 
 
 ### Aligning
 For aligning with **STAR** we need to specify the path of the files (reads and index folder) and if the reads are compressed or not (**--readFilesCommand zcat**). Then we can also specify the kind of outptut we want, in this case we choose **BAM** format with alignment sorted by coordinates. We also indicated that we want to output gene counts too (**--quantMode GeneCounts**) that will be useful for differential analysis.
@@ -369,6 +362,54 @@ grep -v "N_" alignments/A549_0_1ReadsPerGene.out.tab | awk '{unst+=$2;forw+=$3;r
 ```
 So we can confirm that the protocol used is sequencing the reverse complement of input mRNAs.
 
+For aligning with **Salmon** we need to specify the strandess of the library (**Fragment Library Types**). In brief you have to specify three letters:
 
-For aligning with **Salmon** we need to specify the  ...
+The first:
+I = inward   -> ... <- 
+O = outward  <- ... ->
+M = matching -> ... ->
+
+The second:
+S = stranded
+U = unstranded
+
+The third:
+F = read 1 (or single-end read) comes from the forward strand
+R = read 1 (or single-end read) comes from the reverse strand
+
+In our case we have **Inward**, **Stranded** and **Reverse**. Moreover if we want to assign the reads to the genes too we need to provide a GTF file with correlation between transcripts and genes (otpion **-g**).
+
+```{bash}
+$RUN salmon quant -i indexes/transcripts -l ISR \
+    -1 resources/A549_0_1chr10_1.fastq.gz \
+    -2 resources/A549_0_1chr10_2.fastq.gz \
+    -o alignments/salmon_A549_0_1 \
+    -g annotations/gencode.v29.annotation_chr10.gtf \
+    --validateMappings 
+
+Version Info: This is the most recent version of salmon.
+### salmon (mapping-based) v0.13.1
+### [ program ] => salmon 
+### [ command ] => quant 
+....
+```
+
+We can check the results inside the folder 
+
+```{bash}
+ls alignments/salmon_A549_0_1/
+
+aux_info  cmd_info.json  lib_format_counts.json  libParams  logs  quant.genes.sf  quant.sf
+```
+
+And in particular the file **quant.genes.sf**, that is a tabular file with the following information:
+
+
+|Column |Meaning |   
+| :---- | :---- |
+|||
+|||
+
+
+
 
