@@ -108,11 +108,15 @@ GSEA doesn't require a threshold: the whole set of genes is considered.
 
 
 GSEA checks whether a particular gene set (for example, a gene ontology) is randomly distributed across a list of ranked genes.
+<br>
+The algorithm consists of 3 key elements:
 
-1. Calculation of the Enrichment Score.
-The Enrichment Score (ES) reflects the degree to which a set S is overrepresented at the extremes (top or bottom) of the entire ranked list L.
-2. Estimation of Significance Level of ES. We estimate the statistical significance (nominal P value) of the ES by using an empirical phenotype-based permutation test procedure that preserves the complex correlation structure of the gene expression data. Specifically, we permute the phenotype labels and recompute the ES of the gene set for the permuted data, which generates a null distribution for the ES. The empirical, nominal P value of the observed ES is then calculated relative to this null distribution. Importantly, the permutation of class labels preserves gene-gene correlations and, thus, provides a more biologically reasonable assessment of significance than would be obtained by permuting genes.
-3.     Adjustment for Multiple Hypothesis Testing. When an entire database of gene sets is evaluated, we adjust the estimated significance level to account for multiple hypothesis testing. We first normalize the ES for each gene set to account for the size of the set, yielding a normalized enrichment score (NES). We then control the proportion of false positives by calculating the false discovery rate (FDR) (8, 9) corresponding to each NES. The FDR is the estimated probability that a set with a given NES represents a false positive finding; it is computed by comparing the tails of the observed and null distributions for the NES.
+1. **Calculation of the Enrichment Score**
+The Enrichment Score (ES) reflects the degree to which a gene set is overrepresented at the extremes (top or bottom) of the entire ranked gene list.
+2. **Estimation of Significance Level of ES** 
+The statistical significant (nominal p-value) of the ES is estimated by using an empirical phenotype-based permutation test procedure.
+3. **Adjustment for Multiple Hypothesis Testing**
+When an entire database of gene sets is evaluated, we adjust the estimated significance level to account for multiple hypothesis testing. We first normalize the ES for each gene set to account for the size of the set, yielding a normalized enrichment score (NES). We then control the proportion of false positives by calculating the false discovery rate (FDR) (8, 9) corresponding to each NES. The FDR is the estimated probability that a set with a given NES represents a false positive finding; it is computed by comparing the tails of the observed and null distributions for the NES.
 
 <img src="images/gsea_explained.gif" width="1000" align="middle" />
 
@@ -150,10 +154,20 @@ Let's create it for our experiment:
 | # | t0 | t25 |  |  |  |
 | t0 | t0 | t0 | t25 | t25 | t25 |
 
+**NOTE**: the first label used is assigned to the first class named on the second line; the second unique label is assigned to the second class named; and so on. 
+<br> 
+So the phenotype file could also be:
+
+| 6 | 2 | 1 |  |  |  |
+| # | t0 | t25 |  |  |  |
+| 0 | 0 | 0 | 1 | 1 | 1 |
+
+The first label **t0** in the second line is associated to the first label **0** on the third line.
+
 
 ##### Gene sets
 
-Molecular signature database.
+The Molecular Signatures Database (MSigDB) is a collection of annotated gene sets for use with GSEA software. 
 
 <img src="images/gsea_msig_banner.png" width="1000" align="middle" />
 
