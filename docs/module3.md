@@ -99,6 +99,7 @@ Create directory
 mkdir counts_star
 ```
 
+Loop around the 6 **ReadsPerGene.out.tab** files and extract the correct counts (4th column) along with the gene ID column (1rst column).
 
 ```{bash}
 for i in *ReadsPerGene.out.tab
@@ -135,7 +136,7 @@ The analysis is done in R ! <br>
 
 Start an R interactive session:
 
-```{r}
+```{bash}
 # type R (capital letter) in the terminal
 R
 ```
@@ -143,6 +144,8 @@ R
 Read in the sample table that we have prepared:
 
 ```{r}
+# In the R session:
+
 sampletable <- read.table("sample_sheet_A549.txt", header=T, sep="\t")
 
 # check the first rows
@@ -263,12 +266,15 @@ To generate more accurate log2 foldchange estimates, DESeq2 allows for the shrin
 *Low counts
 *High dispersion values
 
-*log2 fold change (MAP=Maximum A Posteriori estimate of dispersion). A positive fold change indicates an increase of expression while a negative fold change indicates a decrease in expression for a given comparison.
+* **log2 fold change** 
+A positive fold change indicates an increase of expression while a negative fold change indicates a decrease in expression for a given comparison.<br>
 This value is reported in a logarithmic scale (base 2): for example, a log2 fold change of 1.5 in the "Ko vs Wt comparison" means that the expression of that gene is increased, in the Ko relative to the Wt, by a multiplicative factor of 2^1.5 ≈ 2.82.
 
-*pvalue: Wald statisticial test p-value: Indicate whether the gene analysed is likely to be differentially expressed in that comparison. The lower the more significant.
+* **pvalue**
+Wald statisticial test p-value: Indicates whether the gene analysed is likely to be differentially expressed in that comparison. **The lower the more significant**.
 
-*padj: Bonferroni-Hochberg adjusted p-values (FDR): the lower the more significant. More robust that the regular p-value. 
+* **padj**
+Bonferroni-Hochberg adjusted p-values (FDR): **the lower the more significant**. More robust that the regular p-value because it controls for the occurrence of **false positives**.
 
 
 * Running the R script from the command line
@@ -281,7 +287,7 @@ Rscript deseq2_salmon.R sampletable_salmon.txt
 
 This [online tool](http://52.90.192.24:3838/rnaseq2g/) provides a way to process differential expression analysis using some of the popular tools in the field (among which DESeq2, edgeR, limma), starting from raw counts, via a user Interface.
 
-<img src="images/rnaseq2g_UI.png" width="1100"/>
+<img src="images/rnaseq2g_UI.png" width="1300"/>
 
 
 * Prepare the matrix of raw counts
@@ -299,13 +305,13 @@ We will use the previously prepared **sample_sheet_A549.txt**.
 
 * Choose the control group name and the case group name
 
-In our case:<br>
+__In our case__<br>
 Control: t0<br>
 Case: t25<br>
 
 * Choose which samples belong to which experimental group
 
-In our case:
+__In our case__<br>
 Control samples: A549_0_1chr10, A549_0_2chr10, A549_0_3chr10<br>
 Case samples: A549_25_1chr10, A549_25_2chr10, A549_25_3chr10<br>
 
@@ -330,7 +336,7 @@ Let's try to run the analysis using both **DESeq2** and **edgeR**.
 
 ### Volcano plots
 
-```
+```{r}
 # code for volcano plot
 ```
 
