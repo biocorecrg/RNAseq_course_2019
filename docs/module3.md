@@ -8,24 +8,32 @@ navigation: 5
 
 ## Differential expression analysis
 
-Differential expression analysis means to perform statistical analysis to try and discover changes in expression levels (genes, transcripts) between experimental groups.<br>
 
+The goal of differential expression analysis is to perform statistical analysis to try and discover changes in expression levels of defined features (genes, transcripts, exons) between experimental groups with replicated samples.<br>
+
+### Popular tools
+
+Most popular tools are available as R / Bioconductor packages. Bioconductor is an R project and repository that provides a set of packages and methods for omics data analysis.<br>
+The best performing tools tend to be DESeq2, edgeR and limma-voom.<br>
+See [Schurch et al, 2015; arXiv:1505.02017](https://arxiv.org/abs/1505.02017).
+<br>
+In this tutorial, we will give you an overview of the DESeq2 method.
 
 ### DESeq2
 
-[DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) is an R/Bioconductor implemented method to detect differentially expression genes.<br>
-Bioconductor is an R project and repository that provides a set of packages and methods for omics data analysis.<br>
+[DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) is an R/Bioconductor implemented method to detect differentially expressed features.<br>
 It is based on the negative binomial distribution.<br>
-Describes the distribution of draws with replacement. The number of failures is fixed.
+
 <br>
 The package DESeq2 provides methods to test for differential expression by use of negative binomial generalized linear models.
 <br>
 This DESeq2 tutorial is widely inspired from the [RNA-seq workflow](http://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html) developped by the authors of the tool.
 
 
-* Raw count matrices
+### Raw count matrices
 
-DESeq2 expects a matrix of integer values. The value at the i-th row and j-th column tells how many reads have been assigned to gene i in sample j.
+DESeq2 takes as an input raw (non normalized) counts, in various forms:
+* Either a <b>matrix of integer values</b> (the value at the i-th row and j-th column tells how many reads have been assigned to gene i in sample j):
 
 | gene name | sample A | sample B | sample C | sample D | sample E | sample F |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -35,79 +43,160 @@ DESeq2 expects a matrix of integer values. The value at the i-th row and j-th co
 | gene 4 | 67 | 72 | 32 | 79 | 62 | 59 |
 | gene 5 | 230 | 241 | 229 | 120 | 99 | 103 |
 
-* Sample sheet
+| gene | A549_0_1chr10 | A549_0_2chr10 | A549_0_3chr10 | A549_25_1chr10 | A549_25_2chr10 | A549_25_3chr10 |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 
-The sample sheet describes the samples characteristics: treatment, knock-out / wild type, replicates etc.
+* A *vector* of file names, each file containing the raw counts for a sample:
+File A549_0_1chr10_counts.txt:
+| gene | A549_0_1chr10 |
+|  |  |
 
-| SampleName | CellType | Group |
-| :---: | :---: | :---: |
-| sample A | HeLa | WT |
-| sample B | HeLa | WT |
-| sample C | HeLa | WT |
-| sample D | HeLa | KO |
-| sample E | HeLa | KO |
-| sample F | HeLa | KO |
+File 2: A549_0_2chr10_counts.txt
+| gene | A549_0_2chr10 |
+|  |  |
 
-* Load data from STAR
+and so on...
+
+* Prepare count data from STAR
+
+Option 1: We can prepare one file per sample, that we will store in the <b>counts_star</b> directory.
 
 ```
 mkdir counts_star
 ```
 
-The "ReadsPerGene" output files of STAR (from option --quantMode GeneCounts) contain 4 columns that correspond to different counts / read overlap according to the protocol's strandedness:
+The "ReadsPerGene" output files of STAR (from option --quantMode GeneCounts) contains 4 columns that correspond to different counts / read overlap according to the protocol's strandedness (see Module 1):
 * column 1: gene ID
 * column 2: counts for unstranded RNA-seq.
 * column 3: counts for the 1st read strand aligned with RNA (htseq-count option -s yes)
 * column 4: counts for the 2nd read strand aligned with RNA (htseq-count option -s reverse): the most common protocol.
 
+The protocol used to prepare the libraries for the A549 ENCODE samples is <b>reverse stranded</b>, so we need to extract the 4th column of each of the "ReadsPerGene" files, along with the column containing the <b>gene names</b>.
+
+
 ```
-for i in `ls -d */`
+for i in *ReadsPerGene.out.tab
 do echo $i
-# retrieve the gene ID and 2nd read strand count information corresponding columns
-cut -f1,4 $i/*ReadsPerGene.out.tab | grep -v "_" > counts_star/`basename $i/*PerGene.out.tab ReadsPerGene.out.tab`_counts.txt
+# retrieve the first (gene name) and fourth column (raw reads)
+cut -f1,4 $i | grep -v "_" > counts_star/`basename $i ReadsPerGene.out.tab`_counts.txt
 done
 ```
 
-```{r}
-se <- DESeqDataSetFromMatrix(countData = countdata,
-                                  colData = coldata,
-                                  design = ~ group)
+Option 2:  we can prepare the corresponding matrix: one row per gene, one column per sample
 
-se <- DESeqDataSetFromHTSeqCount(sampleTable = sampleTable,
-                        directory = countsdir,
-                        design = ~ group)
+```
+# retrieve gene column
+cut -f 1 A549_0_1ReadsPerGene.out.tab | grep -v "_" > gene_column.txt
+
+# retrieve the 4th column of each "ReadsPerGene.out.tab" file
+paste A549_0_*ReadsPerGene.out.tab | grep -v "_" | awk '{for (i=4;i<=NF;i+=4) printf "%s\t", $i; printf "\n" }' > counts_4thcolumn.txt
+
+# paste columns into a single file
+paste gene_column.txt counts_4thcolumn.txt > raw_counts_A549_matrix.txt
+
+# add header: "gene_name" + the name of each of the counts file
+sed -i -e "1igene_name\t$(ls A549_0_*ReadsPerGene.out.tab | tr '\n' '\t' | sed 's/ReadsPerGene.out.tab//g')" raw_counts_A549_matrix.txt
 
 ```
 
-* Load counts data from SALMON
+* Prepare count data from Salmon
+
+
+#### Sample sheet
+
+Additionally, DESeq2 needs a <b>sample sheet</b> that describes the samples characteristics: treatment, knock-out / wild type, replicates, time points, etc. in the form:
+
+| FileName | SampleName | Time | Dexamethasone |
+| :---: | :---: | :---: | :---: |
+| A549_0_1chr10_counts.txt | A549_0_1chr10 | 0 | 100nM |
+| A549_0_2chr10_counts.txt | A549_0_1chr10 | 0 | 100nM |
+| A549_0_3chr10_counts.txt | A549_0_1chr10 | 0 | 100nM |
+| A549_25_1chr10_counts.txt | A549_0_1chr10 | 25 | 100nM |
+| A549_25_2chr10_counts.txt | A549_0_1chr10 | 25 | 100nM |
+| A549_25_3chr10_counts.txt | A549_0_1chr10 | 25 | 100nM |
+
+<b>Exercise</b>
+Prepare this file (tab-separated columns) in a text editor: save it as <b>sample_sheet_A549.txt</b>.
+
+
+#### Analysis
+
+The analysis is done in R ! <br>
+
+Start an R interactive session:
+
+```{r}
+# type R (capital letter) in the terminal
+R
+```
+
+Read in the sample table that we have prepared:
+
+```{r}
+sampletable <- read.table("sample_sheet_A549.txt", header=T, sep="\t")
+
+# check the first rows
+head(sampletable)
+
+# check the number of rows and the number of columns
+nrow(sampletable)
+ncolumn(sampletable)
+```
+
+```{r}
+# Option that compiles one file per sample
+se <- DESeqDataSetFromHTSeqCount(sampleTable = sampletable,
+                        directory = "counts_star",
+                        design = ~ Time)
+
+# Option that reads in a matrix (we will not do it here
+countdata <- read.table("raw_counts_A549_matrix.txt", header=T, sep="\t", row.names=1)
+se_matrix <- DESeqDataSetFromMatrix(countData = countdata,
+                                  colData = coldata,
+                                  design = ~ Time)
+```
+
+* Load counts data from SALMON (PENDING)
 
 ```{r}
 files <- file.path(dir,"salmon", samples$run, "quant.sf.gz")
 names(files) <- samples$run
 tx2gene <- read_csv(file.path(dir, "tx2gene.gencode.v27.csv"))
 txi <- tximport(files, type="salmon", tx2gene=tx2gene)
+sampleTable <- data.frame(condition = factor(rep(c("A", "B"), each = 3)))
+rownames(sampleTable) <- colnames(txi$counts)
+dds <- DESeqDataSetFromTximport(txi, sampleTable, ~condition)
+
 ```
 
-Filter out rows which have sum 0 or 1 across all samples
+* Keep only genes that have more than 10 summed raw counts across the 6 samples
 
 ```{r}
-se1 <- se[rowSums(counts(se)) > 1, ] # 25393 versus 50600 the initial 
+se1 <- se[rowSums(counts(se)) > 10, ]
 ```
 
 
+* Run model
 
 ```{r}
+# 
 se2 <- DESeq(se1)
 
 ```
 
+* Transform raw counts to be able to visualize the data
+
+```{r}
+# Use the rlog transformation
+rld <- rlog(se2)
+```
 
 * Samples correlation
 
 Sample-to-sample distances
 
 ```{r}
-sampleDists <- dist(t(assay(vsd)))
+sampleDists <- dist(t(assay(rld)))
 
 library("RColorBrewer")
 sampleDistMatrix <- as.matrix(sampleDists)
@@ -126,26 +215,22 @@ pheatmap(sampleDistMatrix,
 Reduction of dimensionality to be able to retrieve main differences between samples
 
 ```{r}
-plotPCA(vsd, intgroup = "group")
+plotPCA(rld, intgroup = "Time")
 ```
 
 * Running differential expression analysis
 
-comp_tmp <- results(se3, contrast=c("group", "KO", "WT"), cooksCutoff=0.20)
+comp_tmp <- results(se2, contrast=c("Time", "0", "25"), cooksCutoff=0.20)
 # KO vs WT
-
-The column log2FoldChange is the effect size estimate. It tells us how much the gene’s expression seems to have changed due to treatment with dexamethasone in comparison to untreated samples. This value is reported on a logarithmic scale to base 2: for example, a log2 fold change of 1.5 means that the gene’s expression is increased by a multiplicative factor of 21.5≈2.82.
-
-DESeq2 performs for each gene a hypothesis test to see whether evidence is sufficient to decide against the null hypothesis that there is zero effect of the treatment on the gene and that the observed difference between treatment and control was merely caused by experimental variability (i.e., the type of variability that you can expect between different samples in the same treatment group). As usual in statistics, the result of this test is reported as a p value, and it is found in the column pvalue. Remember that a p value indicates the probability that a fold change as strong as the observed one, or even stronger, would be seen under the situation described by the null hypothesis.
 
 * Running the R script from the command line
 
 Rscript deseq2_star.R sampletable_star.txt
 Rscript deseq2_salmon.R sampletable_salmon.txt
 
-* DESeq2 output
+* DESeq2 output explained
 
-log2FoldChange: 
+log2FoldChange:
 
 To generate more accurate log2 foldchange estimates, DESeq2 allows for the shrinkage of the LFC estimates toward zero when the information for a gene is low, which could include:
 *Low counts
@@ -161,7 +246,7 @@ This value is reported in a logarithmic scale (base 2): for example, a log2 fold
 
 ### Online tool
 
-This [online tool](http://52.90.192.24:3838/rnaseq2g/) provides a way to process differential expression analysis using some of the popular tools in the field (among whichDESeq2, edgeR, limma), starting from raw counts, using an UI (User Interface).
+This [online tool](http://52.90.192.24:3838/rnaseq2g/) provides a way to process differential expression analysis using some of the popular tools in the field (among which DESeq2, edgeR, limma), starting from raw counts, using an UI (User Interface).
 
 * Prepare the matrix of raw counts
 
