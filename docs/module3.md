@@ -331,6 +331,13 @@ Let's try to run the analysis using both **DESeq2** and **edgeR**.
 * padj (p-value corrected for multiple testing)
 * log2FC (log2 Fold Change)
 
+* Write a file with genes differentially expression between t25 and t0 with padj < 0.01 and log2FC > 1
+
+```{bash}
+awk '$4 < 0.01 && $2 > 1 {print}' deseq2_results.txt > deseq2_results_padj0.05_log2fc1.txt
+```
+
+
 
 ## Visualization of differential expression
 
