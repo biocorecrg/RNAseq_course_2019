@@ -308,12 +308,14 @@ Below is an example of a poor quality dataset. As you can see, the average quali
 $RUN fastq_screen --get_genomes
 ``` 
 
-This will download 11 genomes (arabidopsis, drosophila, E. coli, human, lambda, mouse, mitochondria, phiX, rat, worm and yeast) and 3 collection of sequences (adapters, vectors, rRNA) indexed with bowtie2. This step is quite slow so we are not going to launch it now.
+This will download 11 genomes (arabidopsis, drosophila, E. coli, human, lambda, mouse, mitochondria, phiX, rat, worm and yeast) and 3 collection of sequences (adapters, vectors, rRNA) indexed with bowtie2. This step is quite slow so we are not going to launch it now. The files will be stored inside **FastQ_Screen_Genomes** folder.
+We have to modify the fastq_screen.conf file using the real path of the executable **/usr/local/bin/bowtie2** and the one of the genome.
 
 To execute Fastq Screen: 
 
 ```{bash}
-$RUN fastq_screen --conf fastq_screen.conf A549_0_1_1.fastq.gz 
+$RUN fastq_screen --conf FastQ_Screen_Genomes/fastq_screen.conf resources/A549_0_1chr10_1.fastq.gz --outdir QC/
+
 Using fastq_screen v0.13.0
 Reading configuration from 'fastq_screen.conf'
 Aligner (--aligner) not specified, but Bowtie2 path and index files found: mapping with Bowtie2
@@ -333,8 +335,8 @@ Adding database Vectors
 Adding database Adapters
 Using 7 threads for searches
 Option --subset set to 100000 reads
-Processing A549_0_1_1.fastq.gz
-Counting sequences in A549_0_1_1.fastq.gz
+Processing A549_0_1chr10_1.fastq.gz
+Counting sequences in A549_0_1chr10_1.fastq.gz
 Making reduced sequence file with ratio 711:1
 ...
 ```
