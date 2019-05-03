@@ -125,12 +125,30 @@ The main GSEA algorithm requires 3 inputs:
 * Phenotype labels
 * Gene sets 
 
-##### Gene expression data
+##### Gene expression data in TXT format
 
 The input should be normalized read counts filtered out for low counts (-> we have it from the previous GSEA analysis !).
+<br>
+The first column contains the gene ID (HUGO symbols for *Homo sapiens*).<br>
+The second column contains any description or symbol, and will be ignoreed by the algorithm.<br>
+The remaining columns contains normalized expressions: one column per sample.
+
+| NAME | DESCRIPTION | A549_0_1chr10 | A549_0_2chr10 | A549_0_3chr10 | A549_25_1chr10 | A549_25_2chr10 | A549_25_3chr10 |
+| DKK1 | NA| 0 | 0 | 0 | 0 | 0 | 0 |
+| HGT | NA | 0 | 0 | 0 | 0 | 0 | 0 |
 
 
-##### Phenotype labels
+##### Phenotype labels in CLS format
+
+A phenotype label file defines phenotype labels (experimental groups) and assigns those labels to the samples in the corresponding expression data file.
+
+<img src="images/gsea_phenotypes.png" width="500" align="middle" />
+
+Let's create it for our experiment:
+
+| 6 | 2 | 1 |  |  |  |
+| # | t0 | t25 |  |  |  |
+| t0 | t0 | t0 | t25 | t25 | t25 |
 
 
 ##### Gene sets
