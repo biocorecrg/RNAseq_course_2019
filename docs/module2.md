@@ -243,11 +243,10 @@ We cannot inspect directly the output file since the **BAM** format is a compres
 
 ```{bash}
 $RUN samtools view -h alignments/A549_0_1Aligned.sortedByCoord.out.bam |head -n 10
-
 @HD	VN:1.4	SO:coordinate
 @SQ	SN:chr10	LN:133797422
-@PG	ID:STAR	PN:STAR	VN:STAR_2.5.3a	CL:STAR   --genomeDir annotations/chr10   --readFilesIn resources/A549_0_1chr10_1.fastq.gz   resources/A549_0_1chr10_2.fastq.gz      --readFilesCommand zcat      --outFileNamePrefix A549_0_1   --outSAMtype BAM   SortedByCoordinate      --quantMode GeneCounts   
-@CO	user command line: STAR --genomeDir annotations/chr10 --readFilesIn resources/A549_0_1chr10_1.fastq.gz resources/A549_0_1chr10_2.fastq.gz --readFilesCommand zcat --outSAMtype BAM SortedByCoordinate --quantMode GeneCounts --outFileNamePrefix A549_0_1
+@PG	ID:STAR	PN:STAR	VN:2.7.0f	CL:STAR   --genomeDir indexes/chr10   --readFilesIn resources/A549_0_1chr10_1.fastq.gz   resources/A549_0_1chr10_2.fastq.gz      --readFilesCommand zcat      --outFileNamePrefix alignments/A549_0_1   --outSAMtype BAM   SortedByCoordinate      --quantMode GeneCounts   
+@CO	user command line: STAR --genomeDir indexes/chr10 --readFilesIn resources/A549_0_1chr10_1.fastq.gz resources/A549_0_1chr10_2.fastq.gz --readFilesCommand zcat --outSAMtype BAM SortedByCoordinate --quantMode GeneCounts --outFileNamePrefix alignments/A549_0_1
 D00137:453:HLFY2BCXY:2:1115:10428:98737	419	chr10	35442	3	13M174562N32M6S	=	236864	201473	AGCTGTTATTGAACAAGAAGGGATTGGTTGCCAGGAGATGAGATTAGCATT	@DDD?<1D1CGEE11<C@GHIIH?@E?G@CHH?FH@0GH@C<<<@1DFCHH	NH:i:2	HI:i:2	AS:i:74	nM:i:9
 D00137:453:HLFY2BCXY:2:2208:10640:12788	419	chr10	37161	0	51M	=	37323	213	CCAATATTCAACATTCTTAAAGAAAAGAATGTTCAACCCAGAATTTCATAT	DABDDFHHIIIHCFHEHIEEHHHFFEHHIIH@GHHIIIIIIIIHIIHIIIH	NH:i:5	HI:i:5	AS:i:98	nM:i:1
 D00137:453:HLFY2BCXY:2:2208:10640:12788	419	chr10	37161	0	51M	=	37323	213	CCAATATTCAACATTCTTAAAGAAAAGAATGTTCAACCCAGAATTTCATAT	DABDDFHHIIIHCFHEHIEEHHHFFEHHIIH@GHHIIIIIIIIHIIHIIIH	NH:i:5	HI:i:5	AS:i:98	nM:i:1
@@ -262,8 +261,8 @@ The first part indicated by the first character **@** in each row is the header:
 | :----: | :---- | :---- |
 | **@HD** header line	| **VN:1.4** version of the SAM format|	**SO:coordinate** sorting order|
 | **@SQ** reference sequence dictionary 	| **SN:chr10** sequence name|	**LN:133797422** sequence length|
-| **@PG** program used|	**ID:STAR** **PN:STAR**	**VN:STAR_2.5.3a** version| **CL:STAR   --genomeDir annotations/chr10   --readFilesIn resources/A549_0_1chr10_1.fastq.gz   resources/A549_0_1chr10_2.fastq.gz      --readFilesCommand zcat      --outFileNamePrefix A549_0_1   --outSAMtype BAM   SortedByCoordinate      --quantMode GeneCounts** command line|
-|**@CO** One-line text comment||**user command line: STAR --genomeDir annotations/chr10 --readFilesIn resources/A549_0_1chr10_1.fastq.gz resources/A549_0_1chr10_2.fastq.gz --readFilesCommand zcat --outSAMtype BAM SortedByCoordinate --quantMode GeneCounts --outFileNamePrefix A549_0_1**|
+| **@PG** program used|	**ID:STAR** **PN:STAR**	**VN:2.7.0f** version| **CL:STAR   --genomeDir indexes/chr10   --readFilesIn resources/A549_0_1chr10_1.fastq.gz   resources/A549_0_1chr10_2.fastq.gz      --readFilesCommand zcat      --outFileNamePrefix alignments/A549_0_1   --outSAMtype BAM   SortedByCoordinate      --quantMode GeneCounts** command line|
+|**@CO** One-line text comment||**user command line: STAR --genomeDir indexes/chr10 --readFilesIn resources/A549_0_1chr10_1.fastq.gz resources/A549_0_1chr10_2.fastq.gz --readFilesCommand zcat --outSAMtype BAM SortedByCoordinate --quantMode GeneCounts --outFileNamePrefix alignments/A549_0_1**|
 
 The rest is the proper alignment. 
 
@@ -361,6 +360,36 @@ grep -v "N_" alignments/A549_0_1ReadsPerGene.out.tab | awk '{unst+=$2;forw+=$3;r
 2343002 153677 2427536
 ```
 So we can confirm that the protocol used is sequencing the reverse complement of input mRNAs.
+
+We can check the quality of the resulting alignment running the tool [**Qualimap**](http://qualimap.bioinfo.cipf.es/) specifying the kind of analysis (**rnaseq**), the presence of paired end reads within the bam file (**-pe**) and the strand of the library (**-p strand-specific-reverse**). 
+
+```{bash}
+$RUN qualimap rnaseq -pe -bam alignments/A549_0_1Aligned.sortedByCoord.out.bam \
+	-gtf annotations/gencode.v29.annotation_chr10.gtf \
+	-outdir QC -p strand-specific-reverse
+  
+Java memory size is set to 1200M
+Launching application...
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=1024m; support was removed in 8.0
+QualiMap v.2.2.1
+Built on 2016-10-03 18:14
+....  
+```
+
+We can check the final report again with a browser like firefox:
+
+```{bash}
+firefox QC/qualimapReport.html
+```
+
+|Qualimap report|
+| :---:  |
+|<img src="images/qualimap1.png" width="1000" align="middle" />|
+|<img src="images/qualimap2.png" width="1000" align="middle" />|
+|<img src="images/qualimap3.png" width="1000" align="middle" />|
+|<img src="images/qualimap4.png" width="1000" align="middle" />|
+
 
 For aligning with **Salmon** we need to specify the strandess of the library (**Fragment Library Types**). In brief you have to specify three letters:
 
