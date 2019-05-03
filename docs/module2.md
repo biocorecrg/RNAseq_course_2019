@@ -382,11 +382,19 @@ We can check the final report again with a browser like firefox:
 ```{bash}
 firefox QC/qualimapReport.html
 ```
-
 <img src="images/qualimap1.png"  align="middle" />
+
+The report gives many useful information like the total number of mapped reads, the amount of reads mapping to exons, introns or intergenics and the bias towards one of the end of the mRNA (that can give information about RNA integrity or protocol used). 
+
 <img src="images/qualimap2.png"  align="middle" />
-<img src="images/qualimap3.png"  align="middle" />
+
+Looking at the gene coverage we see a bias towards 5' that is compatible with the kind of stranded protocol used (it is beacuse fo reverse trancsriptase).
+
 <img src="images/qualimap4.png"  align="middle" />
+
+Finally we can check that most of our reads map to the exonic part, with little o no contamination of total RNA.
+
+<img src="images/qualimap3.png"  align="middle" />
 
 
 For aligning with **Salmon** we need to specify the strandess of the library (**Fragment Library Types**). In brief you have to specify three letters:
