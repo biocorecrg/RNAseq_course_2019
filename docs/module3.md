@@ -9,15 +9,20 @@ navigation: 5
 ## Differential expression analysis
 
 
-The goal of differential expression analysis is to perform statistical analysis to try and discover changes in expression levels of defined features (genes, transcripts, exons) between experimental groups with replicated samples.<br>
+The goal of differential expression analysis is to perform statistical analysis to try and discover **changes in expression levels** of defined features (genes, transcripts, exons) between experimental groups with **replicated samples**.<br>
 
 ### Popular tools
 
-Most popular tools are available as R / Bioconductor packages. Bioconductor is an R project and repository that provides a set of packages and methods for omics data analysis.<br>
-The best performing tools tend to be DESeq2, edgeR and limma-voom.<br>
+Most popular tools are available as R / Bioconductor packages. <br>
+Bioconductor is an R project and repository that provides a set of packages and methods for omics data analysis.<br>
+The best performing tools tend to be:
+* [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html)
+* [edgeR](https://bioconductor.org/packages/release/bioc/html/edgeR.html)
+* [limma (voom)](https://bioconductor.org/packages/release/bioc/html/limma.html)
+
 See [Schurch et al, 2015; arXiv:1505.02017](https://arxiv.org/abs/1505.02017).
 <br>
-In this tutorial, we will give you an overview of the DESeq2 method.
+In this tutorial, we will give you an overview of the **DESeq2** pipeline to find differentially expressed **genes**.
 
 ### DESeq2
 
@@ -33,59 +38,29 @@ This DESeq2 tutorial is widely inspired from the [RNA-seq workflow](http://maste
 ### Raw count matrices
 
 DESeq2 takes as an input raw (non normalized) counts, in various forms:
-* Either a <b>matrix of integer values</b> (the value at the i-th row and j-th column tells how many reads have been assigned to gene i in sample j):
 
-| gene name | sample A | sample B | sample C | sample D | sample E | sample F |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| gene 1 | 0 | 10 | 5 | 4 | 1 | 2 |
-| gene 2 | 123 | 189 | 76 | 38 | 132 | 139 |
-| gene 3 | 20 | 25 | 35 | 43 | 27 | 32 |
-| gene 4 | 67 | 72 | 32 | 79 | 62 | 59 |
-| gene 5 | 230 | 241 | 229 | 120 | 99 | 103 |
+* **Option 1**: a <b>matrix of integer values</b> (the value at the i-th row and j-th column tells how many reads have been assigned to gene i in sample j):
 
 | gene | A549_0_1chr10 | A549_0_2chr10 | A549_0_3chr10 | A549_25_1chr10 | A549_25_2chr10 | A549_25_3chr10 |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| ENSG00000260370.1 | 0 | 0 | 1 | 0 | 1 | 1 |
+| ENSG00000237297.1 | 10 | 8 | 10 | 12 | 5 | 2 |
+| ENSG00000261456.5 | 210 | 320 | 291 | 300 | 267 | 222 |
+| ENSG00000232420.2 | 3 | 2 | 0 | 1 | 2 | 6 |
 
-* A *vector* of file names, each file containing the raw counts for a sample:
-File A549_0_1chr10_counts.txt:
-| gene | A549_0_1chr10 |
-|  |  |
-
-File 2: A549_0_2chr10_counts.txt
-| gene | A549_0_2chr10 |
-|  |  |
-
-and so on...
-
-* Prepare count data from STAR
-
-Option 1: We can prepare one file per sample, that we will store in the <b>counts_star</b> directory.
-
-```
-mkdir counts_star
-```
-
-The "ReadsPerGene" output files of STAR (from option --quantMode GeneCounts) contains 4 columns that correspond to different counts / read overlap according to the protocol's strandedness (see Module 1):
+Prepare the matrix for our 6 samples, from the **STAR** output.
+<br>
+The **ReadsPerGene.out.tab** output files of STAR (from option --quantMode GeneCounts) contain 4 columns that correspond to different counts / read overlap **according to the protocol's strandedness** (see Module 1):
 * column 1: gene ID
 * column 2: counts for unstranded RNA-seq.
 * column 3: counts for the 1st read strand aligned with RNA (htseq-count option -s yes)
 * column 4: counts for the 2nd read strand aligned with RNA (htseq-count option -s reverse): the most common protocol.
 
-The protocol used to prepare the libraries for the A549 ENCODE samples is <b>reverse stranded</b>, so we need to extract the 4th column of each of the "ReadsPerGene" files, along with the column containing the <b>gene names</b>.
+The protocol used to prepare the libraries for the A549 ENCODE samples is **reverse stranded**, so we need to extract the 4th column of each of the "ReadsPerGene" files, along with the column containing the <b>gene names</b>.
 
 
 ```
-for i in *ReadsPerGene.out.tab
-do echo $i
-# retrieve the first (gene name) and fourth column (raw reads)
-cut -f1,4 $i | grep -v "_" > counts_star/`basename $i ReadsPerGene.out.tab`_counts.txt
-done
-```
-
-Option 2:  we can prepare the corresponding matrix: one row per gene, one column per sample
-
-```
-# retrieve gene column
+# retrieve the 1rst column, containing the gene IDs
 cut -f 1 A549_0_1ReadsPerGene.out.tab | grep -v "_" > gene_column.txt
 
 # retrieve the 4th column of each "ReadsPerGene.out.tab" file
@@ -99,7 +74,43 @@ sed -i -e "1igene_name\t$(ls A549_0_*ReadsPerGene.out.tab | tr '\n' '\t' | sed '
 
 ```
 
-* Prepare count data from Salmon
+* **Option 2**: one file per sample, each file containing the raw counts of all genes:
+
+File A549_0_1chr10_counts.txt:
+
+| ENSG00000260370.1 | 0 |
+| ENSG00000237297.1 | 10 |
+| ENSG00000261456.5 | 210 |
+
+File A549_0_2chr10_counts.txt:
+
+| ENSG00000260370.1 | 0 |
+| ENSG00000237297.1 | 8 |
+| ENSG00000261456.5 | 320 |
+
+and so on...
+
+
+Let's prepare the 6 files needed for our analysis, from the STAR output, that we will store in the <b>counts_star</b> directory.
+
+<br>
+Create directory
+
+```
+mkdir counts_star
+```
+
+
+```
+for i in *ReadsPerGene.out.tab
+do echo $i
+# retrieve the first (gene name) and fourth column (raw reads)
+cut -f1,4 $i | grep -v "_" > counts_star/`basename $i ReadsPerGene.out.tab`_counts.txt
+done
+```
+
+
+* Prepare count data from Salmon (PENDING)
 
 
 #### Sample sheet
@@ -108,12 +119,12 @@ Additionally, DESeq2 needs a <b>sample sheet</b> that describes the samples char
 
 | FileName | SampleName | Time | Dexamethasone |
 | :---: | :---: | :---: | :---: |
-| A549_0_1chr10_counts.txt | A549_0_1chr10 | 0 | 100nM |
-| A549_0_2chr10_counts.txt | A549_0_1chr10 | 0 | 100nM |
-| A549_0_3chr10_counts.txt | A549_0_1chr10 | 0 | 100nM |
-| A549_25_1chr10_counts.txt | A549_0_1chr10 | 25 | 100nM |
-| A549_25_2chr10_counts.txt | A549_0_1chr10 | 25 | 100nM |
-| A549_25_3chr10_counts.txt | A549_0_1chr10 | 25 | 100nM |
+| A549_0_1chr10_counts.txt | A549_0_1chr10 | t0 | 100nM |
+| A549_0_2chr10_counts.txt | A549_0_2chr10 | t0 | 100nM |
+| A549_0_3chr10_counts.txt | A549_0_3chr10 | t0 | 100nM |
+| A549_25_1chr10_counts.txt | A549_25_1chr10 | t25 | 100nM |
+| A549_25_2chr10_counts.txt | A549_25_2chr10 | t25 | 100nM |
+| A549_25_3chr10_counts.txt | A549_25_3chr10 | t25 | 100nM |
 
 <b>Exercise</b>
 Prepare this file (tab-separated columns) in a text editor: save it as <b>sample_sheet_A549.txt</b>.
@@ -143,29 +154,41 @@ nrow(sampletable)
 ncolumn(sampletable)
 ```
 
+* Load count data from STAR
+
 ```{r}
 # Option that compiles one file per sample
-se <- DESeqDataSetFromHTSeqCount(sampleTable = sampletable,
+se_star <- DESeqDataSetFromHTSeqCount(sampleTable = sampletable,
                         directory = "counts_star",
                         design = ~ Time)
 
 # Option that reads in a matrix (we will not do it here
 countdata <- read.table("raw_counts_A549_matrix.txt", header=T, sep="\t", row.names=1)
-se_matrix <- DESeqDataSetFromMatrix(countData = countdata,
+se_star_matrix <- DESeqDataSetFromMatrix(countData = countdata,
                                   colData = coldata,
                                   design = ~ Time)
 ```
 
-* Load counts data from SALMON (PENDING)
+* Load count data from SALMON (PENDING)
 
 ```{r}
 files <- file.path(dir,"salmon", samples$run, "quant.sf.gz")
 names(files) <- samples$run
+
+# a two-column data.frame linking transcript id (column 1) to gene id (column 2)
 tx2gene <- read_csv(file.path(dir, "tx2gene.gencode.v27.csv"))
-txi <- tximport(files, type="salmon", tx2gene=tx2gene)
+
+# tximport can import data from Salmon, Kallisto, Sailfish, RSEM, Stringtie
+txi <- tximport(files, 
+		type="salmon", 
+		tx2gene=tx2gene)
+
 sampleTable <- data.frame(condition = factor(rep(c("A", "B"), each = 3)))
 rownames(sampleTable) <- colnames(txi$counts)
-dds <- DESeqDataSetFromTximport(txi, sampleTable, ~condition)
+
+dds <- DESeqDataSetFromTximport(txi,
+			sampleTable = sampletable, 
+			design = ~ Time)
 
 ```
 
@@ -210,23 +233,28 @@ pheatmap(sampleDistMatrix,
 
 ```
 
+PENDING HERE IMAGE
+
 * Principal Component Analysis
 
 Reduction of dimensionality to be able to retrieve main differences between samples
 
 ```{r}
-plotPCA(rld, intgroup = "Time")
+plotPCA(object = rld,
+		intgroup = "Time")
 ```
 
-* Running differential expression analysis
+PENDING HERE IMAGE
 
-comp_tmp <- results(se2, contrast=c("Time", "0", "25"), cooksCutoff=0.20)
-# KO vs WT
+* Running the differential expression analysis
 
-* Running the R script from the command line
+```{r}
+comp_tmp <- results(object = se2, 
+		contrast = c("Time", "t0", "t25"))
+# t25 vs t0 vs WT
+```
 
-Rscript deseq2_star.R sampletable_star.txt
-Rscript deseq2_salmon.R sampletable_salmon.txt
+PENDING HERE FIRST ROWS
 
 * DESeq2 output explained
 
@@ -244,41 +272,49 @@ This value is reported in a logarithmic scale (base 2): for example, a log2 fold
 *padj: Bonferroni-Hochberg adjusted p-values (FDR): the lower the more significant. More robust that the regular p-value. 
 
 
+* Running the R script from the command line
+
+Rscript deseq2_star.R sampletable_star.txt
+Rscript deseq2_salmon.R sampletable_salmon.txt
+
+
 ### Online tool
 
-This [online tool](http://52.90.192.24:3838/rnaseq2g/) provides a way to process differential expression analysis using some of the popular tools in the field (among which DESeq2, edgeR, limma), starting from raw counts, using an UI (User Interface).
+This [online tool](http://52.90.192.24:3838/rnaseq2g/) provides a way to process differential expression analysis using some of the popular tools in the field (among which DESeq2, edgeR, limma), starting from raw counts, via a user Interface.
 
 * Prepare the matrix of raw counts
 
-The first column contains, in our case, the gene names.
-The remaining columns contain the expression of each gene in each sample (one column per sample).
+The first column contains, in our case, the gene names.<br>
+The remaining columns contain the expression (raw counts) of each gene in each sample (one column per sample).<br>
+We will use the previously prepared **raw_counts_A549_matrix.txt**.
 
 * Prepare the sample sheet
 
 Sample names must match column names in matrix.<br>
-Add one column that corresponds to the experimental groups the samples belong to
+Add one column that corresponds to the experimental groups the samples belong to.<br>
+We will use the previously prepared **sample_sheet_A549.txt**.
 
 
 * Choose the control group name and the case group name
 
 In our case:<br>
-Control: WT<br>
-Case: KO<br>
+Control: t0<br>
+Case: t25<br>
 
 * Choose which samples belong to which experimental group
 
-Control samples: <br>
-Case samples: <br>
+In our case:
+Control samples: A549_0_1chr10, A549_0_2chr10, A549_0_3chr10<br>
+Case samples: A549_25_1chr10, A549_25_2chr10, A549_25_3chr10<br>
 
-* Paired test
+* Choose DE method(s):
 
-* Choose DE method(s)
-
-Let's try DESeq2 and edgeR
+Let's try to run the analysis using both **DESeq2** and **edgeR**.
 
 * Submit DE analysis
 
 * Go to "Results" tab
+
 
 
 
