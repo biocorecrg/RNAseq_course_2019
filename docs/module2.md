@@ -385,10 +385,10 @@ firefox QC/qualimapReport.html
 
 |Qualimap report|
 | :---:  |
-|<img src="images/qualimap1.png" width="1000" align="middle" />|
-|<img src="images/qualimap2.png" width="1000" align="middle" />|
-|<img src="images/qualimap3.png" width="1000" align="middle" />|
-|<img src="images/qualimap4.png" width="1000" align="middle" />|
+|<img src="images/qualimap1.png" width="1200" align="middle" />|
+|<img src="images/qualimap2.png" width="1200" align="middle" />|
+|<img src="images/qualimap3.png" width="1200" align="middle" />|
+|<img src="images/qualimap4.png" width="1200" align="middle" />|
 
 
 For aligning with **Salmon** we need to specify the strandess of the library (**Fragment Library Types**). In brief you have to specify three letters:
