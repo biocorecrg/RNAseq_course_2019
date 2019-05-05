@@ -16,6 +16,9 @@ navigation: 6
 
 ## Functional analysis
 
+https://hbctraining.github.io/DGE_workshop/lessons/09_functional_analysis.html
+
+
 ### Resources
 
 #### Gene Ontology
@@ -41,12 +44,29 @@ http://software.broadinstitute.org/gsea/msigdb/index.jsp
 Null hypothesis: the list of DEGs is randomly found in the GO.
 <br>
 Alternative hypothesis: the list of DEGs is over- or under- represented in the GO.
-<br>
-Universe: all genes in experiment.<br>
+<br>Universe: all genes in experiment.<br>
 Successes: DEGs genes in experiment.<br>
 All GO: all genes in GO term.<br>
 Successes in GO: DEGs genes in GO.<br>
+<br>
+Example:<br>
+20,000 genes annotated in the organism. 60 of them are associated with the ontology "programmed cell death".
+<br>300 genes in total in our DGE results selection. 20 of them are associated with the ontology "programmed cell death"<br>
+What is the probability that their is an over-representation of the "programmed cell death" ontology in our experiment?
+<br>
+Universe: 20000<br>
+Successes: 300<br>
+All GO: 60<br>
+Successes in GO: 20<br>
+??
+phyper(overlap -1, list1, popsize-list1, list2))
+phyper(19, 300, 20000-300, 60)
+???
 
+
+#### clusterProfiler
+
+https://hbctraining.github.io/DGE_workshop/lessons/09_functional_analysis.html
 
 
 #### enrichR
