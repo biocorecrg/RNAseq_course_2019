@@ -46,19 +46,21 @@ And clicking on **Download GTF** download **[Homo_sapiens.GRCh38.96.chr.gtf.gz](
 |<img src="images/ensembl_2.png" width="800" align="middle" />|
 |<img src="images/ensembl_3.png" width="800" align="middle" />|
 
+<br/>
 
-## FASTA and GTF (Gene Transfer Format) formats
-To speed up the mapping process, we downloaded FASTA and GTF files for human v29 from GENCODE and processed these files by selected data concerning Chromosome 10 only. Let's examine these files.
+## FASTA and GTF/GFF formats
+To speed up the mapping process, we downloaded FASTA and GTF files for human v29 from GENCODE and processed these files by selected data related only to Chromosome 10. Let's examine these files.
 
 ```{bash}
 wget https://public-docs.crg.es/biocore/projects/training/RNAseq_2019/annotations.tar
 tar -xf annotations.tar
 ```
 
-The genome is generally represented as a fasta file with the header indicated by the "**>**":
+The genome is generally represented as a FASTA file with the header indicated by the "**>**":
 
 ```{bash}
 zcat annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz| head -n 5
+
 >chr10 dna:chromosome chromosome:GRCh38:10:1:133797422:1 REF
 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
@@ -70,10 +72,11 @@ The size of the chromosome (in bp) is already reported in the header, but we can
 
 ```{bash}
 zcat annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz | grep -v ">" | tr -d '\n' | wc -m  
+
 133797422
 ```
 
-The annotation is stored in **G**eneral **T**ransfer **F**ormat (**GTF**) format (which is an extension of the older [GFF format](https://genome.ucsc.edu/FAQ/FAQformat.html#format3)): a tabular format with one line per genome feature, each one containing 9 columns of data. In general it has a header indicated by the first character **"#"** and one row per feature composed by 9 columns:
+The annotation is stored in **G**eneral **T**ransfer **F**ormat (**GTF**) format (which is an extension of the older **[GFF format](https://genome.ucsc.edu/FAQ/FAQformat.html#format3)**): a tabular format with one line per genome feature, each one containing 9 columns of data. In general it has a header indicated by the first character **"#"** and one row per feature composed in 9 columns:
 
 | Column number | Column name | Details |
 | ----: | :---- | :---- |
@@ -130,16 +133,19 @@ zcat annotations/gencode.v29.annotation_chr10.gtf.gz | grep -v "#" | cut -f3 | s
 
 ```
 
-## Aligners
-In last 10 years several tools for mapping short reads to the reference have been developed. All of them requires to build an index of the reference genome / transcriptome using different algorithms. We can classify them in three groups:
+<br/>
+
+## Tools for read mapping
+
+Once FASTA and GTF files are obtained, we need to choose a tool to perform mapping and, depending on the chosen tool, to calculate the index for the reference genome. Like the index at the end of a book, an index of a large DNA sequence allows one to rapidly find shorter sequences embedded within it. 
 
 ### Fast aligners
-These tools can be used for aligning short reads to a trancriptome or genome reference, but in the latter case they cannot align in splicing junctions. They can be much faster than traditional aligners like [**Blast**](https://blast.ncbi.nlm.nih.gov/Blast.cgi) but less sensitive and may have limitations about the read size. 
+These tools can be used for aligning short reads to a trancriptome or genome reference, but if a genome is used these tools skip splicing junctions. They can be much faster than traditional aligners like [**Blast**](https://blast.ncbi.nlm.nih.gov/Blast.cgi) but less sensitive and may have limitations about the read size. 
 
-1. [**Bowtie**](http://bowtie-bio.sourceforge.net/index.shtml) is an ultrafast, memory-efficient short read aligner geared toward quickly aligning large sets of short DNA sequences (reads) to large genomes. Bowtie indexes the genome with a Burrows-Wheeler index. 
-2. [**Bowtie2**](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml) is an ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences. It is particularly good at aligning reads of about 50 up to 100s or 1,000s of characters, and particularly good at aligning to relatively long (e.g. mammalian) genomes. Bowtie 2 indexes the genome with an FM Index. 
-3. [**BWA**](http://bio-bwa.sourceforge.net/) is a software package for mapping low-divergent sequences against a large reference genome, such as the human genome. BWA indexes the genome with an FM Index.
-4. [**GEM**](https://github.com/smarco/gem3-mapper) is a high-performance mapping tool for aligning sequenced reads against large reference genomes. In particular, it is designed to obtain best results when mapping sequences up to 1K bases long. GEM3 indexes the reference genome using a custom FM-Index design and performs an adaptive gapped search based on the characteristics of the input and the user settings. 
+* [**Bowtie**](http://bowtie-bio.sourceforge.net/index.shtml) is an ultrafast, memory-efficient short read aligner geared toward quickly aligning large sets of short DNA sequences (reads) to large genomes. Bowtie indexes the genome with a Burrows-Wheeler index. 
+* [**Bowtie2**](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml) is an ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences. It is particularly good at aligning reads of length 50 up to 100s or 1,000s to relatively long (e.g. mammalian) genomes. Bowtie 2 indexes the genome with an FM Index. 
+* [**BWA**](http://bio-bwa.sourceforge.net/) is a software package for mapping low-divergent sequences against a large reference genome, such as the human genome. BWA indexes the genome with an FM Index.
+* [**GEM**](https://github.com/smarco/gem3-mapper) is a high-performance mapping tool for aligning sequenced reads against large reference genomes. In particular, it is designed to obtain best results when mapping sequences up to 1K bases long. GEM3 indexes the reference genome using a custom FM-Index design and performs an adaptive gapped search based on the characteristics of the input and the user settings. 
 
 ### Splice-aware aligners 
 These aligners are able to map to the splicing junctions described in the annotation and even to detect novel ones. Some of them can detect gene fusions and SNPs and RNA editing. Downstream anslysis will require for some of them the assignation of the aligned reads to a given gene / transcript.
