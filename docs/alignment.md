@@ -1,17 +1,22 @@
 ---
 layout: page
-title: Alignment
-navigation: 7
+title: Read mapping
+navigation: 10
 ---
 
-# Read alignment to reference transcriptome
+# Read mapping to a reference genome/transcriptome
+
+<img src="images/RNAseq_workflow.png" width="1000"/>
+
+Once sequencing reads are pre-processed we can proceed with mapping them to a reference genome or transcriptome. So first of all we need to retrieve this information from one of the public databases that host genomic data. 
+
 
 |Mapping of short reads|
 | :---:  |
-|<img src="images/800px-Mapping_Reads.png" width="350" align="middle" />|
+|<img src="images/800px-Mapping_Reads.png" width="500" align="middle" />|
 |from Wikipedia|
 
-Once we tested the quality of our input reads we can proceed with the alignment to the reference transcriptome. So first of all we need to retrieve this information from one of the public databases that host genomic data. 
+
 
 ## Public resources:
 

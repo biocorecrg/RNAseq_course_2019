@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Aln practical
-navigation: 8
+navigation: 11
 ---
 
 # Alignment: practical
@@ -156,6 +156,8 @@ Extra fields are often present and are different among aligner tools (https://sa
 
 \* *Note that historically this has been ill-defined and both data and tools exist that disagree with this
 definition.*
+
+## File conversion and alignment QC
 
 Let's now convert BAM to SAM:
 

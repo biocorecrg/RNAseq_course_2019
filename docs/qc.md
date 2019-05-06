@@ -1,17 +1,17 @@
 ---
 layout: page
 title: Quality control
-navigation: 6
+navigation: 9
 ---
 
 # QC of sequencing reads
-To assess the quality of sequencing data, we will use the programms **FastQC**[5] and **Fastq Screen**[6]. 
+To assess the quality of sequencing data, we will use the programms [**FastQC**](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [**Fastq Screen**](https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/). 
 
 FastQC calculates statistics about the composition and quality of raw sequences, while Fastq Screen looks for possible contaminations. 
 
 ```{bash}
 mkdir QC
-$RUN fastqc resources/A549_25_3chr10_*.fastq.gz -o QC/
+$RUN fastqc resources/A549_25_3chr10_*.fastq.gz -o ./QC/
 
 Started analysis of A549_25_3chr10_1.fastq.gz
 Approx 5% complete for A549_25_3chr10_1.fastq.gz
@@ -53,7 +53,9 @@ We have to modify the fastq_screen.conf file using the real path of the executab
 To execute Fastq Screen: 
 
 ```{bash}
-$RUN fastq_screen --conf FastQ_Screen_Genomes/fastq_screen.conf resources/A549_0_1chr10_1.fastq.gz --outdir QC/
+$RUN fastq_screen --conf FastQ_Screen_Genomes/fastq_screen.conf \
+           resources/A549_0_1chr10_1.fastq.gz \
+           --outdir ./QC/A549_0_1
 
 Using fastq_screen v0.13.0
 Reading configuration from 'fastq_screen.conf'
@@ -103,7 +105,7 @@ Adapters are usually expected in small RNA-Seq because the molecules are tipical
 
 
 ```{bash}
-$RUN fastqc resources/subsample_to_trim.fq.gz -o /QC
+$RUN fastqc resources/subsample_to_trim.fq.gz -o ./QC
 
 Started analysis of subsample_to_trim.fq.gz
 Approx 5% complete for subsample_to_trim.fq.gz
@@ -119,14 +121,15 @@ Approx 25% complete for subsample_to_trim.fq.gz
 
 <br/>
 
-**EXERCISE**
+## EXERCISE
+
 Once you got the FastQC report (above), how to find out the sequence(s) of the adapter(s) that needs to be trimmed?
 
 
 
-There are many tools for trimming reads and removing adapters, such as **Trim Galore!**, **Trimmomatic**, **Cutadapt**, **skewer**, **AlienTrimmer**, **BBDuk**, and the most recent **SOAPnuke** and [**fastp**](https://www.ncbi.nlm.nih.gov/pubmed/30423086). 
+There are many tools for trimming reads and removing adapters, such as **Trim Galore!**, **Trimmomatic**, **Cutadapt**, [**skewer**](https://github.com/relipmoc/skewer), **AlienTrimmer**, **BBDuk**, and the most recent **SOAPnuke** and [**fastp**](https://www.ncbi.nlm.nih.gov/pubmed/30423086). 
 
-Let's use **skewer[7]** to trim the Illumina small RNA 3' adapter.  
+Let's use **skewer7** to trim the Illumina small RNA 3' adapter.  
 
 ```{bash}
 $RUN skewer resources/subsample_to_trim.fq.gz -x TGGAATTCTCGGGTGCCAAGG -o QC/subsample_to_trim
@@ -174,10 +177,11 @@ Approx 30% complete for subsample_to_trim-trimmed.fastq
 <img src="images/size_dist_small.png" width="800"/>
 <img src="images/adapter_removed.png" width="800"/>
 
-<br/>
 
-**EXERCISE**
-Let's explore the tool **skewer[7]** in more detail, using "skewer --help" command.
+
+## EXERCISE
+
+Let's explore the tool **skewer** in more detail, using "skewer --help" command.
 * Which parameter indicates the minimum read length allowed after trimming? And what is its default value?
 * Which parameter indicates the threshold on the average read quality to be filtered out?
 * Using skewer filter out reads in "subsample_to_trim.fq-trimmed.fastq" that have average quality below 30 and trim them on 3'-end until the base quality is reached 30. How many reads were filtered out and how many remained?
