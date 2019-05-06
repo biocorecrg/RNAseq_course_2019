@@ -145,7 +145,6 @@ Once FASTA and GTF files for a reference genome/transcriptome are obtained, we n
 |<img src="images/mappers_timeline.jpeg" width="800" align="middle" />|
 |From [https://www.ebi.ac.uk/~nf/hts_mappers/](https://www.ebi.ac.uk/~nf/hts_mappers/)|
 
-For the results of different mappers/aligners comparison, visit [https://www.ecseq.com/support/ngs/best-RNA-seq-aligner-comparison-of-mapping-tools](https://www.ecseq.com/support/ngs/best-RNA-seq-aligner-comparison-of-mapping-tools)
 <br/>
 
 ### Fast (splice-unaware) aligners to a reference transcriptome
@@ -172,6 +171,9 @@ These tools are way faster than the previous ones because they don't need to rep
 * [**Salmon**](https://salmon.readthedocs.io/en/latest/index.html) is **an advanced version of Sailfish, by the same authors**, tool for wicked-fast transcript quantification from RNA-seq data. It requires a set of target transcripts to quantify and a K-mer parameter to make the index (i.e. minimum acceptable alignment). 
 * [**Kallisto**](https://pachterlab.github.io/kallisto/) is a program for quantifying abundances of transcripts from bulk and single-cell RNA-Seq data. It is based on the novel idea of pseudoalignment for rapidly determining the compatibility of reads with targets, without the need for alignment.
 
+<br/>
 
-
+For the results of different mappers/aligners comparison, see
+* [https://www.ecseq.com/support/ngs/best-RNA-seq-aligner-comparison-of-mapping-tools](https://www.ecseq.com/support/ngs/best-RNA-seq-aligner-comparison-of-mapping-tools)
+* [https://mikelove.wordpress.com/2018/05/05/salmon-vs-kallisto/](https://mikelove.wordpress.com/2018/05/05/salmon-vs-kallisto/)
 
