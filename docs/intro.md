@@ -4,8 +4,7 @@ title: Introduction
 navigation: 3
 ---
 
-# Module 1
-## Introduction: What is RNA-Seq? 
+# Introduction: What is RNA-Seq? 
 
 |RNA molecule|
 | :---:  |
