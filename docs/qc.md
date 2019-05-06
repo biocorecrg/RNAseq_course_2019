@@ -103,6 +103,7 @@ A549_0_1_fastq_screen/A549_0_1chr10_1_screen.png
 
 mv A549_0_1_fastq_screen QC
 
+firefox QC/A549_0_1_fastq_screen/A549_0_1chr10_1_screen.html
 ```
 
 <img src="images/A549_0_1_1_screen_2.png" />
