@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Module 0
+title: Linux Containers
 navigation: 2
 ---
 
