@@ -177,7 +177,8 @@ Approx 30% complete for subsample_to_trim-trimmed.fastq
 
 
 
-**EXERCISE**
+## EXERCISE
+
 Let's explore the tool **skewer** in more detail, using "skewer --help" command.
 * Which parameter indicates the minimum read length allowed after trimming? And what is its default value?
 * Which parameter indicates the threshold on the average read quality to be filtered out?
