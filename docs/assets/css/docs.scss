@@ -67,7 +67,7 @@ a {
 		padding: $base-height;
 		display: flex;
 		overflow-x: auto;
-
+		flex-shrink: 0;
 	}
 
 	.sidebar-mobile {
