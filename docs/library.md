@@ -78,7 +78,7 @@ The output of RNA-seq is then demultiplexed yielding either one fastq-file per s
 
 <br/>
 
-
+oosta
 
 
 
