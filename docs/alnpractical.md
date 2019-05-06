@@ -364,4 +364,5 @@ firefox multiqc_report.html
 
 Here the result:
 
+<img src="images/multiqc.png"  align="middle" />
 
