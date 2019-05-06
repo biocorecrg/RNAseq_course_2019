@@ -4,7 +4,7 @@ title: Home
 navigation: 1
 ---
 
-# ![logo](https://github.com/CRG-CNAG/BioCoreMiscOpen/blob/master/logo/biocore-logo_small.png) Biocore's RNAseq course 2019
+# ![logo](https://raw.githubusercontent.com/CRG-CNAG/BioCoreMiscOpen/master/logo/biocore-logo_small.png) Biocore's RNAseq course 2019
 
 
 ## Dates, time & location
