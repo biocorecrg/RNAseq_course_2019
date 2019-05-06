@@ -48,15 +48,15 @@ Fragmented cDNA is indexed with a hexamer or octamer barcode (so that cDNA from 
 
 * **cDNA amplification** 
 
-
+<br/>
 
 * **cDNA library quality control and fragment selection**
 
-
+<br/>
 
 * **Sequencing**
 
-
+<br/>
 
 The output of RNA-seq is then demultiplexed yielding either one fastq-file per sample (for single-end reads protocol) or two fastq-files per sample (for paired-end reads protocol).
 
