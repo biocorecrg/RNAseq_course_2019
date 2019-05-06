@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Fastq format
-navigation: 8
+navigation: 7
 ---
 
 # FASTQ format for sequencing reads
