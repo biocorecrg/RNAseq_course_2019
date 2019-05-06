@@ -25,15 +25,18 @@ RUN bash -c 'curl -k -L https://www.bioinformatics.babraham.ac.uk/projects/fastq
 RUN unzip fastqc.zip; chmod 775 FastQC/fastqc; ln -s $PWD/FastQC/fastqc /usr/local/bin/fastqc
 
 #INSTALLING FASTQ_SCREEN
+RUN yum install -y perl-GD wget gd-devel.x86_64
+RUN cpanm -f GD::Graph::bars
 RUN bash -c 'curl -k -L https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/fastq_screen_v${FASTQSCREEN_VERSION}.tar.gz > fastqc_screen.tar.gz'
 RUN tar -zvxf fastqc_screen.tar.gz
-RUN cp fastq_screen_v${FASTQSCREEN_VERSION}/fastq_screen /usr/local/bin/
+RUN cp fastq_screen_v${FASTQSCREEN_VERSION}/* /usr/local/bin/
+RUN sed s/perl/env\ perl/g fastq_screen_v${FASTQSCREEN_VERSION}/fastq_screen > /usr/local/bin/fastq_screen 
 RUN rm fastqc_screen.tar.gz
 
 #INSTALLING BOWTIE2
 RUN yum install -y yum install tbb.x86_64
 RUN bash -c 'curl -k -L https://sourceforge.net/projects/bowtie-bio/files/bowtie2/${BOWTIE2_VERSION}/bowtie2-${BOWTIE2_VERSION}-linux-x86_64.zip/download > bowtie2.zip'
-RUN unzip bowtie2.zip; cd bowtie2-${BOWTIE2_VERSION}; mv bowtie2* /usr/local/bin/; cd ..
+RUN unzip bowtie2.zip; mv bowtie2-${BOWTIE2_VERSION}*/bowtie2* /usr/local/bin/
 
 
 # Installing Skewer
@@ -70,7 +73,7 @@ RUN cd bcftools-${BCFTOOLS_VERSION}; ./configure; make; make install; cd ../
 # Installing salmon
 RUN bash -c 'curl -k -L https://github.com/COMBINE-lab/salmon/releases/download/v${SALMON_VERSION}/salmon-${SALMON_VERSION}_linux_x86_64.tar.gz > salmon.tar.gz'
 RUN tar -zvxf salmon.tar.gz
-RUN cp salmon-latest_linux_x86_64/bin/salmon /usr/local/bin/ 
+RUN ln -s $PWD/salmon-latest_linux_x86_64/bin/salmon /usr/local/bin/salmon
 
 # Install R and R packages
 RUN yum install epel-release libxml2-devel libcurl-devel -y
@@ -79,7 +82,6 @@ RUN mkdir -p /usr/share/doc/R-${R_VERSION}/html
 RUN Rscript -e "install.packages('BiocManager', , repos='http://cran.us.r-project.org')"
 RUN Rscript -e "BiocManager::install(c('GenomicRanges', 'SummarizedExperiment', 'genefilter', 'geneplotter'))"
 RUN Rscript -e "BiocManager::install(c('DESeq2', 'tximport', 'pheatmap'), dependencies=TRUE)"
-
 
 #cleaning
 RUN yum clean all
