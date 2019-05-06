@@ -35,7 +35,10 @@ In GENCODE, we will be using the version [**v29**](https://www.gencodegenes.org/
 |<img src="images/gencode_1.png" width="800" align="middle" />|
 |<img src="images/gencode_2.png" width="800" align="middle" />|
 
-In Ensembl you can get the information after choosing the genome and clicking on **Download DNA sequence (FASTA)** and then **Homo_sapiens.GRCh38.dna_rm.primary_assembly.fa.gz** if you don't want to look at haplotypes and patches and instead **Homo_sapiens.GRCh38.dna_rm.toplevel.fa.gz** if you want to include them.
+<br/>
+
+In [Ensembl](https://www.ensembl.org/index.html), select the genome, for example, [the latest for human](https://www.ensembl.org/Homo_sapiens/Info/Index) and then click to **Download FASTA** and then **[dna](ftp://ftp.ensembl.org/pub/release-96/fasta/homo_sapiens/dna/)** and  select **Homo_sapiens.GRCh38.dna_rm.primary_assembly.fa.gz** in case you don't want to look at haplotypes and patches. Note, this access might work differently in different Internet browsers and on different OS (e.g., on Mac, it works only in Chrome).
+And clicking on **Download GTF** download **[Homo_sapiens.GRCh38.96.chr.gtf.gz](ftp://ftp.ensembl.org/pub/release-96/gtf/homo_sapiens/Homo_sapiens.GRCh38.96.chr.gtf.gz)**.
 
 |Ensembl website|
 | :---:  |
@@ -44,8 +47,8 @@ In Ensembl you can get the information after choosing the genome and clicking on
 |<img src="images/ensembl_3.png" width="800" align="middle" />|
 
 
-## GTF (Gene Transfer Format) files
-We can download an example of a single chromosome and the corresponding annotation from Gencode here:
+## FASTA and GTF (Gene Transfer Format) formats
+To speed up the mapping process, we downloaded FASTA and GTF files for human v29 from GENCODE and processed these files by selected data concerning Chromosome 10 only. Let's examine these files.
 
 ```{bash}
 wget https://public-docs.crg.es/biocore/projects/training/RNAseq_2019/annotations.tar
@@ -63,14 +66,14 @@ NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 ```
 
-The size of the chromosome is already reported in the header, but if we want to check by ourself we can use a combination of linux commands:
+The size of the chromosome (in bp) is already reported in the header, but we can check it as follows:
 
 ```{bash}
-zcat annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz| grep -v ">"| tr -d '\n'|wc -m  
+zcat annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz | grep -v ">" | tr -d '\n' | wc -m  
 133797422
 ```
 
-The annotation is stored in **G**eneral **T**ransfer **F**ormat (**GTF**) format: a tabular format with one line per feature, each one containing 9 columns of data. In general it has a header indicated by the first character **"#"** and one row per feature composed by 9 columns:
+The annotation is stored in **G**eneral **T**ransfer **F**ormat (**GTF**) format (which is an extension of the older [GFF format](https://genome.ucsc.edu/FAQ/FAQformat.html#format3)): a tabular format with one line per genome feature, each one containing 9 columns of data. In general it has a header indicated by the first character **"#"** and one row per feature composed by 9 columns:
 
 | Column number | Column name | Details |
 | ----: | :---- | :---- |
@@ -86,7 +89,7 @@ The annotation is stored in **G**eneral **T**ransfer **F**ormat (**GTF**) format
 
 
 ```{bash}
-zcat annotations/gencode.v29.annotation_chr10.gtf.gz| head -n 10
+zcat annotations/gencode.v29.annotation_chr10.gtf.gz | head -n 10
 
 ##description: evidence-based annotation of the human genome (GRCh38), version 29 (Ensembl 94)
 ##provider: GENCODE
@@ -100,18 +103,22 @@ chr10	HAVANA	transcript	14138	16544	.	-	.	gene_id "ENSG00000260370.1"; transcrip
 chr10	HAVANA	exon	16502	16544	.	-	.	gene_id "ENSG00000260370.1"; transcript_id "ENST00000566940.1"; gene_type "lincRNA"; gene_name "AC215217.1"; transcript_type "lincRNA"; transcript_name "AC215217.1-202"; exon_number 1; exon_id "ENSE00002578035.1"; level 2; transcript_support_level "3"; havana_gene "OTTHUMG00000174801.2"; havana_transcript "OTTHUMT00000430636.1";
 ```
 
+Let's check the 9th field:
+```{bash}
+zcat annotations/gencode.v29.annotation_chr10.gtf.gz | cut -f9 | head -2
+```
 
-We can check the number of genes within the annotation file:
+Let's check how many genes are in the annotation file:
 
 ```{bash}
-zcat annotations/gencode.v29.annotation_chr10.gtf.gz| grep -v "#"| awk '$3=="gene"' | wc -l 
+zcat annotations/gencode.v29.annotation_chr10.gtf.gz | grep -v "#" | awk '$3=="gene"' | wc -l 
 2240
 ```
 
 And get a final counts of every feature:
 
 ```{bash}
-zcat annotations/gencode.v29.annotation_chr10.gtf.gz| grep -v "#"| cut -f 3 | sort|uniq -c 
+zcat annotations/gencode.v29.annotation_chr10.gtf.gz | grep -v "#" | cut -f3 | sort | uniq -c 
 
   29578 CDS
   46414 exon
