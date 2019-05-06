@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Module 1
+title: Introduction
 navigation: 3
 ---
 
