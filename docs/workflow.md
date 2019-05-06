@@ -148,7 +148,7 @@ zcat resources/A549_25_3chr10_2.fastq.gz | head -n 4 | tail -n 1 | awk '{print l
 51
 ```
 
-</br>
+<br/>
 
 **EXERCISE**
 * Count the number of reads and check the read length for the Read 1 for the sample called A549_25_3chr10.
