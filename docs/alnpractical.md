@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Aln practical
-navigation: 8
+navigation: 10
 ---
 
 # Alignment: practical
