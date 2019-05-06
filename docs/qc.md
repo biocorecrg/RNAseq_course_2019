@@ -119,7 +119,8 @@ Approx 25% complete for subsample_to_trim.fq.gz
 
 <br/>
 
-**EXERCISE**
+## EXERCISE
+
 Once you got the FastQC report (above), how to find out the sequence(s) of the adapter(s) that needs to be trimmed?
 
 
