@@ -174,7 +174,7 @@ Approx 30% complete for subsample_to_trim-trimmed.fastq
 <img src="images/size_dist_small.png" width="800"/>
 <img src="images/adapter_removed.png" width="800"/>
 
-<br/>
+
 
 **EXERCISE**
 Let's explore the tool **skewer[7]** in more detail, using "skewer --help" command.
