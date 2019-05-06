@@ -15,6 +15,7 @@ ARG BCFTOOLS_VERSION=1.9
 ARG FASTQSCREEN_VERSION=0.13.0
 ARG BOWTIE2_VERSION=2.3.5.1
 ARG SALMON_VERSION=0.13.1
+ARG R_VERSION=3.5.2
 
 #upgrading pip
 RUN pip install --upgrade pip
@@ -71,6 +72,13 @@ RUN bash -c 'curl -k -L https://github.com/COMBINE-lab/salmon/releases/download/
 RUN tar -zvxf salmon.tar.gz
 RUN cp salmon-latest_linux_x86_64/bin/salmon /usr/local/bin/ 
 
+# Install R and R packages
+RUN yum install epel-release libxml2-devel libcurl-devel -y
+RUN yum install R-${R_VERSION} -y
+RUN mkdir -p /usr/share/doc/R-${R_VERSION}/html
+RUN Rscript -e "install.packages('BiocManager', , repos='http://cran.us.r-project.org')"
+RUN Rscript -e "BiocManager::install(c('GenomicRanges', 'SummarizedExperiment', 'genefilter', 'geneplotter'))"
+RUN Rscript -e "BiocManager::install(c('DESeq2', 'tximport', 'pheatmap'), dependencies=TRUE)"
 
 
 #cleaning
