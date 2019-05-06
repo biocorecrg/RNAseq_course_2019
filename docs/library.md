@@ -14,7 +14,9 @@ mRNA is isolated using a polyT adapter that binds to the polyA tail of RNA. In t
 * **RNA quantification, quality control and fragmentation**
 
 
+
 <img src="images/illumina1.png" width="500" align="middle" />
+
 
 * **RNA is converted to cDNA**
 
