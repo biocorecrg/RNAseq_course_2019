@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Resources
-navigation: 8
+navigation: 12
 ---
 
 # Resources

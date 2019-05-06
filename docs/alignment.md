@@ -1,29 +1,36 @@
 ---
 layout: page
-title: Alignment
-navigation: 9
+title: Read mapping
+navigation: 10
 ---
 
-# Read alignment to reference transcriptome
+# Read mapping to a reference genome/transcriptome
+
+<img src="images/RNAseq_workflow.png" width="1000"/>
+
+Once sequencing reads are pre-processed and their quality is ensured, we can proceed mapping them to a reference genome or transcriptome. 
 
 |Mapping of short reads|
 | :---:  |
-|<img src="images/800px-Mapping_Reads.png" width="350" align="middle" />|
+|<img src="images/800px-Mapping_Reads.png" width="500" align="middle" />|
 |from Wikipedia|
 
-Once we tested the quality of our input reads we can proceed with the alignment to the reference transcriptome. So first of all we need to retrieve this information from one of the public databases that host genomic data. 
+<br/>
 
-## Public resources:
+But first, before doing mapping, we need to retrieve information about a reference genome or transcriptome from a public database. THe program that map reads to a genome or transcriptome need to be provided with two pieces of data, a FASTA file of the genome/transcriptome sequence and a GTF file with annotation.
 
-1. [Gencode](https://www.gencodegenes.org/) contains a very accurate annotation for Human and Mouse. It contains also functional elements such as protein-coding loci with alternatively splices variants, non-coding loci and pseudogenes and the annotations are carried out by  manual curation, computational analysis and targeted experimental approaches.
-2. [Ensembl](https://www.ensembl.org/index.html) contains both automatically generated and manually curated annotations. They host different genomes and also comparative genomics data and variants. [Ensembl genomes](http://ensemblgenomes.org/) extends the genomic information across different taxonomic groups: bacteria, fungi, metazoa, plants, protists. Ensembl integrates also a genome browser.
-3. [UCSC Genome Browser](https://genome.ucsc.edu/) hosts information about different genomes and a genome browser. They integrates the Gencode information as additional tracks. 
 
-As an example we will show how to access the data for Gencode and Ensembl:
+## Public resources on genome/transcriptome sequences and annotations
 
-In Gencode we can retrieve the gene annotations in the first link (Comprehensive gene annotation, chr) and the genome where is indicated **Genome sequence, primary assembly (GRCh38)**. Transcript sequence is also available in case you want to use the transcriptome as a reference. The data we are going to use are from version [**v29**](https://www.gencodegenes.org/human/release_29.html)
+* [GENCODE](https://www.gencodegenes.org/) contains an accurate annotation of the human and mouse genes derived either using manual curation, computational analysis or targeted experimental approaches. GENCODE also contains information on functional elements, such as protein-coding loci with alternatively splices variants, non-coding loci and pseudogenes.
+* [Ensembl](https://www.ensembl.org/index.html) contains both automatically generated and manually curated annotations. They host different genomes and also comparative genomics data and variants. [Ensembl genomes](http://ensemblgenomes.org/) extends the genomic information across different taxonomic groups: bacteria, fungi, metazoa, plants, protists. Ensembl integrates also a genome browser.
+* [UCSC Genome Browser](https://genome.ucsc.edu/) hosts information about different genomes and a genome browser. It integrates the Gencode information as additional tracks. 
 
-|Gencode website|
+Let's consider how to access data in GENCODE and Ensembl for performing mapping to the human genome.
+
+In GENCODE, we will be using the version [**v29**](https://www.gencodegenes.org/human/release_29.html) of the human genome. We will need two files, one is a GTF file for **Comprehensive gene annotation (CHR)** and the other is a FASTA file for **Genome sequence, primary assembly (GRCh38)**. Transcript sequences are also available in case you want to use the transcriptome as a reference. To download files, you can use wget command in the command line, specifying a URL for each file.
+
+|GENCODE website|
 | :---:  |
 |<img src="images/gencode_1.png" width="800" align="middle" />|
 |<img src="images/gencode_2.png" width="800" align="middle" />|
@@ -37,7 +44,7 @@ In Ensembl you can get the information after choosing the genome and clicking on
 |<img src="images/ensembl_3.png" width="800" align="middle" />|
 
 
-## Data formats
+## GTF (Gene Transfer Format) files
 We can download an example of a single chromosome and the corresponding annotation from Gencode here:
 
 ```{bash}

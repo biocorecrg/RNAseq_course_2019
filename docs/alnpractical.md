@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Aln practical
-navigation: 8
+navigation: 11
 ---
 
 # Alignment: practical
@@ -339,4 +339,30 @@ ENST00000020673.5	4183	5925.497	0.000000	0.000
 ENST00000173785.4	925	868.802	0.000000	0.000
 ENST00000181796.6	3785	3216.057	0.000000	0.000
 ```
+We will use this information for calculating differential expression (DE) analysis. 
+
+## Combining reports
+At this point we can summarize the work done by usiong the tool [**multiqc**](https://multiqc.info/). First we link our mapping results to QC.
+
+```{bash}
+cd QC/
+ln -s ../alignments/* .
+```
+
+Then we join the different analyses:
+
+```{bash}
+$RUN multiqc .
+[INFO   ]         multiqc : This is MultiQC v1.7 (7d02b24)
+[INFO   ]         multiqc : Template    : default
+[INFO   ]         multiqc : Searching 'QC/'
+Searching 70 files..  [####################################]  100% 
+...
+
+firefox multiqc_report.html
+```
+
+Here the result:
+
+<img src="images/multiqc.png"  align="middle" />
 

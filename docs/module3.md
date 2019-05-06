@@ -34,11 +34,11 @@ This DESeq2 tutorial is widely inspired from the [RNA-seq workflow](http://maste
 <br><br>
 DESeq2 steps:
 * Modeling raw counts for each gene:
-** Estimate size factors
-** Estimate gene-wise dispersions
-** Fit curve to gene-wise dispersion estimates
-** Shrink gene-wise dispersion estimates
-** GLM (Generalized Linear Model) fit for each gene
+  * Estimate size factors
+  * Estimate gene-wise dispersions
+  * Fit curve to gene-wise dispersion estimates
+  * Shrink gene-wise dispersion estimates
+  * GLM (Generalized Linear Model) fit for each gene
 * Shrinking of log2FoldChanges
 * Testing for differential expression
 
@@ -47,7 +47,9 @@ DESeq2 steps:
 
 DESeq2 takes as an input raw (non normalized) counts, in various forms:
 
-* **Option 1**: a <b>matrix of integer values</b> (the value at the i-th row and j-th column tells how many reads have been assigned to gene i in sample j), such as:
+#### Prepare data from STAR
+
+##### **Option 1**: a <b>matrix of integer values</b> (the value at the i-th row and j-th column tells how many reads have been assigned to gene i in sample j), such as:
 
 | gene | A549_0_1chr10 | A549_0_2chr10 | A549_0_3chr10 | A549_25_1chr10 | A549_25_2chr10 | A549_25_3chr10 |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -65,24 +67,28 @@ The **ReadsPerGene.out.tab** output files of STAR (from option --quantMode GeneC
 * column 4: counts for the 2nd read strand aligned with RNA (htseq-count option -s reverse): the most common protocol.
 
 The protocol used to prepare the libraries for the A549 ENCODE samples is **reverse stranded**, so we need to extract the 4th column of each of the "ReadsPerGene" files, along with the column containing the <b>gene names</b>.
-
+<br>
+<br>
+Create a folder for the deseq2 analysis
 
 ```{bash}
-# retrieve the 1rst column, containing the gene IDs
-cut -f 1 A549_0_1ReadsPerGene.out.tab | grep -v "_" > gene_column.txt
-
-# retrieve the 4th column of each "ReadsPerGene.out.tab" file
-paste A549_0_*ReadsPerGene.out.tab | grep -v "_" | awk '{for (i=4;i<=NF;i+=4) printf "%s\t", $i; printf "\n" }' > counts_4thcolumn.txt
-
-# paste columns into a single file
-paste gene_column.txt counts_4thcolumn.txt > raw_counts_A549_matrix.txt
-
-# add header: "gene_name" + the name of each of the counts file
-sed -i -e "1igene_name\t$(ls A549_0_*ReadsPerGene.out.tab | tr '\n' '\t' | sed 's/ReadsPerGene.out.tab//g')" raw_counts_A549_matrix.txt
-
+mkdir deseq2
 ```
 
-* **Option 2**: one file per sample, each file containing the raw counts of all genes:
+```{bash}
+cd alignments_star
+
+# retrieve the 4th column of each "ReadsPerGene.out.tab" file + the first column that contains the gene IDs
+paste A549_*ReadsPerGene.out.tab | grep -v "_" | awk '{printf "%s\t", $1}{for (i=4;i<=NF;i+=4) printf "%s\t", $i; printf "\n" }' > tmp
+
+# add header: "gene_name" + the name of each of the counts file
+sed -e "1igene_name\t$(ls A549_*ReadsPerGene.out.tab | tr '\n' '\t' | sed 's/ReadsPerGene.out.tab//g')" tmp | cut -f1-7 > ../deseq2/raw_counts_A549_matrix.txt
+
+# remove temporary file
+rm tmp
+```
+
+##### **Option 2**: one file per sample, each file containing the raw counts of all genes:
 
 File **A549_0_1chr10_counts.txt**:
 
@@ -103,41 +109,53 @@ and so on...
 Prepare the 6 files needed for our analysis, from the STAR output, and save them in the <b>counts_star</b> directory.
 
 <br>
-Create directory
+Create directory **counts_star** in the deseq2 directory:
 
 ```{bash}
+cd ~/deseq2
 mkdir counts_star
 ```
 
-Loop around the 6 **ReadsPerGene.out.tab** files and extract the correct counts (4th column) along with the gene ID column (1rst column).
+Loop around the 6 **ReadsPerGene.out.tab** files and extract the gene ID (1rst column) and the correct counts (4th column).
 
 ```{bash}
+cd ~/alignments_star
+
 for i in *ReadsPerGene.out.tab
 do echo $i
 # retrieve the first (gene name) and fourth column (raw reads)
-cut -f1,4 $i | grep -v "_" > counts_star/`basename $i ReadsPerGene.out.tab`_counts.txt
+cut -f1,4 $i | grep -v "_" > ~/deseq2/counts_star/`basename $i ReadsPerGene.out.tab`_counts.txt
 done
 ```
 
+#### Prepare data from Salmon
 
-* Prepare count data from Salmon (PENDING)
+Prepare the annotation file needed to import the **Salmon** counts: a two-column data frame linking transcript id (column 1) to gene id (column 2). Process from the **GTF file**:<br>
 
+```{bash}
+awk -F "\t" 'BEGIN{OFS="\t"}{if($3=="transcript") print $9}' gencode.v29.annotation_chr10.gtf | cut -d"\"" -f4,8 | tr '"' '\t' > tx2gene.gencode.v29.chr10.csv
+```
 
 #### Sample sheet
 
 Additionally, DESeq2 needs a <b>sample sheet</b> that describes the samples characteristics: treatment, knock-out / wild type, replicates, time points, etc. in the form:
 
-| FileName | SampleName | Time | Dexamethasone |
+| SampleName | FileName | Time | Dexamethasone |
 | :---: | :---: | :---: | :---: |
-| A549_0_1chr10_counts.txt | A549_0_1chr10 | t0 | 100nM |
-| A549_0_2chr10_counts.txt | A549_0_2chr10 | t0 | 100nM |
-| A549_0_3chr10_counts.txt | A549_0_3chr10 | t0 | 100nM |
-| A549_25_1chr10_counts.txt | A549_25_1chr10 | t25 | 100nM |
-| A549_25_2chr10_counts.txt | A549_25_2chr10 | t25 | 100nM |
-| A549_25_3chr10_counts.txt | A549_25_3chr10 | t25 | 100nM |
+| A549_0_1chr10 | A549_0_1chr10_counts.txt | t0 | 100nM |
+| A549_0_2chr10 |A549_0_2chr10_counts.txt |  t0 | 100nM |
+| A549_0_3chr10 | A549_0_3chr10_counts.txt | t0 | 100nM |
+| A549_25_1chr10 | A549_25_1chr10_counts.txt | t25 | 100nM |
+| A549_25_2chr10 | A549_25_2chr10_counts.txt | t25 | 100nM |
+| A549_25_3chr10 | A549_25_3chr10_counts.txt | t25 | 100nM |
 
+<br>
+The first column is the sample name, the second column the file name of the count file generated by htseq-count, and the remaining columns are sample metadata which will be stored in ‘colData’.
+<br>
 <b>Exercise</b>
-Prepare this file (tab-separated columns) in a text editor: save it as <b>sample_sheet_A549.txt</b>.
+Prepare this file (tab-separated columns) in a text editor: save it as **sample_sheet_A549.txt in the deseq2 directory**.
+<br>
+The same sample sheet will be used for both **the STAR and the Salmon** counts.
 
 
 #### Analysis
@@ -149,6 +167,9 @@ Start an R interactive session:
 ```{bash}
 # type R (capital letter) in the terminal
 R
+# go to our working directory
+setwd("~/deseq2")
+# load package DESeq2
 ```
 
 Read in the sample table that we have prepared:
@@ -157,13 +178,14 @@ Read in the sample table that we have prepared:
 # the first row is the "header", i.e. it contains the column names.
 # sep="\t" means that the columns/fields are separated with tabs.
 sampletable <- read.table("sample_sheet_A549.txt", header=T, sep="\t")
+rownames(sampletable) <- sampletable$SampleName
 
 # display the first 6 rows
 head(sampletable)
 
 # check the number of rows and the number of columns
 nrow(sampletable)
-ncolumn(sampletable)
+ncol(sampletable)
 ```
 
 * Load count data from STAR
@@ -175,39 +197,52 @@ se_star <- DESeqDataSetFromHTSeqCount(sampleTable = sampletable,
                         design = ~ Time)
 
 # Option that reads in a matrix (we will not do it here)
-countdata <- read.table("raw_counts_A549_matrix.txt", header=T, sep="\t", row.names=1)
+countdata <- read.delim("raw_counts_A549_matrix.txt", header=T, sep="\t", row.names=1)
 se_star_matrix <- DESeqDataSetFromMatrix(countData = countdata,
-                                  colData = coldata,
+                                  colData = sampletable,
                                   design = ~ Time)
 ```
 
-* Load count data from SALMON (PENDING)
+* Load count data from SALMON
 
 ```{r}
-files <- file.path(dir,"salmon", samples$run, "quant.sf.gz")
-names(files) <- samples$run
+# Go to the deseq2 directory
+setwd("~/deseq2")
 
-# a two-column data.frame linking transcript id (column 1) to gene id (column 2)
-tx2gene <- read_csv(file.path(dir, "tx2gene.gencode.v27.csv"))
+# Load tximport package that we will use to import Salmon counts
+library(tximport)
+
+# List the quantification files from Salmon
+files <- dir("~/alignments_salmon", recursive=TRUE, pattern="quant.sf", full.names=TRUE)
+names(files) <- dir("~/alignments_salmon/")
+
+# Read in the two-column data.frame linking transcript id (column 1) to gene id (column 2)
+tx2gene <- read.table("tx2gene.gencode.v29.chr10.csv", 
+		sep="\t", 
+		header=F)
+
+# Read in the sample table (in case it is not already loaded)
+sampletable <- read.table("sample_sheet_A549.txt", header=T, sep="\t")
+rownames(sampletable) <- sampletable$SampleName
 
 # tximport can import data from Salmon, Kallisto, Sailfish, RSEM, Stringtie
 txi <- tximport(files, 
-		type="salmon", 
-		tx2gene=tx2gene)
+		type = "salmon", 
+		tx2gene = tx2gene)
 
-sampleTable <- data.frame(condition = factor(rep(c("A", "B"), each = 3)))
-rownames(sampleTable) <- colnames(txi$counts)
 
-dds <- DESeqDataSetFromTximport(txi,
-			sampleTable = sampletable, 
+se_salmon <- DESeqDataSetFromTximport(txi,
+			colData = sampletable, 
 			design = ~ Time)
 
 ```
 
+* We will focus the rest of the analysis on the **se_star**. 
+
 * Remove lowly expressed genes: keep only those genes that have more than 10 summed raw counts across the 6 samples
 
 ```{r}
-se1 <- se[rowSums(counts(se)) > 10, ]
+se_star <- se_star[rowSums(counts(se_star)) > 10, ]
 ```
 
 
@@ -215,7 +250,7 @@ se1 <- se[rowSums(counts(se)) > 10, ]
 
 ```{r}
 # 
-se2 <- DESeq(se1)
+se_star2 <- DESeq(se_star)
 
 ```
 
@@ -223,7 +258,7 @@ se2 <- DESeq(se1)
 
 ```{r}
 # Use the rlog transformation for visualization, as adviced by the DESeq2 author
-rld <- rlog(se2)
+rld <- rlog(se_star2)
 ```
 
 * Samples correlation
@@ -231,38 +266,42 @@ rld <- rlog(se2)
 Calculate the sample-to-sample distances:
 
 ```{r}
-sampleDists <- dist(t(assay(rld)))
+# load libraries pheatmap to create the heatmap plot
+library(pheatmap)
 
-library("RColorBrewer")
-sampleDistMatrix <- as.matrix(sampleDists)
+# calculate between-sample distance matrix
+sampleDistMatrix <- as.matrix(dist(t(assay(rld))))
 rownames(sampleDistMatrix) <- paste(vsd$condition, vsd$type, sep="-")
 colnames(sampleDistMatrix) <- NULL
-colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
+
+png("sample_distance_heatmap.png")
 pheatmap(sampleDistMatrix,
          clustering_distance_rows=sampleDists,
-         clustering_distance_cols=sampleDists,
-         col=colors)
+         clustering_distance_cols=sampleDists)
+dev.off()
 
 ```
 
-PENDING HERE IMAGE
+<img src="images/sample_distance_heatmap.png" width="700"/>
 
 * Principal Component Analysis
 
-Reduction of dimensionality to be able to retrieve main differences between samples
+Reduction of dimensionality to be able to retrieve main differences between samples.
 
 ```{r}
+png("PCA.png")
 plotPCA(object = rld,
 		intgroup = "Time")
+dev.off()
 ```
 
-PENDING HERE IMAGE
+<img src="images/PCA.png" width="700"/>
 
 * Running the differential expression analysis
 
 ```{r}
 # t25 vs t0 vs WT
-comp_tmp <- results(object = se2, 
+de <- results(object = se2, 
 		contrast = c("Time", "t0", "t25"))
 ```
 
@@ -287,8 +326,9 @@ Bonferroni-Hochberg adjusted p-values (FDR): **the lower the more significant**.
 
 * Running the R script from the command line
 
-Rscript deseq2_star.R sampletable_star.txt
-Rscript deseq2_salmon.R sampletable_salmon.txt
+Rscript deseq2_star.R sampletable_star.txt star_counts_directory column_groups comparisons
+
+Rscript deseq2_salmon.R sampletable_salmon.txt salmon_counts_directory comparisons
 
 
 ### Online tool
