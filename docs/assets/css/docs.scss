@@ -62,7 +62,7 @@ a {
 	color: $sidebar-color;
 
 	.sidebar-main {
-		height: auto;
+		height: 100%;
 		background: $navigation-background;
 		display: flex;
 		overflow-x: auto;
