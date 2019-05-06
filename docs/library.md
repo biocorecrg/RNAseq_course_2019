@@ -36,7 +36,9 @@ Note that in a stranded protocol shown here (in other protocols it can be differ
 
 <br/>
 
-* **cDNA multiplexing** Fragmented cDNA is indexed with a hexamer or octamer barcode (so that cDNA from different samples can be pooled into a single lane for multiplexed sequencing).
+* **cDNA multiplexing** 
+
+Fragmented cDNA is indexed with a hexamer or octamer barcode (so that cDNA from different samples can be pooled into a single lane for multiplexed sequencing).
 
 |cDNA multiplexing|
 | :---:  |
