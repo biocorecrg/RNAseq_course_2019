@@ -91,7 +91,19 @@ Making reduced sequence file with ratio 711:1
 ...
 ```
 
-Below is shown an example of the result aligning reads from fastq_screen.conf A549_0_1_1.fastq.gz to different databases to detect contaminations, failure of ribosomal depletion, and other artifacts of sequencing.  
+Below is shown an example of the result aligning reads from fastq_screen.conf A549_0_1_1.fastq.gz to different databases to detect contaminations, failure of ribosomal depletion, and other artifacts of sequencing. You can download them here 
+
+```{bash}
+wget https://biocorecrg.github.io/RNAseq_course_2019/precomp_res/A549_0_1_fastq_screen.tar.gz
+tar -zvxf A549_0_1_fastq_screen.tar.gz 
+A549_0_1_fastq_screen/
+A549_0_1_fastq_screen/A549_0_1chr10_1_screen.html
+A549_0_1_fastq_screen/A549_0_1chr10_1_screen.txt
+A549_0_1_fastq_screen/A549_0_1chr10_1_screen.png
+
+mv A549_0_1_fastq_screen QC
+
+```
 
 <img src="images/A549_0_1_1_screen_2.png" />
 <img src="images/A549_0_1_1_screen_1.png" />
