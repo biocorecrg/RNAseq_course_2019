@@ -46,11 +46,11 @@ Fragmented cDNA is indexed with a hexamer or octamer barcode (so that cDNA from 
 |from [https://github.com/hbctraining/rnaseq_overview](https://github.com/hbctraining/rnaseq_overview)|
 
 
-* **cDNA amplification** <br/>
+* **cDNA amplification**
 
 <br/>
 
-* **cDNA library quality control and fragment selection** <br/>
+* **cDNA library quality control and fragment selection** 
 
 <br/>
 
