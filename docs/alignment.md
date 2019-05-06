@@ -1,12 +1,10 @@
 ---
 layout: page
-title: Module 2
-navigation: 4
+title: Alignment
+navigation: 7
 ---
 
-# Module 2
-
-## Read alignment to reference transcriptome
+# Read alignment to reference transcriptome
 
 |Mapping of short reads|
 | :---:  |
@@ -15,7 +13,7 @@ navigation: 4
 
 Once we tested the quality of our input reads we can proceed with the alignment to the reference transcriptome. So first of all we need to retrieve this information from one of the public databases that host genomic data. 
 
-### Public resources:
+## Public resources:
 
 1. [Gencode](https://www.gencodegenes.org/) contains a very accurate annotation for Human and Mouse. It contains also functional elements such as protein-coding loci with alternatively splices variants, non-coding loci and pseudogenes and the annotations are carried out by  manual curation, computational analysis and targeted experimental approaches.
 2. [Ensembl](https://www.ensembl.org/index.html) contains both automatically generated and manually curated annotations. They host different genomes and also comparative genomics data and variants. [Ensembl genomes](http://ensemblgenomes.org/) extends the genomic information across different taxonomic groups: bacteria, fungi, metazoa, plants, protists. Ensembl integrates also a genome browser.
@@ -39,7 +37,7 @@ In Ensembl you can get the information after choosing the genome and clicking on
 |<img src="images/ensembl_3.png" width="800" align="middle" />|
 
 
-### Data formats
+## Data formats
 We can download an example of a single chromosome and the corresponding annotation from Gencode here:
 
 ```{bash}
@@ -118,10 +116,10 @@ zcat annotations/gencode.v29.annotation_chr10.gtf.gz| grep -v "#"| cut -f 3 | so
 
 ```
 
-### Aligners
+## Aligners
 In last 10 years several tools for mapping short reads to the reference have been developed. All of them requires to build an index of the reference genome / transcriptome using different algorithms. We can classify them in three groups:
 
-#### Fast aligners
+### Fast aligners
 These tools can be used for aligning short reads to a trancriptome or genome reference, but in the latter case they cannot align in splicing junctions. They can be much faster than traditional aligners like [**Blast**](https://blast.ncbi.nlm.nih.gov/Blast.cgi) but less sensitive and may have limitations about the read size. 
 
 1. [**Bowtie**](http://bowtie-bio.sourceforge.net/index.shtml) is an ultrafast, memory-efficient short read aligner geared toward quickly aligning large sets of short DNA sequences (reads) to large genomes. Bowtie indexes the genome with a Burrows-Wheeler index. 
@@ -129,21 +127,21 @@ These tools can be used for aligning short reads to a trancriptome or genome ref
 3. [**BWA**](http://bio-bwa.sourceforge.net/) is a software package for mapping low-divergent sequences against a large reference genome, such as the human genome. BWA indexes the genome with an FM Index.
 4. [**GEM**](https://github.com/smarco/gem3-mapper) is a high-performance mapping tool for aligning sequenced reads against large reference genomes. In particular, it is designed to obtain best results when mapping sequences up to 1K bases long. GEM3 indexes the reference genome using a custom FM-Index design and performs an adaptive gapped search based on the characteristics of the input and the user settings. 
 
-#### Splice-aware aligners 
+### Splice-aware aligners 
 These aligners are able to map to the splicing junctions described in the annotation and even to detect novel ones. Some of them can detect gene fusions and SNPs and RNA editing. Downstream anslysis will require for some of them the assignation of the aligned reads to a given gene / transcript.
 
 1. [**Tophat**](https://ccb.jhu.edu/software/tophat/index.shtml) is a fast splice junction mapper for RNA-Seq reads. It aligns RNA-Seq reads to mammalian-sized genomes using the ultra high-throughput short read aligner Bowtie, and then analyzes the mapping results to identify splice junctions between exons.
 2. [**Hisat2**](http://ccb.jhu.edu/software/hisat2/index.shtml) is a fast and sensitive alignment program for mapping next-generation sequencing reads (both DNA and RNA) to a population of human genomes (as well as to a single reference genome). The reference transcriptome is indexed using a Hierarchical Graph FM index (HGFM). 
 3. [**STAR**](https://github.com/alexdobin/STAR) is an ultrafast universal RNA-seq aligner. It uses sequential maximum mappable seed search in uncompressed suffix arrays followed by seed clustering and stitching procedure. It is also able to search for gene fusions.
 
-#### Quasi-mapping aligners 
+### Quasi-mapping aligners 
 These tools are way faster than the previous ones because they don't need to report the resulting alignments but only  associate a read to a given transcript for quantification. They don't discover novel transcript variants (or splicing events) or detect variations, etc.
 
 1. [**Salmon**](https://salmon.readthedocs.io/en/latest/index.html) is a tool for wicked-fast transcript quantification from RNA-seq data. It requires a set of target transcripts to quantify and a K-mer parameter to make the index (i.e. minimum acceptable alignment). 
 2. [**Kallisto**](https://pachterlab.github.io/kallisto/) is a program for quantifying abundances of transcripts from bulk and single-cell RNA-Seq data. It is based on the novel idea of pseudoalignment for rapidly determining the compatibility of reads with targets, without the need for alignment.
 
 
-### Creating indexes
+## Creating indexes
 We will make indexes using two different programs **STAR** and **Salmon**. The former will need both genome in fasta format and annotation in GTF. The latter instead needs transcripts sequences in a fasta file.
 
 We can check the size of the files needed by the tools:
@@ -219,7 +217,7 @@ index ["transcripts"] did not previously exist  . . . creating it
 ```
 
 
-### Aligning
+## Aligning
 For aligning with **STAR** we need to specify the path of the files (reads and index folder) and if the reads are compressed or not (**--readFilesCommand zcat**). Then we can also specify the kind of outptut we want, in this case we choose **BAM** format with alignment sorted by coordinates. We also indicated that we want to output gene counts too (**--quantMode GeneCounts**) that will be useful for differential analysis.
 
 ```{bash}
