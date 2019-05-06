@@ -44,6 +44,7 @@ DESeq2 steps:
 
 In this tutorial, we will use the counts calculated from the mapping on **all chromosomes**:
 * Folder **full_data**
+* svn export https://github.com/biocorecrg/RNAseq_course_2019/trunk/full_data
 
 ### Raw count matrices
 
