@@ -53,7 +53,7 @@ We have to modify the fastq_screen.conf file using the real path of the executab
 To execute Fastq Screen: 
 
 ```{bash}
-$RUN fastq_screen --conf FastQ_Screen_Genomes/fastq_screen.conf resources/A549_0_1chr10_1.fastq.gz --outdir ./QC/
+$RUN fastq_screen --conf FastQ_Screen_Genomes/fastq_screen.conf resources/A549_0_1chr10_1.fastq.gz --outdir ./QC/A549_0_1
 
 Using fastq_screen v0.13.0
 Reading configuration from 'fastq_screen.conf'
