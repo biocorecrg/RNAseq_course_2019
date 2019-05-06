@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Fastq format
+title: FASTQ format
 navigation: 7
 ---
 
