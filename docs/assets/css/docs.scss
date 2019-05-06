@@ -57,7 +57,7 @@ a {
 	max-width: $sidebar-width;
 	padding: 0;
 	border-right: $sidebar-border;
-	height: 90%;
+	height: 100%;
 	overflow: hidden;
 	color: $sidebar-color;
 
@@ -67,6 +67,7 @@ a {
 		padding: $base-height;
 		display: flex;
 		overflow-x: auto;
+		padding-bottom: 10%;
 
 	}
 
