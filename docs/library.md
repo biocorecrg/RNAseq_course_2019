@@ -13,6 +13,9 @@ mRNA is isolated using a polyT adapter that binds to the polyA tail of RNA. In t
 * **ciccio**
 Luca
 
+* **orpo**
+AA
+
 
 
 
