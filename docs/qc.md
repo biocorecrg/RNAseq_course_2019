@@ -5,7 +5,7 @@ navigation: 6
 ---
 
 # QC of sequencing reads
-To assess the quality of sequencing data, we will use the programms **FastQC** and **Fastq Screen**. 
+To assess the quality of sequencing data, we will use the programms [**FastQC**](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [**Fastq Screen**](https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/). 
 
 FastQC calculates statistics about the composition and quality of raw sequences, while Fastq Screen looks for possible contaminations. 
 
@@ -124,9 +124,9 @@ Once you got the FastQC report (above), how to find out the sequence(s) of the a
 
 
 
-There are many tools for trimming reads and removing adapters, such as **Trim Galore!**, **Trimmomatic**, **Cutadapt**, **skewer**, **AlienTrimmer**, **BBDuk**, and the most recent **SOAPnuke** and [**fastp**](https://www.ncbi.nlm.nih.gov/pubmed/30423086). 
+There are many tools for trimming reads and removing adapters, such as **Trim Galore!**, **Trimmomatic**, **Cutadapt**, [**skewer**](https://github.com/relipmoc/skewer), **AlienTrimmer**, **BBDuk**, and the most recent **SOAPnuke** and [**fastp**](https://www.ncbi.nlm.nih.gov/pubmed/30423086). 
 
-Let's use **skewer[7]** to trim the Illumina small RNA 3' adapter.  
+Let's use **skewer7** to trim the Illumina small RNA 3' adapter.  
 
 ```{bash}
 $RUN skewer resources/subsample_to_trim.fq.gz -x TGGAATTCTCGGGTGCCAAGG -o QC/subsample_to_trim
