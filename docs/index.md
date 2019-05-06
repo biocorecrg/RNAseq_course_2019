@@ -4,7 +4,8 @@ title: Home
 navigation: 1
 ---
 
-# Biocore's RNAseq course 2019
+# ![Biocore's RNAseq course 2019](https://github.com/biocorecrg/vectorQC/blob/master/plots/logo_vectorQC_small.png) 
+
 
 ## Dates, time & location
 
