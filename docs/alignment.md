@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Alignment
-navigation: 9
+navigation: 10
 ---
 
 # Read alignment to reference transcriptome
