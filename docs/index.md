@@ -9,6 +9,7 @@ navigation: 1
 
 ## Dates, time & location
 
+
 Dates:
 
 | Day  | Date  | Time  |
