@@ -46,9 +46,15 @@ Note that in a stranded protocol shown here (in other protocols it can be differ
 
 * **cDNA amplification** 
 
+
+
 * **cDNA library quality control and fragment selection**
 
+
+
 * **Sequencing**
+
+
 
 The output of RNA-seq is then demultiplexed yielding either one fastq-file per sample (for single-end reads protocol) or two fastq-files per sample (for paired-end reads protocol).
 
