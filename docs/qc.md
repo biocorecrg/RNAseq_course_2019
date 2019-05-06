@@ -5,7 +5,7 @@ navigation: 6
 ---
 
 # QC of sequencing reads
-To assess the quality of sequencing data, we will use the programms **FastQC**[5] and **Fastq Screen**[6]. 
+To assess the quality of sequencing data, we will use the programms **FastQC** and **Fastq Screen**. 
 
 FastQC calculates statistics about the composition and quality of raw sequences, while Fastq Screen looks for possible contaminations. 
 
@@ -177,7 +177,7 @@ Approx 30% complete for subsample_to_trim-trimmed.fastq
 
 
 **EXERCISE**
-Let's explore the tool **skewer[7]** in more detail, using "skewer --help" command.
+Let's explore the tool **skewer** in more detail, using "skewer --help" command.
 * Which parameter indicates the minimum read length allowed after trimming? And what is its default value?
 * Which parameter indicates the threshold on the average read quality to be filtered out?
 * Using skewer filter out reads in "subsample_to_trim.fq-trimmed.fastq" that have average quality below 30 and trim them on 3'-end until the base quality is reached 30. How many reads were filtered out and how many remained?
