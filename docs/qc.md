@@ -1,10 +1,19 @@
 ---
 layout: page
-title: Quality control
+title: Read pre-processing
 navigation: 9
 ---
+# Pre-processing of the sequencing reads
 
-# QC of sequencing reads
+<img src="images/RNAseq_workflow.png" width="1000"/>
+
+Once sequencing reads are obtained from the sequencing machine, they need to be pre-processed for further analysis. 
+This step includes the quality control of initial reads and read trimming that includes removing adapter sequences, filtering out low quality reads and trimming reads off low qualty base pairs.
+
+<br/>
+
+## QC of sequencing reads
+
 To assess the quality of sequencing data, we will use the programms [**FastQC**](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [**Fastq Screen**](https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/). 
 
 FastQC calculates statistics about the composition and quality of raw sequences, while Fastq Screen looks for possible contaminations. 
@@ -159,7 +168,7 @@ Thu Apr 18 17:51:25 2019 >> done (6.789s)
 log has been saved to "QC/subsample_to_trim-trimmed.log".
 ```
 
-We can look at the read distribution after the trimming of the adapter by inspecting the log-file or re-launching FastQC.
+We can look at the read distribution after the trimming of the adapter by inspecting the log-file or **re-launching FastQC**.
 
 ```{bash}
 $RUN fastqc QC/subsample_to_trim-trimmed.fastq -o QC
