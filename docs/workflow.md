@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Workflow
+title: Analysis workflow
 navigation: 6
 ---
 
