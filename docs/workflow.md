@@ -12,7 +12,7 @@ navigation: 5
 
 <br/>
 
-### FASTQ format for sequencing reads
+## FASTQ format for sequencing reads
 
 Short (and long) sequencing reads coming from the sequencers are stored in **FASTQ** format.
 This format contains the information about sequence and the quality of each base, which encodes the probability that the corresponding base call is incorrect.
@@ -40,7 +40,7 @@ The format contains four rows per sequencing read:
 <br/>
 
 
-### RNA-Seq data repositories
+## RNA-Seq data repositories
 
 
 The major repositories for gene expression data:
@@ -55,7 +55,7 @@ These repositoroes are linked to the repositories of NGS raw data (Fastq files):
 
 <br/>
 
-**EXERCISE**
+### EXERCISE
 Let's explore [one of the GEO records](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE126535)
 * Which platform and protocol were used for sequencing?
 * What type of RNA was sequenced?
@@ -150,7 +150,7 @@ zcat resources/A549_25_3chr10_2.fastq.gz | head -n 4 | tail -n 1 | awk '{print l
 
 <br/>
 
-**EXERCISE**
+### EXERCISE 
 * Count the number of reads and check the read length for the Read 1 for the sample called A549_25_3chr10.
 * Count the number of reads in all fastq files (use for-loop).
 
