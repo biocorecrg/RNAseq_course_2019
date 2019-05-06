@@ -66,6 +66,8 @@ a {
 		background: $navigation-background;
 		padding: $base-height;
 		display: flex;
+		overflow-x: auto;
+
 	}
 
 	.sidebar-mobile {
