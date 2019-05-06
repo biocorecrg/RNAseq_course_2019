@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Quality control
-navigation: 6
+navigation: 7
 ---
 
 # QC of sequencing reads
