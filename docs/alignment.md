@@ -1,10 +1,12 @@
 ---
 layout: page
-title: Alignment
+title: Read mapping
 navigation: 10
 ---
 
-# Read alignment to reference transcriptome
+# Read mapping to reference genome/transcriptome
+
+
 
 |Mapping of short reads|
 | :---:  |
