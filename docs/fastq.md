@@ -6,13 +6,13 @@ navigation: 7
 
 # FASTQ format for sequencing reads
 
-Short (and long) sequencing reads coming from the sequencers are stored in **FASTQ** format.
-This format contains the information about sequence and the quality of each base, which encodes the probability that the corresponding base call is incorrect.
+Short (and long) sequencing reads coming from the sequencers are stored in **FASTQ** format (files with an extension **.fastq**).
+This format contains the information about the sequence and the quality of each sequenced base. The quality encodes the probability that the corresponding base call is incorrect.
 <br/>
 
 <img src="images/fastq_format.png" width="500"/>
 
-The format contains four rows per sequencing read:
+The FASTQ format contains four rows per sequencing read:
 * a header containing **@** as the first character
 * the sequence content
 * a **spacer**
