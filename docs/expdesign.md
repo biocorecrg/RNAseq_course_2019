@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Library preparation
+title: Experimental design
 navigation: 5
 ---
 
