@@ -17,7 +17,7 @@ Once sequencing reads are pre-processed and their quality is ensured, we can pro
 
 <br/>
 
-But first, before doing mapping, we need to retrieve information about a reference genome or transcriptome from a public database. THe program that map reads to a genome or transcriptome need to be provided with two pieces of data, a FASTA file of the genome/transcriptome sequence and a GTF file with annotation.
+But first, before doing the mapping, we need to retrieve information about a reference genome or transcriptome from a public database. The program that map reads to a genome or transcriptome, called an aligner, needs to be provided with two pieces of data, a FASTA file of the genome/transcriptome sequence (a file with an extension **.fa**) and a GTF/GFF file with annotation (a file with an extension **.gtf** or **.gff**).
 
 
 ## Public resources on genome/transcriptome sequences and annotations
@@ -48,7 +48,7 @@ And clicking on **Download GTF** download **[Homo_sapiens.GRCh38.96.chr.gtf.gz](
 
 <br/>
 
-## FASTA and GTF/GFF formats
+## FASTA and GTF/GFF data formats
 To speed up the mapping process, we downloaded FASTA and GTF files for human v29 from GENCODE and processed these files by selected data related only to Chromosome 10. Let's examine these files.
 
 ```{bash}
@@ -56,7 +56,7 @@ wget https://public-docs.crg.es/biocore/projects/training/RNAseq_2019/annotation
 tar -xf annotations.tar
 ```
 
-The genome is generally represented as a FASTA file with the header indicated by the "**>**":
+The genome is generally represented as a FASTA file (.fa file) with the header indicated by the "**>**":
 
 ```{bash}
 zcat annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz| head -n 5
@@ -135,30 +135,36 @@ zcat annotations/gencode.v29.annotation_chr10.gtf.gz | grep -v "#" | cut -f3 | s
 
 <br/>
 
+
 ## Tools for read mapping
 
-Once FASTA and GTF files are obtained, we need to choose a tool to perform mapping and, depending on the chosen tool, to calculate the index for the reference genome. Like the index at the end of a book, an index of a large DNA sequence allows one to rapidly find shorter sequences embedded within it. 
+Once FASTA and GTF files for a reference genome/transcriptome are obtained, we need to choose an aligner to perform the mapping and before doing the mapping to calculate an index for the reference genome that a chosen algorithm will use. Like the index at the end of a book, an index of a large DNA sequence allows one to rapidly find shorter sequences embedded within it. Different tools use different approaches at genome/transcriptome indexing.
+<br/>
 
-### Fast aligners
-These tools can be used for aligning short reads to a trancriptome or genome reference, but if a genome is used these tools skip splicing junctions. They can be much faster than traditional aligners like [**Blast**](https://blast.ncbi.nlm.nih.gov/Blast.cgi) but less sensitive and may have limitations about the read size. 
+### Fast aligners to a reference transcriptome
+These tools can be used for aligning short reads to a trancriptome reference, because if a genome is used these tools would not map reads to splicing junctions; that is, they are not splice-aware aligners. They can be much faster than traditional aligners like [**Blast**](https://blast.ncbi.nlm.nih.gov/Blast.cgi) but less sensitive and may have limitations about the read size. 
 
-* [**Bowtie**](http://bowtie-bio.sourceforge.net/index.shtml) is an ultrafast, memory-efficient short read aligner geared toward quickly aligning large sets of short DNA sequences (reads) to large genomes. Bowtie indexes the genome with a Burrows-Wheeler index. 
-* [**Bowtie2**](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml) is an ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences. It is particularly good at aligning reads of length 50 up to 100s or 1,000s to relatively long (e.g. mammalian) genomes. Bowtie 2 indexes the genome with an FM Index. 
+* [**Bowtie**](http://bowtie-bio.sourceforge.net/index.shtml) is an ultrafast, memory-efficient short read aligner geared toward quickly aligning large sets of short DNA sequences (reads) to large genomes/transcriptomes. Bowtie uses a Burrows-Wheeler index. 
+* [**Bowtie2**](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml) is an ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences. It is particularly good at aligning reads of length 50 up to 100s or 1,000s to relatively long (e.g. mammalian) genomes. Bowtie 2 indexes the transcriptome with an FM Index. 
 * [**BWA**](http://bio-bwa.sourceforge.net/) is a software package for mapping low-divergent sequences against a large reference genome, such as the human genome. BWA indexes the genome with an FM Index.
 * [**GEM**](https://github.com/smarco/gem3-mapper) is a high-performance mapping tool for aligning sequenced reads against large reference genomes. In particular, it is designed to obtain best results when mapping sequences up to 1K bases long. GEM3 indexes the reference genome using a custom FM-Index design and performs an adaptive gapped search based on the characteristics of the input and the user settings. 
+<br/>
 
-### Splice-aware aligners 
-These aligners are able to map to the splicing junctions described in the annotation and even to detect novel ones. Some of them can detect gene fusions and SNPs and RNA editing. Downstream anslysis will require for some of them the assignation of the aligned reads to a given gene / transcript.
+### Splice-aware aligners to a reference genome
+These aligners are able to map to the splicing junctions described in the annotation and even to detect novel ones. Some of them can detect gene fusions and SNPs and also RNA editing. For some of these tools, the downstream analysis requires the assignation of the aligned reads to a given gene/transcript.
 
-1. [**Tophat**](https://ccb.jhu.edu/software/tophat/index.shtml) is a fast splice junction mapper for RNA-Seq reads. It aligns RNA-Seq reads to mammalian-sized genomes using the ultra high-throughput short read aligner Bowtie, and then analyzes the mapping results to identify splice junctions between exons.
-2. [**Hisat2**](http://ccb.jhu.edu/software/hisat2/index.shtml) is a fast and sensitive alignment program for mapping next-generation sequencing reads (both DNA and RNA) to a population of human genomes (as well as to a single reference genome). The reference transcriptome is indexed using a Hierarchical Graph FM index (HGFM). 
-3. [**STAR**](https://github.com/alexdobin/STAR) is an ultrafast universal RNA-seq aligner. It uses sequential maximum mappable seed search in uncompressed suffix arrays followed by seed clustering and stitching procedure. It is also able to search for gene fusions.
+* [**Tophat**](https://ccb.jhu.edu/software/tophat/index.shtml) is a fast splice junction mapper for RNA-Seq reads. It aligns RNA-Seq reads to mammalian-sized genomes using the ultra high-throughput short read aligner Bowtie, and then analyzes the mapping results to identify splice junctions between exons.
+* [**HISAT2**](http://ccb.jhu.edu/software/hisat2/index.shtml) is a fast and sensitive alignment program for mapping next-generation sequencing reads (both DNA and RNA) to a population of human genomes (as well as to a single reference genome). The indexing scheme is called a Hierarchical Graph FM index (HGFM). 
+* [**STAR**](https://github.com/alexdobin/STAR) is an ultrafast universal RNA-seq aligner. It uses sequential maximum mappable seed search in uncompressed suffix arrays followed by seed clustering and stitching procedure. It is also able to search for gene fusions.
+<br/>
 
-### Quasi-mapping aligners 
-These tools are way faster than the previous ones because they don't need to report the resulting alignments but only  associate a read to a given transcript for quantification. They don't discover novel transcript variants (or splicing events) or detect variations, etc.
+### Quasi-mappers to a reference transcriptome
+These tools are way faster than the previous ones because they don't need to report the resulting alignments (BAM/SAM files) but only  associate a read to a given transcript for quantification. They don't discover novel transcript variants (or splicing events) or detect variations, etc.
 
-1. [**Salmon**](https://salmon.readthedocs.io/en/latest/index.html) is a tool for wicked-fast transcript quantification from RNA-seq data. It requires a set of target transcripts to quantify and a K-mer parameter to make the index (i.e. minimum acceptable alignment). 
-2. [**Kallisto**](https://pachterlab.github.io/kallisto/) is a program for quantifying abundances of transcripts from bulk and single-cell RNA-Seq data. It is based on the novel idea of pseudoalignment for rapidly determining the compatibility of reads with targets, without the need for alignment.
+* [**Sailfish**](http://www.cs.cmu.edu/~ckingsf/software/sailfish/) replaces read mapping with intelligent k-mer indexing and counting, thus allowing fast quantification of isoform abundance (for example, the authors claim that it takes about 15 minutes for a set of 150 million reads).
+* [**Salmon**](https://salmon.readthedocs.io/en/latest/index.html) is an advanced version of Sailfish, by the same authors, tool for wicked-fast transcript quantification from RNA-seq data. It requires a set of target transcripts to quantify and a K-mer parameter to make the index (i.e. minimum acceptable alignment). 
+* [**Kallisto**](https://pachterlab.github.io/kallisto/) is a program for quantifying abundances of transcripts from bulk and single-cell RNA-Seq data. It is based on the novel idea of pseudoalignment for rapidly determining the compatibility of reads with targets, without the need for alignment.
+
 
 
 
