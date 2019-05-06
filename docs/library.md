@@ -9,6 +9,8 @@ navigation: 4
 * mRNA purification mRNA is isolated using a polyT adapter that binds to the polyA tail of RNA. In the result, non poly-adenylated transcripts - rRNA, tRNA, long ncRNAs, miRNA, histone mRNA, degraded RNA, bacterial transcripts, and many viral trascripts - are excluded from the reaction (washed away). 
 
 * **RNA quantification, quality control and fragmentation**
+
+
 <img src="images/illumina1.png" width="500" align="middle" />
 
 * **RNA is converted to cDNA**
