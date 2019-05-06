@@ -47,7 +47,9 @@ DESeq2 steps:
 
 DESeq2 takes as an input raw (non normalized) counts, in various forms:
 
-* **Option 1**: a <b>matrix of integer values</b> (the value at the i-th row and j-th column tells how many reads have been assigned to gene i in sample j), such as:
+#### Prepare data from STAR
+
+##### **Option 1**: a <b>matrix of integer values</b> (the value at the i-th row and j-th column tells how many reads have been assigned to gene i in sample j), such as:
 
 | gene | A549_0_1chr10 | A549_0_2chr10 | A549_0_3chr10 | A549_25_1chr10 | A549_25_2chr10 | A549_25_3chr10 |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -86,7 +88,7 @@ sed -e "1igene_name\t$(ls A549_*ReadsPerGene.out.tab | tr '\n' '\t' | sed 's/Rea
 rm tmp
 ```
 
-* **Option 2**: one file per sample, each file containing the raw counts of all genes:
+##### **Option 2**: one file per sample, each file containing the raw counts of all genes:
 
 File **A549_0_1chr10_counts.txt**:
 
@@ -126,9 +128,13 @@ cut -f1,4 $i | grep -v "_" > ~/deseq2/counts_star/`basename $i ReadsPerGene.out.
 done
 ```
 
+#### Prepare data from Salmon
 
-* Prepare count data from Salmon (PENDING)
+Prepare the annotation file needed to import the **Salmon** counts: a two-column data frame linking transcript id (column 1) to gene id (column 2). Process from the **GTF file**:<br>
 
+```{bash}
+awk -F "\t" 'BEGIN{OFS="\t"}{if($3=="transcript") print $9}' gencode.v29.annotation_chr10.gtf | cut -d"\"" -f4,8 | tr '"' '\t' > tx2gene.gencode.v29.chr10.csv
+```
 
 #### Sample sheet
 
@@ -148,6 +154,8 @@ The first column is the sample name, the second column the file name of the coun
 <br>
 <b>Exercise</b>
 Prepare this file (tab-separated columns) in a text editor: save it as **sample_sheet_A549.txt in the deseq2 directory**.
+<br>
+The same sample sheet will be used for both **the STAR and the Salmon** counts.
 
 
 #### Analysis
@@ -161,6 +169,7 @@ Start an R interactive session:
 R
 # go to our working directory
 setwd("~/deseq2")
+# load package DESeq2
 ```
 
 Read in the sample table that we have prepared:
@@ -176,7 +185,7 @@ head(sampletable)
 
 # check the number of rows and the number of columns
 nrow(sampletable)
-ncolumn(sampletable)
+ncol(sampletable)
 ```
 
 * Load count data from STAR
@@ -194,15 +203,7 @@ se_star_matrix <- DESeqDataSetFromMatrix(countData = countdata,
                                   design = ~ Time)
 ```
 
-
 * Load count data from SALMON
-
-Prepare the annotation file needed to import the **Salmon** counts: a two-column data frame linking transcript id (column 1) to gene id (column 2). Process from the **GTF file**:<br>
-
-```{bash}
-awk -F "\t" 'BEGIN{OFS="\t"}{if($3=="transcript") print $9}' gencode.v29.annotation_chr10.gtf | cut -d"\"" -f4,8 | tr '"' '\t' > tx2gene.gencode.v29.chr10.csv
-```
-
 
 ```{r}
 # Go to the deseq2 directory
@@ -212,39 +213,36 @@ setwd("~/deseq2")
 library(tximport)
 
 # List the quantification files from Salmon
-files <- dir("~/alignments_salmon", recursive=TRUE, pattern="quant.genes.sf", full.names=TRUE)
+files <- dir("~/alignments_salmon", recursive=TRUE, pattern="quant.sf", full.names=TRUE)
 names(files) <- dir("~/alignments_salmon/")
-
-files <- file.path("/nfs/users2/bi/sbonnin/gith/RNAseq_course_2019/alignments_salmon", dir("/nfs/users2/bi/sbonnin/gith/RNAseq_course_2019/alignments_salmon") "quant.gene.sf")
-names(files) <- dir("~/alignments_salmon/")
-
 
 # Read in the two-column data.frame linking transcript id (column 1) to gene id (column 2)
 tx2gene <- read.table("tx2gene.gencode.v29.chr10.csv", 
 		sep="\t", 
 		header=F)
 
-# Read in the sample table
-sampleTable <- data.frame(Time = gsub("A549_|_[123]chr10", "", dir("alignements/")))
-rownames(sampleTable) <- colnames(txi$counts)
-
+# Read in the sample table (in case it is not already loaded)
+sampletable <- read.table("sample_sheet_A549.txt", header=T, sep="\t")
+rownames(sampletable) <- sampletable$SampleName
 
 # tximport can import data from Salmon, Kallisto, Sailfish, RSEM, Stringtie
 txi <- tximport(files, 
-		type="salmon", 
-		tx2gene=tx2gene)
+		type = "salmon", 
+		tx2gene = tx2gene)
 
 
-dds <- DESeqDataSetFromTximport(txi,
-			colData = sampleTable, 
+se_salmon <- DESeqDataSetFromTximport(txi,
+			colData = sampletable, 
 			design = ~ Time)
 
 ```
 
+* We will focus the rest of the analysis on the **se_star**. 
+
 * Remove lowly expressed genes: keep only those genes that have more than 10 summed raw counts across the 6 samples
 
 ```{r}
-se1 <- se[rowSums(counts(se)) > 10, ]
+se_star <- se_star[rowSums(counts(se_star)) > 10, ]
 ```
 
 
@@ -252,7 +250,7 @@ se1 <- se[rowSums(counts(se)) > 10, ]
 
 ```{r}
 # 
-se2 <- DESeq(se1)
+se_star2 <- DESeq(se_star)
 
 ```
 
@@ -260,7 +258,7 @@ se2 <- DESeq(se1)
 
 ```{r}
 # Use the rlog transformation for visualization, as adviced by the DESeq2 author
-rld <- rlog(se2)
+rld <- rlog(se_star2)
 ```
 
 * Samples correlation
@@ -268,32 +266,36 @@ rld <- rlog(se2)
 Calculate the sample-to-sample distances:
 
 ```{r}
-sampleDists <- dist(t(assay(rld)))
+# load libraries pheatmap to create the heatmap plot
+library(pheatmap)
 
-library("RColorBrewer")
-sampleDistMatrix <- as.matrix(sampleDists)
+# calculate between-sample distance matrix
+sampleDistMatrix <- as.matrix(dist(t(assay(rld))))
 rownames(sampleDistMatrix) <- paste(vsd$condition, vsd$type, sep="-")
 colnames(sampleDistMatrix) <- NULL
-colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
+
+png("sample_distance_heatmap.png")
 pheatmap(sampleDistMatrix,
          clustering_distance_rows=sampleDists,
-         clustering_distance_cols=sampleDists,
-         col=colors)
+         clustering_distance_cols=sampleDists)
+dev.off()
 
 ```
 
-PENDING HERE IMAGE
+<img src="images/sample_distance_heatmap.png" width="700"/>
 
 * Principal Component Analysis
 
-Reduction of dimensionality to be able to retrieve main differences between samples
+Reduction of dimensionality to be able to retrieve main differences between samples.
 
 ```{r}
+png("PCA.png")
 plotPCA(object = rld,
 		intgroup = "Time")
+dev.off()
 ```
 
-PENDING HERE IMAGE
+<img src="images/PCA.png" width="700"/>
 
 * Running the differential expression analysis
 
