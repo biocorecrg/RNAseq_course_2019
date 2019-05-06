@@ -34,11 +34,11 @@ This DESeq2 tutorial is widely inspired from the [RNA-seq workflow](http://maste
 <br><br>
 DESeq2 steps:
 * Modeling raw counts for each gene:
-** Estimate size factors
-** Estimate gene-wise dispersions
-** Fit curve to gene-wise dispersion estimates
-** Shrink gene-wise dispersion estimates
-** GLM (Generalized Linear Model) fit for each gene
+  * Estimate size factors
+  * Estimate gene-wise dispersions
+  * Fit curve to gene-wise dispersion estimates
+  * Shrink gene-wise dispersion estimates
+  * GLM (Generalized Linear Model) fit for each gene
 * Shrinking of log2FoldChanges
 * Testing for differential expression
 
