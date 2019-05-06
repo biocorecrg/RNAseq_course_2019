@@ -284,7 +284,7 @@ dev.off()
 
 ```
 
-<img src="images/sample_distance_heatmap.png" width="700"/>
+<img src="images/sample_distance_heatmap.png" width="600"/>
 
 * Principal Component Analysis
 
@@ -313,8 +313,8 @@ head(de)
 * DESeq2 output explained
 
 To generate more accurate log2 foldchange estimates, DESeq2 allows for the **shrinkage of the LFC** estimates toward zero when the information for a gene is low, which could include:
-* Low counts
-* High dispersion values
+  * Low counts
+  * High dispersion values
 
 * **log2 fold change** 
 A positive fold change indicates an increase of expression while a negative fold change indicates a decrease in expression for a given comparison.<br>
@@ -326,6 +326,7 @@ Wald statisticial test p-value: Indicates whether the gene analysed is likely to
 * **padj**
 Bonferroni-Hochberg adjusted p-values (FDR): **the lower the more significant**. More robust that the regular p-value because it controls for the occurrence of **false positives**.
 
+* **baseMean**
 
 
 ### Online tool
