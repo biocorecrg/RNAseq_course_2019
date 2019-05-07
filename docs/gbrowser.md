@@ -72,8 +72,20 @@ This indicates that everything went ok and we can now display the data. Of cours
 And we can display it. 
 <img src="images/ucsc6.png"  align="middle" />
 
+The default view can be changed by clickin on the bar on the left. You can open a window with different settings and as an example you can change the **Display mode** indicating  **Squish**.
+
+<img src="images/ucsc7.png"  align="middle" />
+
+This will change the way we display our data. We can see the single read pairs aligned to the forward and reverse strands (blu is **+** and red **-**).  
+
 <img src="images/ucsc8.png"  align="middle" />
+
+We can also display only the coverage by clicking on **Display data as a density graph:** and then **Display mode: full**. 
+
 <img src="images/ucsc9.png"  align="middle" />
+
+Here the result that can help sometimes to see the change in expression between different conditions:
+
 <img src="images/ucsc10.png"  align="middle" />
 
 
