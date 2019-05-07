@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Aln practical
-navigation: 11
+navigation: 12
 ---
 
 # Mapping using STAR
@@ -38,7 +38,7 @@ gunzip -k Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz
 **Once index is built, we have to not forget to remove those unzipped files!**
 
 
-To index the genome with **STAR**, the **sjdbOverhang** option needs to be specified for detecting possible splicing sites. It usually equals to the minimum read size minus 1; it tells **STAR** what is the maximum possible stretch of sequence that can be found on one side of a spicing site. In our case, since the read size is 51 bases, we can accept maximum 50 bases on one side and one base on the other of a splicing site; that is, to set up this parameter to **50**.
+To index the genome with **STAR** for RNA-seq analysis, the **sjdbOverhang** option needs to be specified for detecting possible splicing sites. It usually equals to the minimum read size minus 1; it tells **STAR** what is the maximum possible stretch of sequence that can be found on one side of a spicing site. In our case, since the read size is 51 bases, we can accept maximum 50 bases on one side and one base on the other of a splicing site; that is, to set up this parameter to **50**.
 
 Building the STAR index (--runMode genomeGenerate):
 
@@ -77,7 +77,7 @@ rm annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa
 ```
 <br/>
 
-## Aligning the reads to the genome (and counting them at the same time!)
+## Aligning reads to the genome (and counting them at the same time!)
 To use **STAR** for the read alignment (default --runMode option), we have to specify the following options:
 * the index directory (**--genomeDir**)
 * the read files (**--readFilesIn**)
@@ -111,6 +111,60 @@ Let's explore the output directory "alignments".
 ```{bash}
 ln -lh alignments
 ```
+
+<br/>
+
+## Read counts 
+STAR outputs read counts per gene into **PREFIX**ReadsPerGene.out.tab file with 4 columns which correspond to different strandedness options:
+column 1: gene ID
+column 2: counts for unstranded RNA-seq
+column 3: counts for the 1st read strand aligned with RNA (htseq-count option -s yes)
+column 4: counts for the 2nd read strand aligned with RNA (htseq-count option -s reverse)
+
+| | | | |   
+| :----: | :----: | :----: |  :----: |
+|gene id| read counts per gene (unstranded) | read counts per gene (read 1)|read counts per gene (read 2)| 
+|N_unmapped|	26098|	26098|	26098|
+|...|	...|	...|	...|
+|ENSG00000261456.5|	13|	0|	13|
+|...|	...|	...|	...|
+|ENSG00000151240.16|	1652|	5|	1664|
+|...|	...|	...|	...|
+
+
+Select the output according to the strandedness of your data. Note, that if you have stranded data and choose one of the columns 3 or 4, the other column (4 or 3) will give you the count of antisense reads. 
+
+For example, in the stranded protocol shown in "Library preparation", Read 1 is mapped to the antisense strand (this is also true for single-end reads), while Read 2, to the sense strand.
+
+This is quite useful in case we don't know which kit was used for the sequencing step. At the beginning we also have number of unmapped reads, of reads that map to more than one position 
+
+
+```{bash}
+more alignments/A549_0_1ReadsPerGene.out.tab
+
+N_unmapped	26098	26098	26098
+N_multimapping	337723	337723	337723
+N_noFeature	211089	2547710	246034
+N_ambiguous	151810	4514	32331
+ENSG00000260370.1	0	0	0
+ENSG00000237297.1	0	0	0
+ENSG00000261456.5	13	0	13
+ENSG00000232420.2	0	0	0
+ENSG00000015171.19	6874	131	6743
+ENSG00000276662.1	6	6	0
+ENSG00000212331.1	0	0	0
+ENSG00000151240.16	1652	5	1664
+...
+```
+
+We can count the number of reads mapping to each strand by using a simple awk script:
+
+```{bash}
+grep -v "N_" alignments/A549_0_1ReadsPerGene.out.tab | awk '{unst+=$2;forw+=$3;rev+=$4}END{print unst,forw,rev}'
+
+2343002 153677 2427536
+```
+So we can confirm that the protocol used is sequencing the reverse complement of input mRNAs.
 
 <br/>
 
@@ -206,43 +260,6 @@ rm alignments/*.sam
 ```
 
 
-Gene counts are reported within the file **PREFIX**ReadsPerGene.out.tab. It is a tab separated text with information about 
-
-| | | | |   
-| :----: | :----: | :----: |  :----: |
-|gene id| read counts per gene (no strand) | read counts per gene (forward)|read counts per gene (reverse)| 
-|N_unmapped|	26098|	26098|	26098|
-|...|	...|	...|	...|
-|ENSG00000261456.5|	13|	0|	13|
-
-This is quite useful in case we don't know which kit was used for the sequencing step. At the beginning we also have number of unmapped reads, of reads that map to more than one position 
-
-```{bash}
-more alignments/A549_0_1ReadsPerGene.out.tab
-
-N_unmapped	26098	26098	26098
-N_multimapping	337723	337723	337723
-N_noFeature	211089	2547710	246034
-N_ambiguous	151810	4514	32331
-ENSG00000260370.1	0	0	0
-ENSG00000237297.1	0	0	0
-ENSG00000261456.5	13	0	13
-ENSG00000232420.2	0	0	0
-ENSG00000015171.19	6874	131	6743
-ENSG00000276662.1	6	6	0
-ENSG00000212331.1	0	0	0
-ENSG00000151240.16	1652	5	1664
-...
-```
-
-We can count the number of reads mapping to each strand by using a simple awk script:
-
-```{bash}
-grep -v "N_" alignments/A549_0_1ReadsPerGene.out.tab | awk '{unst+=$2;forw+=$3;rev+=$4}END{print unst,forw,rev}'
-
-2343002 153677 2427536
-```
-So we can confirm that the protocol used is sequencing the reverse complement of input mRNAs.
 
 We can check the quality of the resulting alignment running the tool [**Qualimap**](http://qualimap.bioinfo.cipf.es/) specifying the kind of analysis (**rnaseq**), the presence of paired end reads within the bam file (**-pe**) and the strand of the library (**-p strand-specific-reverse**). 
 
