@@ -4,12 +4,17 @@ title: Aln practical
 navigation: 11
 ---
 
-# Alignment: practical
+# Mapping using STAR
 
-## Creating indexes
-We will make indexes using two different programs **STAR** and **Salmon**. The former will need both genome in fasta format and annotation in GTF. The latter instead needs transcripts sequences in a fasta file.
+* For the STAR running options, see [STAR Manual](http://labshare.cshl.edu/shares/gingeraslab/www-data/dobin/STAR/Releases/FromGitHub/Old/STAR-2.5.3a/doc/STARmanual.pdf).
 
-We can check the size of the files needed by the tools:
+<br/>
+
+## Building the STAR index
+To make an index for STAR, we need both the genome sequence in FASTA format and the annotation in GTF format. 
+We will be building an index only for chromosome 10.
+
+Let's look at the files we will need in **the directory "annotations"**:
 
 ```{bash}
 ls -alht annotations
@@ -21,30 +26,27 @@ drwxr-xr-x 2 lcozzuto Bioinformatics_Unit  253 Apr 30 17:37 .
 -rw-r--r-- 1 lcozzuto Bioinformatics_Unit 1.5M Apr 17 16:08 gencode.v29.annotation_chr10.gtf.gz
 ```
 
-As a good practice is better to keep our files zipped as much as possible, you won't waste storage that is a precious resource when dealing with these analysis. You can see how much storage is wasted when using unzipped files:
-
-**PLEASE DO NOT UNZIP ALSO THE FILE gencode.v29.transcripts.fa!! THE FOLLOWING IS AN EXAMPLE!!**
+STAR requires unzipped .fa and .gtf files. Let's unzip them, using the option -k which allows to keep .gz files: 
 
 ```{bash}
-for i in *.gz; do gunzip $i; done
-
-ls -alht
-total 617M
-drwxr-xr-x  2 lcozzuto Bioinformatics_Unit  244 Apr 30 17:49 .
-drwxr-xr-x 10 lcozzuto Bioinformatics_Unit 1.7K Apr 30 17:49 ..
--rw-r--r--  1 lcozzuto Bioinformatics_Unit 130M Apr 30 17:48 Homo_sapiens.GRCh38.dna.chromosome.10.fa
--rw-r--r--  1 lcozzuto Bioinformatics_Unit 331M Apr 30 17:48 gencode.v29.transcripts.fa
--rw-r--r--  1 lcozzuto Bioinformatics_Unit  43M Apr 30 17:48 gencode.v29.annotation_chr10.gtf
+gunzip -k gencode.v29.annotation_chr10.gtf.gz
+gunzip -k Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz
 ```
-Basically you are using 80% more space. Some of the tools cannot handle directly zipped files as an input (like the indexing step of **STAR**), so you can unzip them, use them and remove the uncompressed version.
 
-To indexing the genome with **STAR** we need to provide also the parameter **sjdbOverhang** that is needed for detecting possible splicing sites. It is generally the minimum read size minus 1 and tells **STAR** which is the maximum possible stretch of sequence that can be found on one side of the spicing site. In our case that every reads is 51 bases long we can accept maximum 50 bases on one side and one base on the other (so the value for this parameter is **50**).
+**Q. How much (in percentage) disk space is saved when those two files are kept zipped vs unzipped?**
 
-This step will require some minutes:
+**Once index is built, we have to not forget to remove those unzipped files.**
+
+
+To index the genome with **STAR**, the **sjdbOverhang** option needs to be specified for detecting possible splicing sites. It usually equals to the minimum read size minus 1; it tells **STAR** what is the maximum possible stretch of sequence that can be found on one side of a spicing site. In our case, since the read size is 51 bases, we can accept maximum 50 bases on one side and one base on the other of a splicing site; that is, to set up this parameter to **50**.
+
+Building the STAR index (--runMode genomeGenerate):
 
 ```{bash}
+cd ..
 mkdir indexes
 mkdir indexes/chr10
+
 $RUN STAR --runMode genomeGenerate --genomeDir indexes/chr10 \
             --genomeFastaFiles annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa \
             --sjdbGTFfile annotations/gencode.v29.annotation_chr10.gtf \
@@ -67,23 +69,24 @@ Apr 30 18:27:24 ..... finished successfully
 
 ```
 
-**Salmon** does not need any decompression of the input so we can index by using this command:
+Remove unzipped files:
 
 ```{bash}
-$RUN salmon index -t annotations/gencode.v29.transcripts.fa.gz -i indexes/transcripts
-
-Version Info: This is the most recent version of salmon.
-index ["transcripts"] did not previously exist  . . . creating it
-[2019-04-30 18:12:59.272] [jLog] [info] building index
-[2019-04-30 18:12:59.275] [jointLog] [info] [Step 1 of 4] : counting k-mers
-
-[....]
-[2019-04-30 18:18:07.251] [jLog] [info] done building index
+rm annotations/gencode.v29.annotation_chr10.gtf
+rm annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa
 ```
+<br/>
+
+## Aligning the reads (and quantifying at the same time)
+To use **STAR** for the read alignment (default --runMode option), we have to specify the following options:
+* the index directory (--genomeDir)
+* the read files (--readFilesIn)
+* if reads are are compressed or not (--readFilesCommand)
+* type of output (--outSAMtype)
+* (--quantMode). "With **--quantMode GeneCounts** option STAR will count number reads per gene while mapping. A read is counted if it overlaps (1nt or more) one and only one gene. Both ends of the paired- end read are checked for overlaps. The counts coincide with those produced by htseq-count with default parameters." (from [STAR Manual](http://labshare.cshl.edu/shares/gingeraslab/www-data/dobin/STAR/Releases/FromGitHub/Old/STAR-2.5.3a/doc/STARmanual.pdf)) 
+* (--outFileNamePrefix)
 
 
-## Aligning
-For aligning with **STAR** we need to specify the path of the files (reads and index folder) and if the reads are compressed or not (**--readFilesCommand zcat**). Then we can also specify the kind of outptut we want, in this case we choose **BAM** format with alignment sorted by coordinates. We also indicated that we want to output gene counts too (**--quantMode GeneCounts**) that will be useful for differential analysis.
 
 ```{bash}
 mkdir alignments
@@ -365,4 +368,24 @@ firefox multiqc_report.html
 Here the result:
 
 <img src="images/multiqc.png"  align="middle" />
+
+<br/>
+
+# Read mapping using Salmon
+
+We will make indexes using two different programs **STAR** and **Salmon**. The former will need both genome in fasta format and annotation in GTF. The latter instead needs transcripts sequences in a fasta file.
+
+**Salmon** does not need any decompression of the input so we can index by using this command:
+
+```{bash}
+$RUN salmon index -t annotations/gencode.v29.transcripts.fa.gz -i indexes/transcripts
+
+Version Info: This is the most recent version of salmon.
+index ["transcripts"] did not previously exist  . . . creating it
+[2019-04-30 18:12:59.272] [jLog] [info] building index
+[2019-04-30 18:12:59.275] [jointLog] [info] [Step 1 of 4] : counting k-mers
+
+[....]
+[2019-04-30 18:18:07.251] [jLog] [info] done building index
+```
 
