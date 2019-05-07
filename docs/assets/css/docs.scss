@@ -62,12 +62,12 @@ a {
 	color: $sidebar-color;
 
 	.sidebar-main {
-		height: 100%;
+		height: 90%;
 		background: $navigation-background;
 		display: flex;
 		overflow-x: auto;
 		padding: $base-height;
-		padding-bottom: 25px;
+		padding-bottom: 100px;
 
 	}
 
