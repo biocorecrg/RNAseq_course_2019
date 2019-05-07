@@ -6,9 +6,6 @@ navigation: 15
 
 ## Functional analysis
 
-https://hbctraining.github.io/DGE_workshop/lessons/09_functional_analysis.html
-
-
 ### Resources
 
 #### Gene Ontology
@@ -66,7 +63,6 @@ The [main page of GO] provides a tool to test the enrichment of gene ontologies 
 <img src="images/GO_tool_input1.png" width="800" align="middle" />
 
 * Prepare ENSEMBL IDs gene list and **universe**
-
 ```{bash}
 # Extract all gene IDs used in our analysis and convert from Gencode (e.g ENSG00000057657.16) to ENSEMBL (e.g. ENSG00000057657) IDs
 cut -f1 deseq2_results.txt | sed '1d' | sed 's/\..//g' > deseq2_universe_ensemblIDs.txt
@@ -74,21 +70,13 @@ cut -f1 deseq2_results.txt | sed '1d' | sed 's/\..//g' > deseq2_universe_ensembl
 # Convert from Gencode to ENSEMBL IDs from selected gene list
 sed 's/\..//g' deseq2_results_padj0.05_log2fc0.5_IDs.txt > deseq2_results_padj0.05_log2fc0.5_ensemblIDs.txt
 ```
-
-* Load the universe gene list as **Reference list** in the tool. *Change -> Browse -> (select deseq2_universe_symbols.txt) -> Upload list*
-
+* Load the universe gene list as **Reference list** in the tool. *Change -> Browse -> (select deseq2_universe_ensemblIDs.txt) -> Upload list*
 * *Launch analysis*
-
 <img src="images/GO_tool_results_ensembl.png" width="800" align="middle" />
-
 * Try the same analysis using the **gene symbols** instead of ENSEMBL IDs
-
 ```{bash}
-# Extract all gene IDs used in our analysis
-cut -f1 deseq2_results.txt | sed '1d' > deseq2_universe_IDs.txt
-
-# Get corresponding gene symbols
-fgrep -f deseq2_universe_IDs.txt tx2gene.gencode.v29_symbols.csv | cut -f3 | sort -u > deseq2_universe_symbols.txt
+# Get universe with gene symbols (we already have the gene selection in deseq2_results_padj0.05_log2fc0.5_symbols.txt)
+cut -f2 deseq2_results.txt | sed '1d' > deseq2_universe_symbols.txt
 ```
 <img src="images/GO_tool_results_symbols.png" width="800" align="middle" />
 
@@ -98,13 +86,13 @@ fgrep -f deseq2_universe_IDs.txt tx2gene.gencode.v29_symbols.csv | cut -f3 | sor
 http://amp.pharm.mssm.edu/Enrichr/
 
 
-### Enrichment based on ranked lists of genes
+### Enrichment based on ranked lists of genes using GSEA
 
 #### GSEA (Gene Set Enrichment Analysis)
 
-GSEA is a Java-based tool.
-
 <img src="images/gsea_presentation.png" width="600" align="middle" />
+
+[GSEA](http://software.broadinstitute.org/gsea/) is available as a Java-based tool.
 
 ##### Algorithm
 
@@ -112,44 +100,48 @@ GSEA doesn't require a threshold: the whole set of genes is considered.
 
 <img src="images/gsea_paper.jpg" width="800" align="middle" />
 
-
-(A) An expression data set sorted by correlation with phenotype, the corresponding heat map, and the “gene tags,” i.e., location of genes from a set S within the sorted list. (B) Plot of the running sum for S in the data set, including the location of the maximum enrichment score (ES) and the leading-edge subset.
-
-
-GSEA checks whether a particular gene set (for example, a gene ontology) is randomly distributed across a list of ranked genes.
+GSEA checks whether a particular gene set (for example, a gene ontology) is **randomly distributed** across a list of **ranked genes**.
 <br>
 The algorithm consists of 3 key elements:
 
 1. **Calculation of the Enrichment Score**
 The Enrichment Score (ES) reflects the degree to which a gene set is overrepresented at the extremes (top or bottom) of the entire ranked gene list.
 2. **Estimation of Significance Level of ES** 
-The statistical significant (nominal p-value) of the ES is estimated by using an empirical phenotype-based permutation test procedure.
-
+The statistical significant (nominal p-value) of the **Enrichment Score (ES)** is estimated by using an empirical phenotype-based permutation test procedure. The **Normalized Enrichment Score (NES)** is obtained by normalizing the ES for each gene set to account for the size of the set.
 3. **Adjustment for Multiple Hypothesis Testing**
-When an entire database of gene sets is evaluated, we adjust the estimated significance level to account for multiple hypothesis testing. We first normalize the ES for each gene set to account for the size of the set, yielding a normalized enrichment score (NES). We then control the proportion of false positives by calculating the false discovery rate (FDR) (8, 9) corresponding to each NES. The FDR is the estimated probability that a set with a given NES represents a false positive finding; it is computed by comparing the tails of the observed and null distributions for the NES.
+Calculation of the FDR ti control the proportion of falses positives.
 
 <img src="images/gsea_explained.gif" width="900" align="middle" />
-
-
 
 See the [GSEA Paper](https://www.ncbi.nlm.nih.gov/pubmed/16199517) for more details on the algorithm.
 
 The main GSEA algorithm requires 3 inputs:
 * Gene expression data
 * Phenotype labels
-* Gene sets 
+* Gene sets
 
 ##### Gene expression data in TXT format
 
-The input should be normalized read counts filtered out for low counts (-> we have it from the previous GSEA analysis !).
+The input should be normalized read counts filtered out for low counts (-> we created it in the DESeq2 tutorial -> *normalized_counts.txt* !).
 <br>
 The first column contains the gene ID (HUGO symbols for *Homo sapiens*).<br>
 The second column contains any description or symbol, and will be ignoreed by the algorithm.<br>
 The remaining columns contains normalized expressions: one column per sample.
 
-| NAME | DESCRIPTION | A549_0_1chr10 | A549_0_2chr10 | A549_0_3chr10 | A549_25_1chr10 | A549_25_2chr10 | A549_25_3chr10 |
+| NAME | DESCRIPTION | A549_0_1 | A549_0_2 | A549_0_3 | A549_25_1 | A549_25_2 | A549_25_3 |
 | DKK1 | NA| 0 | 0 | 0 | 0 | 0 | 0 |
 | HGT | NA | 0 | 0 | 0 | 0 | 0 | 0 |
+
+<b>Exercise</b>
+<br>
+GSEA will work by default with the gene symbols: add the gene symbol as a first column to *normalized_counts.txt*.
+Remember the file *tx2gene.gencode.v29_symbols.csv* that maps the **gene IDs to the gene symbols**.
+
+```{bash}
+join -1 2 -2 1 <(sort -k1,1 tx2gene.gencode.v29_symbols.csv) <(sort -k1,1 normalized_counts.txt)
+
+```
+
 
 
 ##### Phenotype labels in CLS format

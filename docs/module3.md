@@ -136,11 +136,8 @@ done
 Prepare the annotation file needed to import the **Salmon** counts: a two-column data frame linking transcript id (column 1) to gene id (column 2). Process from the **GTF file**:<br>
 
 ```{bash}
-# first column is the transcript ID, second column is the gene ID
-awk -F "\t" 'BEGIN{OFS="\t"}{if($3=="transcript"){split($9, a, "\""); print a[4],a[2]}}' gencode.v29.annotation.gtf > tx2gene.gencode.v29.csv
-
 # first column is the transcript ID, second column is the gene ID, third column is the gene symbol
-awk -F "\t" 'BEGIN{OFS="\t"}{if($3=="transcript"){split($9, a, "\""); print a[4],a[2],a[8]}}' gencode.v29.annotation.gtf > tx2gene.gencode.v29_symbols.csv
+awk -F "\t" 'BEGIN{OFS="\t"}{if($3=="transcript"){split($9, a, "\""); print a[4],a[2],a[8]}}' gencode.v29.annotation.gtf > tx2gene.gencode.v29.csv
 
 ```
 
@@ -237,7 +234,7 @@ names(files) <- dir("~/alignments_salmon/")
 
 # Read in the two-column data.frame linking transcript id (column 1) to gene id (column 2)
 tx2gene <- read.table("tx2gene.gencode.v29.csv", 
-		sep="\t", 
+		sep="\t",
 		header=F)
 
 # Read in the sample table (in case it is not already loaded)
@@ -335,8 +332,11 @@ de <- results(object = se_star2,
 # check first rows
 head(de)
 
+# add the more comprehensive gene symbols
+de_symbols <- merge(unique(tx2gene[,2:3]), data.frame(ID=rownames(de), de), by=1, all=F)
+
 # write differential expression analysis result to text file
-write.table(de, "deseq2_results.txt", quote=F, col.names=NA, row.names=T, sep="\t")
+write.table(de_symbols, "deseq2_results.txt", quote=F, col.names=T, row.names=F, sep="\t")
 ```
 
 * Save the normalized counts
@@ -344,9 +344,12 @@ write.table(de, "deseq2_results.txt", quote=F, col.names=NA, row.names=T, sep="\
 ```{bash}
 # compute normalized counts
 norm_counts <- log2(counts(se_star2, normalized=T)+1)
-# write normalized counts to text file
-write.table(norm_counts, "normalized_counts.txt", quote=F, col.names=NA, row.names=T, sep="\t")
 
+# add the gene symbols
+norm_counts_symbols <- merge(unique(tx2gene[,2:3]), data.frame(ID=rownames(norm_counts), norm_counts), by=1, all=F)
+
+# write normalized counts to text file
+write.table(norm_counts_symbols, "normalized_counts.txt", quote=F, col.names=T, row.names=F, sep="\t")
 ```
 
 
@@ -397,18 +400,15 @@ An False Discovery Rate adjusted p-value of 0.05 implies that 5% of **significan
 * We select our list of differentially expressed genes betwen t25 and t0 based on padj < 0.05 and log2FC > 0.5 or log2FC < -0.5
 
 ```{bash}
-# column 3 is the log2FoldChange, column 7 is the adjusted p-value (padj)
+# column 4 is the log2FoldChange, column 8 is the adjusted p-value (padj)
 # keep all columns
-awk '($7 < 0.05 && $3 > 0.5) || ($7 < 0.05 && $3 < -0.5) {print}' deseq2_results.txt > deseq2_results_padj0.05_log2fc0.5.txt
+awk '($8 < 0.05 && $4 > 0.5) || ($8 < 0.05 && $4 < -0.5) {print}' deseq2_results.txt > deseq2_results_padj0.05_log2fc0.5.txt
 
-# extract only gene IDs (sed '1d' removes the first row that is the column names)
-cut -f1 deseq2_results_padj0.05_log2fc0.5.txt | sed '1d' > deseq2_results_padj0.05_log2fc0.5_IDs.txt
-```
+# extract only gene IDs (column 1)
+cut -f1 deseq2_results_padj0.05_log2fc0.5.txt > deseq2_results_padj0.05_log2fc0.5_IDs.txt
 
-* Extract more comprehensive gene symbols:
-
-```{bash}
-fgrep -f deseq2_results_padj0.05_log2fc0.5_IDs.txt tx2gene.gencode.v29_symbols.csv | cut -f3 | sort -u > deseq2_results_padj0.05_log2fc0.5_symbols.txt
+# extract only gene symbols (column 2)
+cut -f2 deseq2_results_padj0.05_log2fc0.5.txt > deseq2_results_padj0.05_log2fc0.5_symbols.txt
 ```
 
 
