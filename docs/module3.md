@@ -378,6 +378,11 @@ Let's try to run the analysis using both **DESeq2** and **edgeR**.
 * padj (p-value corrected for multiple testing)
 * log2FC (log2 Fold Change)
 
+Why is p-value important ?
+
+<img src="images/RNAseq_dispersion.png" width="700"/>
+
+
 * Write a file with genes differentially expression between t25 and t0 with padj < 0.01 and log2FC > 1
 
 ```{bash}
