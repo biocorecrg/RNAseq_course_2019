@@ -63,6 +63,7 @@ The [main page of GO] provides a tool to test the enrichment of gene ontologies 
 <img src="images/GO_tool_input1.png" width="800" align="middle" />
 
 * Prepare ENSEMBL IDs gene list and **universe**
+
 ```{bash}
 # Extract all gene IDs used in our analysis and convert from Gencode (e.g ENSG00000057657.16) to ENSEMBL (e.g. ENSG00000057657) IDs
 cut -f1 deseq2_results.txt | sed '1d' | sed 's/\..//g' > deseq2_universe_ensemblIDs.txt
