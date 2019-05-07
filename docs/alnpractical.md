@@ -35,7 +35,7 @@ gunzip -k Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz
 
 **Q. How much (in percentage) disk space is saved when those two files are kept zipped vs unzipped?**
 
-**Once index is built, we have to not forget to remove those unzipped files.**
+**Once index is built, we have to not forget to remove those unzipped files!**
 
 
 To index the genome with **STAR**, the **sjdbOverhang** option needs to be specified for detecting possible splicing sites. It usually equals to the minimum read size minus 1; it tells **STAR** what is the maximum possible stretch of sequence that can be found on one side of a spicing site. In our case, since the read size is 51 bases, we can accept maximum 50 bases on one side and one base on the other of a splicing site; that is, to set up this parameter to **50**.
@@ -77,14 +77,16 @@ rm annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa
 ```
 <br/>
 
-## Aligning the reads (and quantifying at the same time)
+## Aligning the reads to the genome (and counting them at the same time!)
 To use **STAR** for the read alignment (default --runMode option), we have to specify the following options:
 * the index directory (--genomeDir)
 * the read files (--readFilesIn)
 * if reads are are compressed or not (--readFilesCommand)
-* type of output (--outSAMtype)
-* (--quantMode). "With **--quantMode GeneCounts** option STAR will count number reads per gene while mapping. A read is counted if it overlaps (1nt or more) one and only one gene. Both ends of the paired- end read are checked for overlaps. The counts coincide with those produced by htseq-count with default parameters." (from [STAR Manual](http://labshare.cshl.edu/shares/gingeraslab/www-data/dobin/STAR/Releases/FromGitHub/Old/STAR-2.5.3a/doc/STARmanual.pdf)) 
-* (--outFileNamePrefix)
+
+The following options are optional"
+* type of output (--outSAMtype). Defaul is "BAM Unsorted"; STAR outputs unsorted Aligned.out.bam file(s). "The paired ends of an alignment are always adjacent, and multiple alignments of a read are adjacent as well. This ”unsorted” file can be directly used with downstream software such as HTseq, without the need of name sorting."
+* the path for output directory and prefix of all output files prefix (--outFileNamePrefix). By default, this parameter is ./, i.e. all output files are written in the current directory.
+* (--quantMode). "With the default **TranscriptomeSAM** option STAR will output alignments translated into transcript coordinates in the Aligned.toTranscriptome.out.bam file. These transcriptomic alignments can be used with various transcript quantification software that require reads to be mapped to transcriptome, such as RSEM or eXpress. With **--quantMode GeneCounts** option STAR will count the number of reads per gene while mapping. A read is counted if it overlaps (1nt or more) one and only one gene. Both ends of the paired- end read are checked for overlaps. The counts coincide with those produced by htseq-count with default parameters. **This option requires annotations (GTF or GFF with –sjdbGTFfile option) used at the genome generation step, or at the mapping step.**" (from [STAR Manual](http://labshare.cshl.edu/shares/gingeraslab/www-data/dobin/STAR/Releases/FromGitHub/Old/STAR-2.5.3a/doc/STARmanual.pdf)) 
 
 
 
@@ -105,7 +107,13 @@ Apr 30 18:54:41 ..... started sorting BAM
 Apr 30 18:55:30 ..... finished successfully
 ```
 
-We cannot inspect directly the output file since the **BAM** format is a compressed version of the [**SAM**](https://samtools.github.io/hts-specs/SAMv1.pdf) (that is plain text). We can convert BAM to SAM by using [**samtools**](http://samtools.sourceforge.net/). Note that we use the parameter **-h** to show also the header that is hidden by default. 
+Let's explore the output directory "alignments".
+
+<br/>
+
+## BAM format
+
+We cannot inspect directly the output file since the **BAM** format is a compressed version of the [**SAM**](https://samtools.github.io/hts-specs/SAMv1.pdf) (which is a plain text). We can convert BAM to SAM by using [**samtools**](http://samtools.sourceforge.net/). Note that we use the parameter **-h** to show also the header that is hidden by default. 
 
 ```{bash}
 $RUN samtools view -h alignments/A549_0_1Aligned.sortedByCoord.out.bam |head -n 10
