@@ -1,9 +1,9 @@
 ---
 layout: page
-title: Read pre-processing
+title: Read trimming
 navigation: 10
 ---
-# Pre-processing of the sequencing reads
+# Pre-processing of sequencing reads
 
 <img src="images/RNAseq_workflow.png" width="1000"/>
 
