@@ -46,7 +46,7 @@ Depending on the technology and the protocol, RNA-Seq can produce:
 |mRNA-Seq protocol|
 | :---:  |
 |<img src="images/tileshop.jpeg" align="middle" />|
-|from Wang et al 2009 [4]|
+|from Wang et al 2009|
 
 <br/>
 
