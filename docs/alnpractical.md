@@ -164,9 +164,14 @@ grep -v "N_" alignments/A549_0_1ReadsPerGene.out.tab | awk '{unst+=$2;forw+=$3;r
 2343002 153677 2427536
 ```
 
-It can be seen that off all reads 1 only 153,677 reads were mapped to known genes and 2,547,710 were not (see N_noFeature in the file).
-While for reads 2,  24,27,536 were mapped to known genes and only 246,034 were not.
-This means that the protocol used for sequencing was stranded, and the reverse complement of input mRNAs.
+It can be seen that only 153,677 Reads 1 (forward) were mapped to known genes; while 24,27,536 Reads 2 (reverse) were mapped to known genes.
+This means that the protocol used for this mRNA-Seq experiment was stranded; when the reverse complement of input mRNA was seqeunced. 
+
+<br/>
+
+**EXERCISE** 
+* Scroll the file alignments/A549_0_1ReadsPerGene.out.tab further to find genes for which read 1 count was much more than read 2 count. Why is it so? (look at the gene in Ensemble)
+* Look up also some gene for which read 1 count was comparable with read 2 count. What can you tell about this gene?
 
 <br/>
 
