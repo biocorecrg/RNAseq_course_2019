@@ -378,33 +378,6 @@ ENST00000181796.6	3785	3216.057	0.000000	0.000
 ```
 We will use this information for calculating differential expression (DE) analysis. 
 
-## Combining reports
-At this point we can summarize the work done by using the tool [**multiqc**](https://multiqc.info/). First we link our mapping results to QC.
-
-```{bash}
-cd QC/
-ln -s ../alignments/* .
-```
-
-Then we join the different analyses:
-
-```{bash}
-$RUN multiqc .
-[INFO   ]         multiqc : This is MultiQC v1.7 (7d02b24)
-[INFO   ]         multiqc : Template    : default
-[INFO   ]         multiqc : Searching 'QC/'
-Searching 70 files..  [####################################]  100% 
-...
-
-firefox multiqc_report.html
-```
-
-Here the result:
-
-<img src="images/multiqc.png"  align="middle" />
-
-<br/>
-
 # Read mapping using Salmon
 
 We will make indexes using two different programs **STAR** and **Salmon**. The former will need both genome in fasta format and annotation in GTF. The latter instead needs transcripts sequences in a fasta file.
