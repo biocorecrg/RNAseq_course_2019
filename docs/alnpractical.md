@@ -132,12 +132,11 @@ column 4: counts for the 2nd read strand aligned with RNA (htseq-count option -s
 |...|	...|	...|	...|
 
 
-Select the output according to the strandedness of your data. Note, that if you have stranded data and choose one of the columns 3 or 4, the other column (4 or 3) will give you the count of antisense reads. 
+Select the output according to the strandedness of your data. Note, if you have stranded data and choose one of the columns 3 or 4, the other column (4 or 3) will give you the count of antisense reads. 
 
 For example, in the stranded protocol shown in "Library preparation", Read 1 is mapped to the antisense strand (this is also true for single-end reads), while Read 2, to the sense strand.
 
-This is quite useful in case we don't know which kit was used for the sequencing step. At the beginning we also have number of unmapped reads, of reads that map to more than one position 
-
+**What protocol, standed or unstranded, was used for this RNA-seq data?**
 
 ```{bash}
 more alignments/A549_0_1ReadsPerGene.out.tab
@@ -157,14 +156,17 @@ ENSG00000151240.16	1652	5	1664
 ...
 ```
 
-We can count the number of reads mapping to each strand by using a simple awk script:
+We can count the number of reads mapped to each strand by using a simple awk script:
 
 ```{bash}
 grep -v "N_" alignments/A549_0_1ReadsPerGene.out.tab | awk '{unst+=$2;forw+=$3;rev+=$4}END{print unst,forw,rev}'
 
 2343002 153677 2427536
 ```
-So we can confirm that the protocol used is sequencing the reverse complement of input mRNAs.
+
+It can be seen that off all reads 1 only 153,677 reads were mapped to known genes and 2,547,710 were not (see N_noFeature in the file).
+While for reads 2,  24,27,536 were mapped to known genes and only 246,034 were not.
+This means that the protocol used for sequencing was stranded, and the reverse complement of input mRNAs.
 
 <br/>
 
