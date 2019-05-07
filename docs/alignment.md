@@ -151,7 +151,7 @@ Further, before doing the mapping we have to calculate an index for the referenc
 
 |k-mer index|
 | :---:  |
-|<img src="images/index_kmer.png" width="500" align="middle" />|
+|<img src="images/index_kmer.png" width="300" align="middle" />|
 |from [https://www.coursera.org/learn/dna-sequencing/lecture/d5oFY/lecture-indexing-and-the-k-mer-index](https://www.coursera.org/learn/dna-sequencing/lecture/d5oFY/lecture-indexing-and-the-k-mer-index)|
 
 
