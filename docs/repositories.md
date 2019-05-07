@@ -12,14 +12,14 @@ The major repositories for gene expression data:
 * [**Array-express**](https://www.ebi.ac.uk/arrayexpress/)
 * [**ENCODE**](https://www.encodeproject.org/)
 
-These repositoroes are linked to the repositories of NGS raw data (Fastq files):
+These repositories  are linked to the repositories of NGS raw data (Fastq files):
 * [**SRA**](https://www.ncbi.nlm.nih.gov/sra) (Sequence Read Archive) 
 * [**ENA**](https://www.ebi.ac.uk/ena) (European Nucleotide Archive) 
 * [**DDBJ-DRA**](https://www.ddbj.nig.ac.jp/dra/index-e.html) 
 
 <br/>
 
-### EXERCISE
+## EXERCISE
 Let's explore [one of the GEO records](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE126535)
 * Which platform and protocol were used for sequencing?
 * What type of RNA was sequenced?
@@ -36,7 +36,7 @@ To download data, use the SRA identifier specifying whether reads are single or 
 fastq-dump --gzip --origfmt --split-files SRR-IDENTIFIER
 ```
 
-To download all samples for a specific GEO experiment, use the SRA study identifier (e.g., for the GEO experiemnt considered above, it is SRP185848) and follow the steps:
+To download all samples for a specific GEO experiment, use the SRA study identifier (e.g., for the GEO experiment considered above, it is SRP185848) and follow the steps:
 * First, download a list of SRR identifiers for all samples in the study by going to [the NCBI SRA page for this study](https://www.ncbi.nlm.nih.gov/sra?LinkName=bioproject_sra_all&from_uid=522280) and clicking on the right top "Send" --> "File" --> "Accession List" --> "Save to file". That will give you the text file with all SRR identifiers for this study; save it for example to the file "sra_ids.txt". 
 * Second, run the following command:
 
