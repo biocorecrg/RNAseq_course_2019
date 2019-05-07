@@ -48,9 +48,36 @@ http://software.broadinstitute.org/gsea/msigdb/index.jsp
 
 The [main page of GO] provides a tool to test the enrichment of gene ontologies or Panther/Reactome pathways in pre-selected gene list.
 
-<img src="images/GO_tool_interface.png" width="800" align="middle" />
+<img src="images/GO_tool_interface.png" width="500" align="middle" />
 
-<img src="images/GO_input1.png" width="800" align="middle" />
+<img src="images/GO_tool_input1.png" width="500" align="middle" />
+
+* Prepare ENSEMBL IDs gene list and **universe**
+
+```{bash}
+# Extract all gene IDs used in our analysis and convert from Gencode (e.g ENSG00000057657.16) to ENSEMBL (e.g. ENSG00000057657) IDs
+cut -f1 deseq2_results.txt | sed '1d' | sed 's/\..//g' > deseq2_universe_ensemblIDs.txt
+
+# Convert from Gencode to ENSEMBL IDs from selected gene list
+sed 's/\..//g' deseq2_results_padj0.05_log2fc0.5_IDs.txt > deseq2_results_padj0.05_log2fc0.5_ensemblIDs.txt
+```
+
+* Load the universe gene list as **Reference list** in the tool. *Change -> Browse -> (select deseq2_universe_symbols.txt) -> Upload list*
+
+* *Launch analysis*
+
+<img src="images/GO_tool_results_ensembl.png" width="500" align="middle" />
+
+* Try the same analysis using the **gene symbols** instead of ENSEMBL IDs
+
+```{bash}
+# Extract all gene IDs used in our analysis
+cut -f1 deseq2_results.txt | sed '1d' > deseq2_universe_IDs.txt
+
+# Get corresponding gene symbols
+fgrep -f deseq2_universe_IDs.txt tx2gene.gencode.v29_symbols.csv | cut -f3 | sort -u > deseq2_universe_symbols.txt
+```
+<img src="images/GO_tool_results_symbols.png" width="500" align="middle" />
 
 
 #### enrichR

@@ -408,7 +408,7 @@ cut -f1 deseq2_results_padj0.05_log2fc0.5.txt | sed '1d' > deseq2_results_padj0.
 * Extract more comprehensive gene symbols:
 
 ```{bash}
-grep -f deseq2_results_padj0.05_log2fc0.5_IDs.txt tx2gene.gencode.v29_symbols.csv | cut -f3 | sort -u > deseq2_results_padj0.05_log2fc0.5_symbols.txt
+fgrep -f deseq2_results_padj0.05_log2fc0.5_IDs.txt tx2gene.gencode.v29_symbols.csv | cut -f3 | sort -u > deseq2_results_padj0.05_log2fc0.5_symbols.txt
 ```
 
 
