@@ -65,8 +65,15 @@ track type=bam name="My BAM" bigDataUrl=https://public-docs.crg.es/biocore/proje
 
 <img src="images/ucsc4.png"  align="middle" />
 
-This indicates us that everything went ok and we can now display the data. Of course our data are restricted to the chromosome 10 so we have to display that chromosome.
+This indicates that everything went ok and we can now display the data. Of course our data are restricted to the chromosome 10 so we have to display that chromosome. For instance we can select the gene **LARP4B**.
 
+<img src="images/ucsc5.png"  align="middle" />
 
+And we can display it. 
+<img src="images/ucsc6.png"  align="middle" />
+
+<img src="images/ucsc8.png"  align="middle" />
+<img src="images/ucsc9.png"  align="middle" />
+<img src="images/ucsc10.png"  align="middle" />
 
 
