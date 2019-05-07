@@ -79,14 +79,14 @@ rm annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa
 
 ## Aligning the reads to the genome (and counting them at the same time!)
 To use **STAR** for the read alignment (default --runMode option), we have to specify the following options:
-* the index directory (--genomeDir)
-* the read files (--readFilesIn)
-* if reads are are compressed or not (--readFilesCommand)
+* the index directory (**--genomeDir**)
+* the read files (**--readFilesIn**)
+* if reads are compressed or not (**--readFilesCommand**)
 
-The following options are optional"
-* type of output (--outSAMtype). Defaul is "BAM Unsorted"; STAR outputs unsorted Aligned.out.bam file(s). "The paired ends of an alignment are always adjacent, and multiple alignments of a read are adjacent as well. This ”unsorted” file can be directly used with downstream software such as HTseq, without the need of name sorting."
-* the path for output directory and prefix of all output files prefix (--outFileNamePrefix). By default, this parameter is ./, i.e. all output files are written in the current directory.
-* (--quantMode). "With the default **TranscriptomeSAM** option STAR will output alignments translated into transcript coordinates in the Aligned.toTranscriptome.out.bam file. These transcriptomic alignments can be used with various transcript quantification software that require reads to be mapped to transcriptome, such as RSEM or eXpress. With **--quantMode GeneCounts** option STAR will count the number of reads per gene while mapping. A read is counted if it overlaps (1nt or more) one and only one gene. Both ends of the paired- end read are checked for overlaps. The counts coincide with those produced by htseq-count with default parameters. **This option requires annotations (GTF or GFF with –sjdbGTFfile option) used at the genome generation step, or at the mapping step.**" (from [STAR Manual](http://labshare.cshl.edu/shares/gingeraslab/www-data/dobin/STAR/Releases/FromGitHub/Old/STAR-2.5.3a/doc/STARmanual.pdf)) 
+The following options are optional:
+* type of output (**--outSAMtype**). Defaul is "BAM Unsorted"; STAR outputs unsorted Aligned.out.bam file(s). "The paired ends of an alignment are always adjacent, and multiple alignments of a read are adjacent as well. This ”unsorted” file can be directly used with downstream software such as HTseq, without the need of name sorting."
+* the path for the output directory and prefix of all output files prefix (**--outFileNamePrefix**). By default, this parameter is ./, i.e. all output files are written in the current directory.
+* (**--quantMode**). "With the default **TranscriptomeSAM** option STAR will output alignments translated into transcript coordinates in the Aligned.toTranscriptome.out.bam file. These transcriptomic alignments can be used with various transcript quantification software that require reads to be mapped to transcriptome, such as RSEM or eXpress. With **--quantMode GeneCounts** option STAR will count the number of reads per gene while mapping. A read is counted if it overlaps (1nt or more) one and only one gene. Both ends of the paired- end read are checked for overlaps. The counts coincide with those produced by htseq-count with default parameters. **This option requires annotations (GTF or GFF with –sjdbGTFfile option) used at the genome generation step, or at the mapping step.**" (from [STAR Manual](http://labshare.cshl.edu/shares/gingeraslab/www-data/dobin/STAR/Releases/FromGitHub/Old/STAR-2.5.3a/doc/STARmanual.pdf)) 
 
 
 
@@ -108,15 +108,18 @@ Apr 30 18:55:30 ..... finished successfully
 ```
 
 Let's explore the output directory "alignments".
+```{bash}
+ln -lh alignments
+```
 
 <br/>
 
 ## BAM format
 
-We cannot inspect directly the output file since the **BAM** format is a compressed version of the [**SAM**](https://samtools.github.io/hts-specs/SAMv1.pdf) (which is a plain text). We can convert BAM to SAM by using [**samtools**](http://samtools.sourceforge.net/). Note that we use the parameter **-h** to show also the header that is hidden by default. 
+The **BAM** format is a compressed version of the [**SAM**](https://samtools.github.io/hts-specs/SAMv1.pdf) (which is a plain text). To explore the BAM file, we have to convert it to the SAM format by using [**samtools**](http://samtools.sourceforge.net/). Note that we use the parameter **-h** to show also the header that is hidden by default. 
 
 ```{bash}
-$RUN samtools view -h alignments/A549_0_1Aligned.sortedByCoord.out.bam |head -n 10
+$RUN samtools view -h alignments/A549_0_1Aligned.sortedByCoord.out.bam | head -n 10
 @HD	VN:1.4	SO:coordinate
 @SQ	SN:chr10	LN:133797422
 @PG	ID:STAR	PN:STAR	VN:2.7.0f	CL:STAR   --genomeDir indexes/chr10   --readFilesIn resources/A549_0_1chr10_1.fastq.gz   resources/A549_0_1chr10_2.fastq.gz      --readFilesCommand zcat      --outFileNamePrefix alignments/A549_0_1   --outSAMtype BAM   SortedByCoordinate      --quantMode GeneCounts   
@@ -138,25 +141,27 @@ The first part indicated by the first character **@** in each row is the header:
 | **@PG** program used|	**ID:STAR** **PN:STAR**	**VN:2.7.0f** version| **CL:STAR   --genomeDir indexes/chr10   --readFilesIn resources/A549_0_1chr10_1.fastq.gz   resources/A549_0_1chr10_2.fastq.gz      --readFilesCommand zcat      --outFileNamePrefix alignments/A549_0_1   --outSAMtype BAM   SortedByCoordinate      --quantMode GeneCounts** command line|
 |**@CO** One-line text comment||**user command line: STAR --genomeDir indexes/chr10 --readFilesIn resources/A549_0_1chr10_1.fastq.gz resources/A549_0_1chr10_2.fastq.gz --readFilesCommand zcat --outSAMtype BAM SortedByCoordinate --quantMode GeneCounts --outFileNamePrefix alignments/A549_0_1**|
 
-The rest is the proper alignment. 
+The rest is a read alignment. 
 
 | Field|Value |   
 | :----: | :---- |
 |Query name 	|D00137:453:HLFY2BCXY:2:1115:10428:98737|
 |FLAG 	|419 * |
 |Reference name 	|chr10|
-|Leftmost mapping position 	|35442|
+|Leftmost mapping position (1-based)	|35442|
 |Mapping quality 	|3 *(p=0.5)* |
-|CIGAR string 	|13M174562N32M6S *13 bases equal to the reference (M), 174562 not mapping = 1 insertion (N) 32 mapping (M) 6 soft clipped (S)*|
-|Reference name for mate read |	= *same chromosome*|
-|Position of the mate| 	236864|
-|Template length| 	201473|
+|CIGAR string |13M174562N32M6S *|
+|Reference rsequence name of the primary alignment of the mate |	= *same chromosome*|
+|Position of the primary alignment of the mate| 	236864|
+|observed fragment length| 	201473|
 |Sequence |AGCTGTTATTGAACAAGAAGGGATTGGTTGCCAGGAGATGAGATTAGCATT|
 |Quality	|@DDD?<1D1CGEE11<C@GHIIH?@E?G@CHH?FH@0GH@C<<<@1DFCHH|
 
-\* the flag 419 means: read paired, read mapped in proper pair, mate on the reverse strand, second in pair, not primary alignment. You can use this useful website for the translation of this value in plain English (http://blog.biochen.com/FlagExplain.html).
+\* FLAG 419 means: read paired, read mapped in proper pair, mate on the reverse strand, second in pair, not primary alignment. 
+SIGAR string 13M174562N32M6S means 13 bases equal to the reference (M), 174562 bases were not mapping (that is, 1 insertion) (N), 32 bases were mapped (M), and 6 bases were soft clipped (S).
+You can use [this website for the translation of FLAG and SIGAR values into plain English](http://blog.biochen.com/FlagExplain.html).
 
-Extra fields are often present and are different among aligner tools (https://samtools.github.io/hts-specs/SAMtags.pdf). In our case we have:
+Extra fields are often present and are different among aligner tools [https://samtools.github.io/hts-specs/SAMtags.pdf](https://samtools.github.io/hts-specs/SAMtags.pdf). In our case we have:
 
 | Field|Meaning |   
 | :----: | :---- |
@@ -167,6 +172,8 @@ Extra fields are often present and are different among aligner tools (https://sa
 
 \* *Note that historically this has been ill-defined and both data and tools exist that disagree with this
 definition.*
+
+<br/>
 
 ## File conversion and alignment QC
 
