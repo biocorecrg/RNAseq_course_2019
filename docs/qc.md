@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Read pre-processing
-navigation: 9
+navigation: 10
 ---
 # Pre-processing of the sequencing reads
 
