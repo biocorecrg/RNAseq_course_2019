@@ -40,16 +40,32 @@ Fist of all you should upload your sorted bam (or cram) files together with the 
 ```{bash}
 https://public-docs.crg.es/biocore/projects/training/RNAseq_2019/
 ```
+We can use the right click to copy the URL address to be uploaded to the genome browser.
 
 We can use any browser to access the [UCSC genome browser website](https://genome-euro.ucsc.edu/cgi-bin/hgGateway?redirect=manual&source=genome.ucsc.edu)
 
 <img src="images/ucsc1.png"  align="middle" />
 
-We then choose human genome version hg38 (the one corresponding to our gencode annotation). Then we  
+We then choose human genome version hg38 (the one corresponding to our gencode annotation). Then we click go and display a random portion of the genome. 
 
 <img src="images/ucsc2.png"  align="middle" />
+
+Every track that is displayed is an annotation stored in their database. We can add our custom one by clicking on **ADD CUSTOM TRACK**. 
+
 <img src="images/ucsc3.png"  align="middle" />
+
+Then we type this information that is descriptive of the data we are loading:
+* **track type** indicates the kind of file: **BAM** (that is indicating also **CRAM**)
+* **name** that is any description to our data 
+* **bigDataUrl** that indicates the URL (or weblink) where the file can be accessed. 
+
+```{bash}
+track type=bam name="My BAM" bigDataUrl=https://public-docs.crg.es/biocore/projects/training/RNAseq_2019/A549_0_1Aligned.sortedByCoord.out.bam
+```
+
 <img src="images/ucsc4.png"  align="middle" />
+
+This indicates us that everything went ok and we can now display the data. Of course our data are restricted to the chromosome 10 so we have to display that chromosome.
 
 
 
