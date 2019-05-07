@@ -32,11 +32,24 @@ The structure of GO can be described as a graph: each GO term is a **node**, eac
 
 #### KEGG pathways
 
-https://www.genome.jp/kegg/
+The [Kyoto Encyclopedia of Genes and Genomes (KEGG)](https://www.genome.jp/kegg/) is a database for understanding high-level functions and utilities of the biological system. <br>
+
+It provides comprehensible manually-drawn pathways representing biological processes or disease-specific pathways.<br>
+Example of the [*Homo sapiens* melanoma pathway](https://www.genome.jp/dbget-bin/www_bget?hsa05218):
+
+<img src="images/kegg_hsa05218.png" width="700" align="middle" />
+
 
 #### Molecular Signatures Database (MSigDB)
 
-http://software.broadinstitute.org/gsea/msigdb/index.jsp
+<img src="images/gsea_msig_banner.png" width="1000" align="middle" />
+
+The [Molecular Signatures Database (MSigDB)](http://software.broadinstitute.org/gsea/msigdb/index.jsp) is a collection of 17810 annotated gene sets (in May 2019) created to be used with the GSEA software. <br>
+
+It is divided into [8 major collections](http://software.broadinstitute.org/gsea/msigdb/collections.jsp) (that include the previously explained GOs and KEGG pathways):
+
+<img src="images/gsea_msig_sets.png" width="300" align="middle" />
+
 
 
 ### Enrichment analysis based on gene selection
@@ -164,11 +177,6 @@ The first label **t0** in the second line is associated to the first label **0**
 
 ##### Gene sets
 
-The Molecular Signatures Database (MSigDB) is a collection of annotated gene sets for use with GSEA software. 
-
-<img src="images/gsea_msig_banner.png" width="1000" align="middle" />
-
-<img src="images/gsea_msig_sets.png" width="300" align="middle" />
 
 As GSEA was created and optimized for microarray data, the authors make the [following suggestions](https://software.broadinstitute.org/cancer/software/gsea/wiki/index.php/RNA-Seq_Data_and_Ensembl_CHIP_files) for RNA-seq:
 
