@@ -45,7 +45,8 @@ We can use any browser to access the [UCSC genome browser website](https://genom
 
 <img src="images/ucsc1.png"  align="middle" />
 
-We then choose 
+We then choose human genome version hg38 (the one corresponding to our gencode annotation). Then we  
+
 <img src="images/ucsc2.png"  align="middle" />
 <img src="images/ucsc3.png"  align="middle" />
 <img src="images/ucsc4.png"  align="middle" />
