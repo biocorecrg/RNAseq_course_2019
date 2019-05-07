@@ -50,7 +50,7 @@ The [main page of GO] provides a tool to test the enrichment of gene ontologies 
 
 <img src="images/GO_tool_interface.png" width="500" align="middle" />
 
-<img src="images/GO_tool_input1.png" width="500" align="middle" />
+<img src="images/GO_tool_input1.png" width="800" align="middle" />
 
 * Prepare ENSEMBL IDs gene list and **universe**
 
@@ -66,7 +66,7 @@ sed 's/\..//g' deseq2_results_padj0.05_log2fc0.5_IDs.txt > deseq2_results_padj0.
 
 * *Launch analysis*
 
-<img src="images/GO_tool_results_ensembl.png" width="500" align="middle" />
+<img src="images/GO_tool_results_ensembl.png" width="800" align="middle" />
 
 * Try the same analysis using the **gene symbols** instead of ENSEMBL IDs
 
@@ -77,7 +77,7 @@ cut -f1 deseq2_results.txt | sed '1d' > deseq2_universe_IDs.txt
 # Get corresponding gene symbols
 fgrep -f deseq2_universe_IDs.txt tx2gene.gencode.v29_symbols.csv | cut -f3 | sort -u > deseq2_universe_symbols.txt
 ```
-<img src="images/GO_tool_results_symbols.png" width="500" align="middle" />
+<img src="images/GO_tool_results_symbols.png" width="800" align="middle" />
 
 
 #### enrichR
