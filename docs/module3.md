@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Module 3
-navigation: 5
+title: Differential expression analysis
+navigation: 14
 ---
 
 # Module 3
