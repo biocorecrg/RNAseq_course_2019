@@ -16,9 +16,14 @@ ARG FASTQSCREEN_VERSION=0.13.0
 ARG BOWTIE2_VERSION=2.3.5.1
 ARG SALMON_VERSION=0.13.1
 ARG R_VERSION=3.5.2
+ARG SRATOOLKIT_VERSION=2.9.6
 
 #upgrading pip
 RUN pip install --upgrade pip
+
+#INSTALLING SRATOOLKIT
+RUN bash -c 'curl -k -L https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/${SRATOOLKIT_VERSION}/sratoolkit.${SRATOOLKIT_VERSION}-centos_linux64.tar.gz > sratoolkit.tar.gz'
+RUN tar -zvxf sratoolkit.tar.gz; cd sratoolkit.${SRATOOLKIT_VERSION}-centos_linux64/bin; ln -s $PWD/fastq-dump /usr/local/bin/fastq-dump; cd ../../
 
 #INSTALLING FASTQC
 RUN bash -c 'curl -k -L https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v${FASTQC_VERSION}.zip > fastqc.zip'
