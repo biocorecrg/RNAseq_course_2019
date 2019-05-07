@@ -8,13 +8,13 @@ navigation: 10
 <img src="images/RNAseq_workflow.png" width="1000"/>
 
 Once sequencing reads are obtained from the sequencing machine, they need to be pre-processed for further analysis. 
-This step includes the quality control of initial reads and read trimming that includes removing adapter sequences, filtering out low quality reads and trimming reads off low qualty base pairs.
+This step includes the quality control of initial reads and read trimming that includes removing adapter sequences, filtering out low quality reads and trimming reads off low quality base pairs.
 
 <br/>
 
 ## QC of sequencing reads
 
-To assess the quality of sequencing data, we will use the programms [**FastQC**](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [**Fastq Screen**](https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/). 
+To assess the quality of sequencing data, we will use the programs [**FastQC**](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [**Fastq Screen**](https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/). 
 
 FastQC calculates statistics about the composition and quality of raw sequences, while Fastq Screen looks for possible contaminations. 
 
@@ -91,7 +91,7 @@ Making reduced sequence file with ratio 711:1
 ...
 ```
 
-Below is shown an example of the result aligning reads from fastq_screen.conf A549_0_1_1.fastq.gz to different databases to detect contaminations, failure of ribosomal depletion, and other artifacts of sequencing. You can download them here 
+Below is shown an example of the result aligning reads from fastq_screen.conf A549_0_1_1.fastq.gz to different databases to detect contaminations, failure of ribosomal depletion, and other artefacts of sequencing. You can download them here 
 
 ```{bash}
 wget https://biocorecrg.github.io/RNAseq_course_2019/precomp_res/A549_0_1_fastq_screen.tar.gz
@@ -123,7 +123,7 @@ Before mapping reads to the genome/transcriptome or performing a de novo assembl
 
 As shown before, both the presence of low quality reads and adapters are reported in the **fastqc** output. 
 
-Adapters are usually expected in small RNA-Seq because the molecules are tipically shorter than the reads, and that makes an adapter to be present at 3'-end. Let's run FastQC on a fastq file for small RNA-Seq.
+Adapters are usually expected in small RNA-Seq because the molecules are typically shorter than the reads, and that makes an adapter to be present at 3'-end. Let's run FastQC on a fastq file for small RNA-Seq.
 
 
 ```{bash}
