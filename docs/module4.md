@@ -205,3 +205,17 @@ As GSEA was created and optimized for microarray data, the authors make the [fol
 Reflects the degree to which a set is overrepresented at the extremes (top or bottom) of the entire ranked list.
 
 
+##### Run GSEA
+
+GSEA is Java-based. Launch it from a terminal window:
+
+```{bash}
+java -Xmx1024m -jar gsea-3.0.jar 
+```
+
+<img src="images/gsea_interface.png" width="800" align="middle" />
+
+
+
+
+
