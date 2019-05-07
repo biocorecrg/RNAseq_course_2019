@@ -298,6 +298,23 @@ Finally we can check that most of our reads map to the exonic part, with little 
 
 <img src="images/qualimap3.png"  align="middle" />
 
+# Read mapping using Salmon
+
+We will make indexes using two different programs **STAR** and **Salmon**. The former will need both genome in fasta format and annotation in GTF. The latter instead needs transcripts sequences in a fasta file.
+
+**Salmon** does not need any decompression of the input so we can index by using this command:
+
+```{bash}
+$RUN salmon index -t annotations/gencode.v29.transcripts.fa.gz -i indexes/transcripts
+
+Version Info: This is the most recent version of salmon.
+index ["transcripts"] did not previously exist  . . . creating it
+[2019-04-30 18:12:59.272] [jLog] [info] building index
+[2019-04-30 18:12:59.275] [jointLog] [info] [Step 1 of 4] : counting k-mers
+
+[....]
+[2019-04-30 18:18:07.251] [jLog] [info] done building index
+```
 
 For aligning with **Salmon** we need to specify the strandess of the library (**Fragment Library Types**). In brief you have to specify three letters:
 
@@ -378,21 +395,29 @@ ENST00000181796.6	3785	3216.057	0.000000	0.000
 ```
 We will use this information for calculating differential expression (DE) analysis. 
 
-# Read mapping using Salmon
-
-We will make indexes using two different programs **STAR** and **Salmon**. The former will need both genome in fasta format and annotation in GTF. The latter instead needs transcripts sequences in a fasta file.
-
-**Salmon** does not need any decompression of the input so we can index by using this command:
+# Combining reports
+At this point we can summarize the work done by using the tool [**multiqc**](https://multiqc.info/). First we link our mapping results to QC.
 
 ```{bash}
-$RUN salmon index -t annotations/gencode.v29.transcripts.fa.gz -i indexes/transcripts
-
-Version Info: This is the most recent version of salmon.
-index ["transcripts"] did not previously exist  . . . creating it
-[2019-04-30 18:12:59.272] [jLog] [info] building index
-[2019-04-30 18:12:59.275] [jointLog] [info] [Step 1 of 4] : counting k-mers
-
-[....]
-[2019-04-30 18:18:07.251] [jLog] [info] done building index
+cd QC/
+ln -s ../alignments/* .
 ```
 
+Then we join the different analyses:
+
+```{bash}
+$RUN multiqc .
+[INFO   ]         multiqc : This is MultiQC v1.7 (7d02b24)
+[INFO   ]         multiqc : Template    : default
+[INFO   ]         multiqc : Searching 'QC/'
+Searching 70 files..  [####################################]  100% 
+...
+
+firefox multiqc_report.html
+```
+
+Here the result:
+
+<img src="images/multiqc.png"  align="middle" />
+
+<br/>
