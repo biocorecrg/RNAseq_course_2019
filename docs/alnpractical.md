@@ -84,9 +84,9 @@ To use **STAR** for the read alignment (default --runMode option), we have to sp
 * if reads are compressed or not (**--readFilesCommand**)
 
 The following options are optional:
-* type of output (**--outSAMtype**). Defaul is "BAM Unsorted"; STAR outputs unsorted Aligned.out.bam file(s). "The paired ends of an alignment are always adjacent, and multiple alignments of a read are adjacent as well. This ”unsorted” file can be directly used with downstream software such as HTseq, without the need of name sorting."
+* type of output (**--outSAMtype**). Defaul is "BAM Unsorted"; STAR outputs unsorted Aligned.out.bam file(s). "The paired ends of an alignment are always adjacent, and multiple alignments of a read are adjacent as well. This ”unsorted” file cannot be directly used with downstream software such as HTseq, without the need of name sorting."
 * the path for the output directory and prefix of all output files prefix (**--outFileNamePrefix**). By default, this parameter is ./, i.e. all output files are written in the current directory.
-* (**--quantMode**). "With the default **TranscriptomeSAM** option STAR will output alignments translated into transcript coordinates in the Aligned.toTranscriptome.out.bam file. These transcriptomic alignments can be used with various transcript quantification software that require reads to be mapped to transcriptome, such as RSEM or eXpress. With **--quantMode GeneCounts** option STAR will count the number of reads per gene while mapping. A read is counted if it overlaps (1nt or more) one and only one gene. Both ends of the paired- end read are checked for overlaps. The counts coincide with those produced by htseq-count with default parameters. **This option requires annotations (GTF or GFF with –sjdbGTFfile option) used at the genome generation step, or at the mapping step.**" (from [STAR Manual](http://labshare.cshl.edu/shares/gingeraslab/www-data/dobin/STAR/Releases/FromGitHub/Old/STAR-2.5.3a/doc/STARmanual.pdf)) 
+* (**--quantMode**). With **--quantMode GeneCounts** option STAR will count the number of reads per gene while mapping. A read is counted if it overlaps (1nt or more) one and only one gene. Both ends of the paired- end read are checked for overlaps. The counts coincide with those produced by htseq-count with default parameters. **This option requires annotations (GTF or GFF with –sjdbGTFfile option) used at the genome generation step, or at the mapping step.**" (from [STAR Manual](http://labshare.cshl.edu/shares/gingeraslab/www-data/dobin/STAR/Releases/FromGitHub/Old/STAR-2.5.3a/doc/STARmanual.pdf)) 
 
 
 
@@ -136,7 +136,7 @@ Select the output according to the strandedness of your data. Note, if you have 
 
 For example, in the stranded protocol shown in "Library preparation", Read 1 is mapped to the antisense strand (this is also true for single-end reads), while Read 2, to the sense strand.
 
-**What protocol, standed or unstranded, was used for this RNA-seq data?**
+**What protocol, stranded or unstranded, was used for this RNA-seq data?**
 
 ```{bash}
 more alignments/A549_0_1ReadsPerGene.out.tab
@@ -207,7 +207,7 @@ The rest is a read alignment.
 |Leftmost mapping position (1-based)	|35442|
 |Mapping quality 	|3 *(p=0.5)* |
 |CIGAR string |13M174562N32M6S *|
-|Reference rsequence name of the primary alignment of the mate |	= *same chromosome*|
+|Reference sequence name of the primary alignment of the mate |	= *same chromosome*|
 |Position of the primary alignment of the mate| 	236864|
 |observed fragment length| 	201473|
 |Sequence |AGCTGTTATTGAACAAGAAGGGATTGGTTGCCAGGAGATGAGATTAGCATT|
@@ -222,7 +222,7 @@ Extra fields are often present and are different among aligner tools [https://sa
 | Field|Meaning |   
 | :----: | :---- |
 |NH:i:2|number of mapping to the reference|
-|HI:i:2|which aligmnent is the reported one (in this case is the second one)|	
+|HI:i:2|which alignment is the reported one (in this case is the second one)|	
 |AS:i:74|Alignment score calculate by the aligner|
 |nM:i:9|number of difference with the reference*|
 
@@ -290,7 +290,7 @@ The report gives many useful information like the total number of mapped reads, 
 
 <img src="images/qualimap2.png"  align="middle" />
 
-Looking at the gene coverage we see a bias towards 5' that is compatible with the kind of stranded protocol used (it is beacuse fo reverse trancsriptase).
+Looking at the gene coverage we see a bias towards 5' that is compatible with the kind of stranded protocol used (it is because of reverse transcriptase).
 
 <img src="images/qualimap4.png"  align="middle" />
 
@@ -323,7 +323,7 @@ For aligning with **Salmon** we need to specify the strandess of the library (**
 |F|read 1 (or single-end read) comes from the forward strand|
 |R|read 1 (or single-end read) comes from the reverse strand|
 
-In our case we have **Inward**, **Stranded** and **Reverse**. Moreover if we want to assign the reads to the genes too we need to provide a GTF file with correlation between transcripts and genes (otpion **-g**).
+In our case we have **Inward**, **Stranded** and **Reverse**. Moreover if we want to assign the reads to the genes too we need to provide a GTF file with correlation between transcripts and genes (option **-g**).
 
 ```{bash}
 $RUN salmon quant -i indexes/transcripts -l ISR \
@@ -379,7 +379,7 @@ ENST00000181796.6	3785	3216.057	0.000000	0.000
 We will use this information for calculating differential expression (DE) analysis. 
 
 ## Combining reports
-At this point we can summarize the work done by usiong the tool [**multiqc**](https://multiqc.info/). First we link our mapping results to QC.
+At this point we can summarize the work done by using the tool [**multiqc**](https://multiqc.info/). First we link our mapping results to QC.
 
 ```{bash}
 cd QC/
