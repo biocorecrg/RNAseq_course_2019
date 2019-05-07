@@ -24,7 +24,7 @@ But first, before doing the mapping, we need to retrieve information about a ref
 
 * [GENCODE](https://www.gencodegenes.org/) contains an accurate annotation of the human and mouse genes derived either using manual curation, computational analysis or targeted experimental approaches. GENCODE also contains information on functional elements, such as protein-coding loci with alternatively splices variants, non-coding loci and pseudogenes.
 * [Ensembl](https://www.ensembl.org/index.html) contains both automatically generated and manually curated annotations. They host different genomes and also comparative genomics data and variants. [Ensembl genomes](http://ensemblgenomes.org/) extends the genomic information across different taxonomic groups: bacteria, fungi, metazoa, plants, protists. Ensembl integrates also a genome browser.
-* [UCSC Genome Browser](https://genome.ucsc.edu/) hosts information about different genomes and a genome browser. It integrates the Gencode information as additional tracks. 
+* [UCSC Genome Browser](https://genome.ucsc.edu/) hosts information about different genomes. It integrates the GENCODE information as additional tracks. 
 
 Let's consider how to access data in GENCODE and Ensembl for performing mapping to the human genome.
 
@@ -49,7 +49,7 @@ And clicking on **Download GTF** download **[Homo_sapiens.GRCh38.96.chr.gtf.gz](
 <br/>
 
 ## FASTA and GTF/GFF data formats
-To speed up the mapping process, we downloaded FASTA and GTF files for human v29 from GENCODE and processed these files by selected data related only to Chromosome 10. Let's examine these files.
+To speed up the mapping process, we downloaded FASTA and GTF files for human v29 from GENCODE and processed these files by selecting data related only to the chromosome 10. Let's examine these files.
 
 ```{bash}
 wget https://public-docs.crg.es/biocore/projects/training/RNAseq_2019/annotations.tar
@@ -138,12 +138,22 @@ zcat annotations/gencode.v29.annotation_chr10.gtf.gz | grep -v "#" | cut -f3 | s
 
 ## Tools for read mapping
 
-Once FASTA and GTF files for a reference genome/transcriptome are obtained, we need to choose an aligner to perform the mapping and before doing the mapping to calculate an index for the reference genome that a chosen algorithm will use. Like the index at the end of a book, an index of a large DNA sequence allows one to rapidly find shorter sequences embedded within it. Different tools use different approaches at genome/transcriptome indexing.
+Once FASTA and GTF files for a reference genome/transcriptome are obtained, we need to choose an aligner (that is, an algorithm for the read mapping) to perform the mapping. 
 
 |Read mappers timeline|
 | :---:  |
 |<img src="images/mappers_timeline.jpeg" width="800" align="middle" />|
-|From [https://www.ebi.ac.uk/~nf/hts_mappers/](https://www.ebi.ac.uk/~nf/hts_mappers/)|
+|from [https://www.ebi.ac.uk/~nf/hts_mappers/](https://www.ebi.ac.uk/~nf/hts_mappers/)|
+
+<br/>
+
+Further, before doing the mapping we have to calculate an index for the reference DNA sequence that a chosen algorithm will use. Like the index at the end of a book, an index of a large DNA sequence allows one to rapidly find shorter sequences embedded within it. Different tools use different approaches at genome/transcriptome indexing.
+
+|k-mer index|
+| :---:  |
+|<img src="images/index_kmer.png" width="500" align="middle" />|
+|from [https://www.coursera.org/learn/dna-sequencing/lecture/d5oFY/lecture-indexing-and-the-k-mer-index](https://www.coursera.org/learn/dna-sequencing/lecture/d5oFY/lecture-indexing-and-the-k-mer-index)|
+
 
 <br/>
 
@@ -154,6 +164,7 @@ These tools can be used for aligning short reads to a trancriptome reference, be
 * [**Bowtie2**](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml) is an ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences. It is particularly good at aligning reads of length 50 up to 100s or 1,000s to relatively long (e.g. mammalian) genomes. Bowtie 2 indexes the transcriptome with an FM Index. 
 * [**BWA**](http://bio-bwa.sourceforge.net/) is a software package for mapping low-divergent sequences against a large reference genome, such as the human genome. BWA indexes the genome with an FM Index.
 * [**GEM**](https://github.com/smarco/gem3-mapper) is a high-performance mapping tool for aligning sequenced reads against large reference genomes. In particular, it is designed to obtain best results when mapping sequences up to 1K bases long. GEM3 indexes the reference genome using a custom FM-Index design and performs an adaptive gapped search based on the characteristics of the input and the user settings. 
+
 <br/>
 
 ### Splice-aware aligners to a reference genome
@@ -162,6 +173,7 @@ These aligners are able to map to the splicing junctions described in the annota
 * [**Tophat**](https://ccb.jhu.edu/software/tophat/index.shtml) is a fast splice junction mapper for RNA-Seq reads. It aligns RNA-Seq reads to mammalian-sized genomes using the ultra high-throughput short read aligner Bowtie, and then analyzes the mapping results to identify splice junctions between exons.
 * [**HISAT2**](http://ccb.jhu.edu/software/hisat2/index.shtml) is **the next generation of spliced aligner from the same group that have developed TopHat**. It is a fast and sensitive alignment program for mapping next-generation sequencing reads (both DNA and RNA) to a population of human genomes (as well as to a single reference genome). The indexing scheme is called a Hierarchical Graph FM index (HGFM). 
 * [**STAR**](https://github.com/alexdobin/STAR) is an ultrafast universal RNA-seq aligner. It uses sequential maximum mappable seed search in uncompressed suffix arrays followed by seed clustering and stitching procedure. It is also able to search for gene fusions.
+
 <br/>
 
 ### Quasi-mappers (alignment-free mappers) to a reference transcriptome
