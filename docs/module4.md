@@ -1,18 +1,8 @@
 ---
 layout: page
-title: Module 4
+title: Functional analysis
 navigation: 6
 ---
-
-# Module 4
-
-## Visualization in the genome browser
-
-### Differences in chromosome nomenclature!
-
-### Conversion to bigwig
-
-
 
 ## Functional analysis
 
@@ -23,7 +13,22 @@ https://hbctraining.github.io/DGE_workshop/lessons/09_functional_analysis.html
 
 #### Gene Ontology
 
-http://geneontology.org/
+<img src="images/GO_logo.png" width="200" align="middle" />
+
+The [Gene Ontology (GO)](http://geneontology.org/) describes our knowledge of the biological domain with respect to three aspects:
+
+| GO domains / root terms | Description |
+| :----: | :----: |
+| Molecular Function | Molecular-level activities performed by gene products. e.g. **catalysis**, **binding**. |
+| Biological Process | Larger processes accomplished by multiple molecular activities. e.g. **apoptosis**, **DNA repair**. |
+| Cellular Component | The locations where a gene product performs a function. e.g. **cell membrane**, **ribosome**. |
+
+Example of GO annotation: the gene product "cytochrome c" can be described by the **molecular function** *oxidoreductase activity*, the **biological process** *oxidative phosphorylation*, and the **cellular component** *mitochondrial matrix*.
+<br>
+The structure of GO can be described as a graph: each GO term is a **node**, each **edge** represents the relationships between the nodes. For example:
+
+<img src="images/GO_example_graph.png" width="500" align="middle" />
+
 
 #### KEGG pathways
 
@@ -36,79 +41,22 @@ http://software.broadinstitute.org/gsea/msigdb/index.jsp
 
 ### Enrichment analysis based on gene selection
 
-* Gene Universe: in our example: all genes present in our annotation, on chromosome 10
-* List of genes selected from the universe: our selection of genes, give the criteria we defined: padj < 0.01, &#124;log2FoldChange&#124; >= 1
+* Gene Universe: in our example: all genes present in our annotation.
+* List of genes selected from the universe: our selection of genes, give the criteria we previously used: padj < 0.05, &#124;log2FoldChange&#124; >= 0.5.
 
-#### Hypergeometric test
+#### GO / Panther tool
 
-Null hypothesis: the list of DEGs is randomly found in the GO.
-<br>
-Alternative hypothesis: the list of DEGs is over- or under- represented in the GO.
-<br>Universe: all genes in experiment.<br>
-Successes: DEGs genes in experiment.<br>
-All GO: all genes in GO term.<br>
-Successes in GO: DEGs genes in GO.<br>
-<br>
-Example:<br>
-20,000 genes annotated in the organism. 60 of them are associated with the ontology "programmed cell death".
-<br>300 genes in total in our DGE results selection. 20 of them are associated with the ontology "programmed cell death"<br>
-What is the probability that their is an over-representation of the "programmed cell death" ontology in our experiment?
-<br>
-Universe: 20000<br>
-Successes: 300<br>
-All GO: 60<br>
-Successes in GO: 20<br>
-??
-phyper(overlap -1, list1, popsize-list1, list2))
-phyper(19, 300, 20000-300, 60)
-???
+The [main page of GO] provides a tool to test the enrichment of gene ontologies or Panther/Reactome pathways in pre-selected gene list.
 
+<img src="images/GO_tool_interface.png" width="800" align="middle" />
 
-#### clusterProfiler
-
-https://hbctraining.github.io/DGE_workshop/lessons/09_functional_analysis.html
+<img src="images/GO_input1.png" width="800" align="middle" />
 
 
 #### enrichR
 
 http://amp.pharm.mssm.edu/Enrichr/
 
-
-#### GOSeq
-
-https://bioconductor.org/packages/release/bioc/vignettes/goseq/inst/doc/goseq.pdf
-
-#### GOstats
-
-https://www.bioconductor.org/packages/release/bioc/vignettes/GOstats/inst/doc/GOstatsHyperG.pdf
-
-#### topGO
-
-https://bioconductor.org/packages/release/bioc/vignettes/topGO/inst/doc/topGO.pdf
-
-```{r}
-library("topGO")
-library("org.Hs.eg.db")
-
-     ## GO to Symbol mappings (only the BP ontology is used)
-     xx <- annFUN.org("BP", mapping = "org.Hs.eg.db", ID = "entrez") # or symbol, ensembl, ...
-
-     allGenes <- unique(unlist(xx)) # retrieve all genes
-
-     myInterestedGenes <- sample(allGenes, 500)
-
-     geneList <- factor(as.integer(allGenes 
-
-     names(geneList) <- allGenes
-     
-     GOdata <- new("topGOdata",
-                   ontology = "BP",
-                   allGenes = geneList,
-                   nodeSize = 5,
-                   annot = annFUN.org, 
-                   mapping = "org.Hs.eg.db",
-                   ID = "entrez") 
-```
 
 ### Enrichment based on ranked lists of genes
 
@@ -140,7 +88,7 @@ The statistical significant (nominal p-value) of the ES is estimated by using an
 3. **Adjustment for Multiple Hypothesis Testing**
 When an entire database of gene sets is evaluated, we adjust the estimated significance level to account for multiple hypothesis testing. We first normalize the ES for each gene set to account for the size of the set, yielding a normalized enrichment score (NES). We then control the proportion of false positives by calculating the false discovery rate (FDR) (8, 9) corresponding to each NES. The FDR is the estimated probability that a set with a given NES represents a false positive finding; it is computed by comparing the tails of the observed and null distributions for the NES.
 
-<img src="images/gsea_explained.gif" width="1000" align="middle" />
+<img src="images/gsea_explained.gif" width="900" align="middle" />
 
 
 
@@ -216,6 +164,73 @@ java -Xmx1024m -jar gsea-3.0.jar
 <img src="images/gsea_interface.png" width="800" align="middle" />
 
 
+
+------------
+#### Hypergeometric test
+
+Null hypothesis: the list of DEGs is randomly found in the GO.
+<br>
+Alternative hypothesis: the list of DEGs is over- or under- represented in the GO.
+<br>Universe: all genes in experiment.<br>
+Successes: DEGs genes in experiment.<br>
+All GO: all genes in GO term.<br>
+Successes in GO: DEGs genes in GO.<br>
+<br>
+Example:<br>
+20,000 genes annotated in the organism. 60 of them are associated with the ontology "programmed cell death".
+<br>300 genes in total in our DGE results selection. 20 of them are associated with the ontology "programmed cell death"<br>
+What is the probability that their is an over-representation of the "programmed cell death" ontology in our experiment?
+<br>
+Universe: 20000<br>
+Successes: 300<br>
+All GO: 60<br>
+Successes in GO: 20<br>
+??
+phyper(overlap -1, list1, popsize-list1, list2))
+phyper(19, 300, 20000-300, 60)
+???
+
+
+#### clusterProfiler
+
+https://hbctraining.github.io/DGE_workshop/lessons/09_functional_analysis.html
+
+
+#### GOSeq
+
+https://bioconductor.org/packages/release/bioc/vignettes/goseq/inst/doc/goseq.pdf
+
+#### GOstats
+
+https://www.bioconductor.org/packages/release/bioc/vignettes/GOstats/inst/doc/GOstatsHyperG.pdf
+
+#### topGO
+
+https://bioconductor.org/packages/release/bioc/vignettes/topGO/inst/doc/topGO.pdf
+
+```{r}
+library("topGO")
+library("org.Hs.eg.db")
+
+     ## GO to Symbol mappings (only the BP ontology is used)
+     xx <- annFUN.org("BP", mapping = "org.Hs.eg.db", ID = "entrez") # or symbol, ensembl, ...
+
+     allGenes <- unique(unlist(xx)) # retrieve all genes
+
+     myInterestedGenes <- sample(allGenes, 500)
+
+     geneList <- factor(as.integer(allGenes 
+
+     names(geneList) <- allGenes
+     
+     GOdata <- new("topGOdata",
+                   ontology = "BP",
+                   allGenes = geneList,
+                   nodeSize = 5,
+                   annot = annFUN.org, 
+                   mapping = "org.Hs.eg.db",
+                   ID = "entrez") 
+```
 
 
 
