@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Functional analysis
-navigation: 14
+navigation: 15
 ---
 
 # Functional analysis

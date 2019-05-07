@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Differential expression analysis
-navigation: 13
+navigation: 14
 ---
 
 
