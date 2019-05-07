@@ -4,9 +4,9 @@ title: Course data
 navigation: 9
 ---
 
-Another source of high quality data on gene expression in human and mouse is [The Encyclopedia of DNA Elements (ENCODE)](https://www.encodeproject.org/). Using the ENCODE portal one can access data produced by the ENCODE Consortium.
+# Data used in this course
 
-For the purpose of this course, we downloaded the following ENCODE data:
+For the purpose of this course, we downloaded the following [ENCODE](https://www.encodeproject.org/) data:
 
 1. [Homo sapiens A549 treated with 100 nM dexamethasone for 0 minutes](https://www.encodeproject.org/experiments/ENCSR937WIG/)
 2. [Homo sapiens A549 treated with 100 nM dexamethasone for 25 minutes](https://www.encodeproject.org/experiments/ENCSR525HSH/)
@@ -17,7 +17,7 @@ For the purpose of this course, we downloaded the following ENCODE data:
 |<img src="images/encode2.png" width="800" align="middle" />|
 
 
-To download all fastq-files for this experiemnt takes a lot of time; therefore, to restrict the computation time of the analysis, we selected reads that are mapped only to the chromosome 10. Please run the following commands to obtain these files: 
+To download all fastq-files for this experiment takes a lot of time; therefore, to restrict the computation time of the read mapping, we selected reads that are mapped only to chromosome 10. Please run the following commands to obtain these files: 
 
 ```{bash}
 wget https://public-docs.crg.es/biocore/projects/training/RNAseq_2019/resources.tar
