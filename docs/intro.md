@@ -22,7 +22,7 @@ Other technologies for assessing RNA expression are Northern Blot, real-time PCR
 
 <br/>
 
-RNA-Seq can be performed using
+RNA-Seq can be performed using:
 * total RNA (in this case the content of ribosomal RNA is about 80%);
 * rRNA depleted RNA (after removing ribosomal RNA);
 * mRNA transcripts (by performing polyA enrichment of RNA); 
@@ -32,7 +32,7 @@ RNA-Seq can be performed using
 
 <br/>
 
-Depending on the technology and the protocol, RNA-Seq can produce
+Depending on the technology and the protocol, RNA-Seq can produce:
 * single-end short reads (50-450 nt), which are useful for gene expression quantification (mainly **Illumina**, but also **Ion Torrent** and **BGISEQ**);
 * paired-end reads (2 x 50-250 nt), which are useful for detecting splicing events and refinement of transcriptome annotation;
 * single long reads (**PACBio** or **Nanopore**), which are used for the de novo identification of new transcripts and improving transcriptome assembly. 
