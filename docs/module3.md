@@ -124,7 +124,7 @@ Loop around the 6 **ReadsPerGene.out.tab** files and extract the gene ID (1rst c
 ```{bash}
 cd ~/alignments_star
 
-for i in *ReadsPerGene.out.tab
+for i in */*ReadsPerGene.out.tab
 do echo $i
 # retrieve the first (gene name) and fourth column (raw reads)
 cut -f1,4 $i | grep -v "_" > ~/deseq2/counts_star/`basename $i ReadsPerGene.out.tab`_counts.txt
@@ -136,7 +136,12 @@ done
 Prepare the annotation file needed to import the **Salmon** counts: a two-column data frame linking transcript id (column 1) to gene id (column 2). Process from the **GTF file**:<br>
 
 ```{bash}
-awk -F "\t" 'BEGIN{OFS="\t"}{if($3=="transcript") print $9}' gencode.v29.annotation.gtf | cut -d"\"" -f4,8 | tr '"' '\t' > tx2gene.gencode.v29.csv
+# first column is the transcript ID, second column is the gene ID
+awk -F "\t" 'BEGIN{OFS="\t"}{if($3=="transcript"){split($9, a, "\""); print a[4],a[2]}}' gencode.v29.annotation.gtf > tx2gene.gencode.v29.csv
+
+# first column is the transcript ID, second column is the gene ID, third column is the gene symbol
+awk -F "\t" 'BEGIN{OFS="\t"}{if($3=="transcript"){split($9, a, "\""); print a[4],a[2],a[8]}}' gencode.v29.annotation.gtf > tx2gene.gencode.v29_symbols.csv
+
 ```
 
 #### Sample sheet
@@ -173,6 +178,7 @@ R
 # go to our working directory
 setwd("~/deseq2")
 # load package DESeq2
+library(DESeq2)
 ```
 
 Read in the sample table that we have prepared:
@@ -220,7 +226,7 @@ files <- dir("~/alignments_salmon", recursive=TRUE, pattern="quant.sf", full.nam
 names(files) <- dir("~/alignments_salmon/")
 
 # Read in the two-column data.frame linking transcript id (column 1) to gene id (column 2)
-tx2gene <- read.table("tx2gene.gencode.v29.chr10.csv", 
+tx2gene <- read.table("tx2gene.gencode.v29.csv", 
 		sep="\t", 
 		header=F)
 
@@ -232,8 +238,13 @@ rownames(sampletable) <- sampletable$SampleName
 txi <- tximport(files, 
 		type = "salmon", 
 		tx2gene = tx2gene)
+# check the names of the "slots" of the txi object
+names(txi)
 
+# display the first rows of the counts per gene information
+head(txi$counts)
 
+# import count into a DESeq2 object
 se_salmon <- DESeqDataSetFromTximport(txi,
 			colData = sampletable, 
 			design = ~ Time)
@@ -274,13 +285,9 @@ library(pheatmap)
 
 # calculate between-sample distance matrix
 sampleDistMatrix <- as.matrix(dist(t(assay(rld))))
-rownames(sampleDistMatrix) <- paste(vsd$condition, vsd$type, sep="-")
-colnames(sampleDistMatrix) <- NULL
 
-png("sample_distance_heatmap.png")
-pheatmap(sampleDistMatrix,
-         clustering_distance_rows=sampleDists,
-         clustering_distance_cols=sampleDists)
+png("sample_distance_heatmap_star.png")
+pheatmap(sampleDistMatrix)
 dev.off()
 
 ```
@@ -292,7 +299,7 @@ dev.off()
 Reduction of dimensionality to be able to retrieve main differences between samples.
 
 ```{r}
-png("PCA.png")
+png("PCA_star.png")
 plotPCA(object = rld,
 		intgroup = "Time")
 dev.off()
@@ -309,7 +316,21 @@ de <- results(object = se_star2,
 
 # check first rows
 head(de)
+
+# write differential expression analysis result to text file
+write.table(de, "deseq2_results.txt", quote=F, col.names=NA, row.names=T, sep="\t")
 ```
+
+* Save the normalized counts
+
+```{bash}
+# compute normalized counts
+norm_counts <- log2(counts(se_star2, normalized=T)+1)
+# write normalized counts to text file
+write.table(norm_counts, "normalized_counts.txt", quote=F, col.names=NA, row.names=T, sep="\t")
+
+```
+
 
 * DESeq2 output explained
 
@@ -322,12 +343,58 @@ A positive fold change indicates an increase of expression while a negative fold
 This value is reported in a **logarithmic scale (base 2)**: for example, a log2 fold change of 1.5 in the "Ko vs Wt comparison" means that the expression of that gene is increased, in the Ko relative to the Wt, by a multiplicative factor of 2^1.5 ≈ 2.82.
 
 * **pvalue**
-Wald statisticial test p-value: Indicates whether the gene analysed is likely to be differentially expressed in that comparison. **The lower the more significant**.
+Wald test p-value: Indicates whether the gene analysed is likely to be differentially expressed in that comparison. **The lower the more significant**.
 
 * **padj**
 Bonferroni-Hochberg adjusted p-values (FDR): **the lower the more significant**. More robust that the regular p-value because it controls for the occurrence of **false positives**.
 
 * **baseMean**
+Mean of normalized counts for all samples.
+
+* **lfcSE**
+Standard error of the log2FoldChange.
+
+* **stat**
+Wald statistic: the log2FoldChange divided by its standard error.
+
+
+
+## Gene selection
+
+* padj (p-value corrected for multiple testing)
+* log2FC (log2 Fold Change)
+
+<br>
+the log2FoldChange only does not give an information on the **within-group variability**:
+
+<img src="images/RNAseq_dispersion.png" width="450"/>
+
+We need to take into account the p-value or, better **the adjusted p-value** (padj).
+<br>
+Setting a p-value threshold of 0.05 means that there is a **5% chance that the observed result is a false positive**. For thousands of simultaneous tests (as in RNA-seq), 5% can result in a large number of false positives.	
+<br>
+An False Discovery Rate adjusted p-value of 0.05 implies that 5% of **significant tests** will result in false positives.
+<br>
+
+* We select our list of differentially expressed genes betwen t25 and t0 based on padj < 0.05 and log2FC > 0.5 or log2FC < -0.5
+
+```{bash}
+# all columns
+awk '($7 < 0.05 && $3 > 0.5) || ($7 < 0.05 && $3 < -0.5) {print}' deseq2_results.txt > deseq2_results_padj0.05_log2fc0.5.txt
+
+# extract only gene IDs (sed '1d' removes the first row that is the column names)
+cut -f1 deseq2_results_padj0.05_log2fc0.5.txt | sed '1d' > deseq2_results_padj0.05_log2fc0.5_IDs.txt
+```
+
+* Extract more comprehensive gene symbols:
+
+```{bash}
+grep -f deseq2_results_padj0.05_log2fc0.5_IDs.txt tx2gene.gencode.v29_symbols.csv | cut -f3 | sort -u > deseq2_results_padj0.05_log2fc0.5_symbols.txt
+```
+
+
+
+
 
 
 ### Online tool
@@ -371,36 +438,6 @@ Let's try to run the analysis using both **DESeq2** and **edgeR**.
 * Go to "Results" tab
 
 
-
-
-## Gene selection
-
-* padj (p-value corrected for multiple testing)
-* log2FC (log2 Fold Change)
-
-Why is p-value important ?
-
-<img src="images/RNAseq_dispersion.png" width="700"/>
-
-
-* Write a file with genes differentially expression between t25 and t0 with padj < 0.01 and log2FC > 1
-
-```{bash}
-awk '$ < 0.01 && $ > 1 {print}' deseq2_results.txt > deseq2_results_padj0.05_log2fc1.txt
-```
-
-
-
-## Visualization of differential expression
-
-### Volcano plots
-
-```{r}
-# code for volcano plot
-```
-
-Run the R script:<br>
-Rscript volcano_plot.R
 
 
 
