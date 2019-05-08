@@ -1,3 +1,9 @@
+---
+layout: page
+title: MultiQC report
+navigation: 15
+---
+
 # Combining reports
 At this point we can summarize the work done by using the tool [**multiqc**](https://multiqc.info/). First we link our mapping results to QC.
 
