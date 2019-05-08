@@ -51,7 +51,9 @@ It is divided into [8 major collections](http://software.broadinstitute.org/gsea
 
 ## Enrichment analysis based on gene selection
 
-* Gene Universe: in our example: all genes present in our annotation.
+Tools based on a user-selection of genes usually require 2 inputs:
+
+* Gene Universe: in our example: all genes used in our analysis (after filtering out low counts in our case).
 * List of genes selected from the universe: our selection of genes, give the criteria we previously used: **padj < 0.05**, **&#124;log2FoldChange&#124; >= 0.5**.
 
 ### GO / Panther tool
@@ -78,26 +80,58 @@ Paste our selection, and select **biological process** and **Homo sapiens**(file
 
 <img src="images/GO_tool_input1.png" width="800" align="middle" />
 
-**Analyzed List** is what we just uploaded.
+**Analyzed List** is what we just uploaded (*deseq2_results_padj0.05_log2fc0.5_ensemblIDs.txt*).
 <br>
-In **Reference List**, we need to upload a **gene universe**:  *Change -> Browse -> (select deseq2_universe_ensemblIDs.txt) -> Upload list*
+In **Reference List**, we need to upload a file containg the **universe** (*deseq2_universe_ensemblIDs.txt*):  *Change -> Browse -> (select deseq2_universe_ensemblIDs.txt) -> Upload list*
 <br>
 
-* *Launch analysis*
+* Launch analysis
 <img src="images/GO_tool_results_ensembl.png" width="800" align="middle" />
 * Try the same analysis using the **gene symbols** instead of ENSEMBL IDs
 ```{bash}
 # Get universe with gene symbols (we already have the gene selection in deseq2_results_padj0.05_log2fc0.5_symbols.txt)
 cut -f2 deseq2_results.txt | sed '1d' > deseq2_universe_symbols.txt
 ```
-**Launch** !
+* **Launch** !
 <img src="images/GO_tool_results_symbols.png" width="800" align="middle" />
 
 
 
 ### enrichR
 
-http://amp.pharm.mssm.edu/Enrichr/
+[EnrichR](http://amp.pharm.mssm.edu/Enrichr/) is a gene-list enrichment tool developped at the Icahn Schoold of Medicine (Mount Sinai).
+
+<img src="images/enrichr_interface.png" width="500" align="middle" />
+
+It does not require the input of a gene universe: only a selection of genes or a BED file.
+
+<img src="images/enrichr_paper1.jpg" width="500" align="middle" />
+
+The default EnrichR interface works for *Homo sapiens* and *Mus musculus*.<br>
+However, EnrichR also provides a [set of tools](https://amp.pharm.mssm.edu/modEnrichr/) for ortholog conversion and enrichment analysis of more organisms:
+
+<img src="images/enrichr_interface2.png" width="500" align="middle" />
+
+In the [main page](http://amp.pharm.mssm.edu/Enrichr/), paste our list of selected **gene symbols** (*deseq2_results_padj0.05_log2fc0.5_symbols.txt*) and **Submit** !
+
+<img src="images/enrichr_results_all.png" width="500" align="middle" />
+
+
+<img src="images/enrichr_results_table.png" width="500" align="middle" />
+
+KEGG Human pathway **bar graph** vizualization:
+<img src="images/enrichr_results_bar.png" width="500" align="middle" />
+
+KEGG Human pathway **table** vizualization:
+<img src="images/enrichr_results_table.png" width="500" align="middle" />
+
+KEGG Human pathway **clustergram** vizualization:
+<img src="images/enrichr_results_clustergram.png" width="500" align="middle" />
+
+For **Cell Types**, you can also visualize networks, for example **Human gene Atlas**:
+<img src="images/enrichr_results_table.network" width="500" align="middle" />
+
+You can also export some graphs as PNG, JPEG or SVG.
 
 
 ## Enrichment based on ranked lists of genes using GSEA
