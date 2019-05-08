@@ -307,6 +307,11 @@ Finally, we can see that the majority of reads map to the exons.
 <br/>
 
 # Mapping using Salmon
+
+<img src="images/RNAseq_workflow.png" width="1000"/>
+
+[**Salmon**](https://combine-lab.github.io/salmon/) is a tool for quantifying the expression of transcripts using RNA-seq data. It is a quasi-mapper as it doesn't produce the read alignment (and doesn't output BAM/SAM files).
+
 For indexing with **Salmon** we need to use transcripts sequences in a fasta file. **Salmon** does not need any decompression of the input so we can index by using this command:
 
 ```{bash}
