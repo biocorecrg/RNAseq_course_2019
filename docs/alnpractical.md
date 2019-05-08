@@ -174,7 +174,7 @@ This means that the protocol used for this mRNA-Seq experiment was stranded; and
 
 <br/>
 
-## BAM format
+## BAM/SAM/CRAM format
 
 The **BAM format** is a compressed version of the [**SAM format**](https://samtools.github.io/hts-specs/SAMv1.pdf) (which is a plain text) and cannot thus being seen as a text. To explore the BAM file, we have to convert it to the SAM format by using [**samtools**](http://samtools.sourceforge.net/). Note that we use the parameter **-h** to show also the header that is hidden by default. 
 
@@ -235,8 +235,6 @@ definition.*
 
 <br/>
 
-## BAM/SAM/CRAM file conversion and Alignment QC
-
 Let's convert BAM to SAM:
 
 ```{bash}
@@ -270,7 +268,7 @@ rm alignments/*.sam
 
 <br/>
 
-## ALignment QC
+## Alignment QC
 The quality of the resulting alignment can be checked using the tool [**QualiMap**](http://qualimap.bioinfo.cipf.es/). To run QualiMap, we specify the kind of analysis (**rnaseq**), the presence of paired-end reads within the bam file (**-pe**) and the strand of the library (**-p strand-specific-reverse**). 
 
 ```{bash}
@@ -287,7 +285,7 @@ Built on 2016-10-03 18:14
 ....  
 ```
 
-We can check the final report in a browser like Firefox:
+We can check the final report in a browser:
 
 ```{bash}
 firefox QC/qualimapReport.html
