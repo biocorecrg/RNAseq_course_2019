@@ -192,7 +192,7 @@ awk 'BEGIN{OFS="\t"}{print $2,$1,$3,$4,$5,$6,$7,$8}' normalized_counts.txt > gse
 
 A phenotype label file defines phenotype labels (experimental groups) and assigns those labels to the samples in the corresponding expression data file.
 
-<img src="images/gsea_phenotypes.png" width="500" align="middle" />
+<img src="images/gsea_phenotypes.png" width="700" align="middle" />
 
 Let's create it for our experiment:
 
