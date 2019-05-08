@@ -5,7 +5,7 @@ navigation: 13
 ---
 
 # Genome Browser
-Read alignments (in the BAM. CRAM BigWig formats) can be displayed in a genome browser, which is a program allowing users to browse, search, retrieve and analyze genomic sequences and annotation data using a graphical interface.
+Read alignments (in the BAM, CRAM or BigWig formats) can be displayed in a genome browser, which is a program allowing users to browse, search, retrieve and analyze genomic sequences and annotation data using a graphical interface.
 
 There are two kinds of genome browsers:
 * Web-based genome browsers:
