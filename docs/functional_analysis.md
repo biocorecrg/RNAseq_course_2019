@@ -6,7 +6,7 @@ navigation: 15
 
 # Functional analysis
 
-## Resources
+## Data bases
 
 ### Gene Ontology
 
@@ -21,11 +21,12 @@ The [Gene Ontology (GO)](http://geneontology.org/) describes our knowledge of th
 | Cellular Component | The locations where a gene product performs a function. e.g. **cell membrane**, **ribosome**. |
 
 Example of GO annotation: the gene product "cytochrome c" can be described by the **molecular function** *oxidoreductase activity*, the **biological process** *oxidative phosphorylation*, and the **cellular component** *mitochondrial matrix*.
-<br>
+<br><br>
 The structure of GO can be described as a graph: each GO term is a **node**, each **edge** represents the relationships between the nodes. For example:
 
 <img src="images/GO_example_graph.png" width="500" align="middle" />
 
+GO:0019319 (hexose biosynthetic process) is part of GO:0019318 (hexose metabolic process) and also part of  GO:0046364 (monosaccharide biosynthetic process). They all share common **parent nodes**, for example GO:0008152 (metabolic process), and eventually a **root node** that is here **biological process**.
 
 ### KEGG pathways
 
@@ -41,28 +42,26 @@ Example of the [*Homo sapiens* melanoma pathway](https://www.genome.jp/dbget-bin
 
 <img src="images/gsea_msig_banner.png" width="1000" align="middle" />
 
-The [Molecular Signatures Database (MSigDB)](http://software.broadinstitute.org/gsea/msigdb/index.jsp) is a collection of 17810 annotated gene sets (in May 2019) created to be used with the GSEA software. <br>
+The [Molecular Signatures Database (MSigDB)](http://software.broadinstitute.org/gsea/msigdb/index.jsp) is a collection of 17810 annotated gene sets (as of May 2019) created to be used with the GSEA software (but not only). <br>
 
 It is divided into [8 major collections](http://software.broadinstitute.org/gsea/msigdb/collections.jsp) (that include the previously explained GOs and KEGG pathways):
 
 <img src="images/gsea_msig_sets.png" width="300" align="middle" />
 
 
-
 ## Enrichment analysis based on gene selection
 
 * Gene Universe: in our example: all genes present in our annotation.
-* List of genes selected from the universe: our selection of genes, give the criteria we previously used: padj < 0.05, &#124;log2FoldChange&#124; >= 0.5.
+* List of genes selected from the universe: our selection of genes, give the criteria we previously used: **padj < 0.05**, **&#124;log2FoldChange&#124; >= 0.5**.
 
 ### GO / Panther tool
 
-The [main page of GO] provides a tool to test the enrichment of gene ontologies or Panther/Reactome pathways in pre-selected gene list.
+The [main page of GO](http://geneontology.org/) provides a tool to test the enrichment of gene ontologies or Panther/Reactome pathways in pre-selected gene lists.
+<br>
+The tool needs a selection of differentially expressed genes (supported IDs are: gene symbols, ENSEMBL IDs, HUGO IDs, UniGene, ..) and a gene universe.
+<br>
 
-<img src="images/GO_tool_interface.png" width="500" align="middle" />
-
-<img src="images/GO_tool_input1.png" width="800" align="middle" />
-
-* Prepare ENSEMBL IDs gene list and **universe**
+Prepare files using the ENSEMBL IDs:
 
 ```{bash}
 # Extract all gene IDs used in our analysis and convert from Gencode (e.g ENSG00000057657.16) to ENSEMBL (e.g. ENSG00000057657) IDs
@@ -71,7 +70,19 @@ cut -f1 deseq2_results.txt | sed '1d' | sed 's/\..//g' > deseq2_universe_ensembl
 # Convert from Gencode to ENSEMBL IDs from selected gene list
 sed 's/\..//g' deseq2_results_padj0.05_log2fc0.5_IDs.txt > deseq2_results_padj0.05_log2fc0.5_ensemblIDs.txt
 ```
-* Load the universe gene list as **Reference list** in the tool. *Change -> Browse -> (select deseq2_universe_ensemblIDs.txt) -> Upload list*
+Paste our selection, and select **biological process** and **Homo sapiens**(file deseq2_results_padj0.05_log2fc0.5_IDs.txt):
+
+<img src="images/GO_tool_interface.png" width="500" align="middle" />
+
+**Launch** !
+
+<img src="images/GO_tool_input1.png" width="800" align="middle" />
+
+**Analyzed List** is what we just uploaded.
+<br>
+In **Reference List**, we need to upload a **gene universe**:  *Change -> Browse -> (select deseq2_universe_ensemblIDs.txt) -> Upload list*
+<br>
+
 * *Launch analysis*
 <img src="images/GO_tool_results_ensembl.png" width="800" align="middle" />
 * Try the same analysis using the **gene symbols** instead of ENSEMBL IDs
@@ -79,7 +90,9 @@ sed 's/\..//g' deseq2_results_padj0.05_log2fc0.5_IDs.txt > deseq2_results_padj0.
 # Get universe with gene symbols (we already have the gene selection in deseq2_results_padj0.05_log2fc0.5_symbols.txt)
 cut -f2 deseq2_results.txt | sed '1d' > deseq2_universe_symbols.txt
 ```
+**Launch** !
 <img src="images/GO_tool_results_symbols.png" width="800" align="middle" />
+
 
 
 ### enrichR

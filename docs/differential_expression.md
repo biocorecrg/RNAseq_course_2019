@@ -29,7 +29,7 @@ In this tutorial, we will give you an overview of the **DESeq2** pipeline to fin
 <br>
 It uses the negative binomial generalized linear models.
 <br>
-This DESeq2 tutorial is widely inspired from the [RNA-seq workflow](http://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html) developped by the authors, and from the [differential gene expression course](https://hbctraining.github.io/DGE_workshop/lessons/04_DGE_DESeq2_analysis.html) from the [Harvard Chan Bioinformatics Core](http://bioinformatics.sph.harvard.edu/)
+This DESeq2 tutorial is widely inspired by the [RNA-seq workflow](http://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html) developped by the authors of the tool, and by the [differential gene expression course](https://hbctraining.github.io/DGE_workshop/lessons/04_DGE_DESeq2_analysis.html) from the [Harvard Chan Bioinformatics Core](http://bioinformatics.sph.harvard.edu/).
 <br><br>
 DESeq2 steps:
 * Modeling raw counts for each gene:
@@ -40,10 +40,19 @@ DESeq2 steps:
   * GLM (Generalized Linear Model) fit for each gene
 * Shrinking of log2FoldChanges
 * Testing for differential expression
-
+<br> For additional information regarding the tool and the algorithm, please refer to the [paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4302049/) and the user-friendly package [vignette](http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html).
+<br>
 In this tutorial, we will use the counts calculated from the mapping on **all chromosomes**:
-* Folder **full_data**
-* svn export https://github.com/biocorecrg/RNAseq_course_2019/trunk/full_data
+<br>
+Get the data for the full data set:
+
+```{bash}
+# Go to the home directory
+cd ~
+
+# Export the folder containing all the data
+svn export https://github.com/biocorecrg/RNAseq_course_2019/trunk/full_data
+```
 
 ## Raw count matrices
 
@@ -65,17 +74,19 @@ Prepare the matrix for our 6 samples, from the **STAR** output.
 The **ReadsPerGene.out.tab** output files of STAR (from option --quantMode GeneCounts) contain 4 columns that correspond to different counts / read overlap **according to the protocol's strandedness** (see Module 1):
 * column 1: gene ID
 * column 2: counts for unstranded RNA-seq.
-* column 3: counts for the 1st read strand aligned with RNA (htseq-count option -s yes)
-* column 4: counts for the 2nd read strand aligned with RNA (htseq-count option -s reverse): the most common protocol.
+* column 3: counts for the 1st read strand aligned with RNA
+* column 4: counts for the 2nd read strand aligned with RNA (the most common protocol nowadays)
 
 The protocol used to prepare the libraries for the A549 ENCODE samples is **reverse stranded**, so we need to extract the 4th column of each of the "ReadsPerGene" files, along with the column containing the <b>gene names</b>.
 <br>
 <br>
-Create a folder for the deseq2 analysis
+Create a folder for the deseq2 analysis in the **full_data**:
 
 ```{bash}
 mkdir deseq2
 ```
+
+* Create a matrix of expression:
 
 ```{bash}
 cd alignments_star
@@ -105,7 +116,7 @@ File **A549_0_2chr10_counts.txt**:
 | ENSG00000261456.5 | 320 |
 
 and so on...
-<br>
+<br><br>
 **Exercise**
 <br>
 Prepare the 6 files needed for our analysis, from the STAR output, and save them in the <b>counts_star</b> directory.
@@ -175,7 +186,7 @@ Start an R interactive session:
 R
 ```
 
-* Go to our working directory and load the DESeq2 package
+* Go to the **deseq2** working directory and load the DESeq2 package
 
 ```{bash}
 # setwd = set working directory
@@ -188,9 +199,11 @@ library(DESeq2)
 * Read in the sample table that we prepared:
 
 ```{r}
-# header = TRUE: the first row is the "header", i.e. it contains the column names.
-# sep = "\t": the columns/fields are separated with tabs.
+# read in the sample sheet
+	# header = TRUE: the first row is the "header", i.e. it contains the column names.
+	# sep = "\t": the columns/fields are separated with tabs.
 sampletable <- read.table("sample_sheet_A549.txt", header=T, sep="\t")
+# add the same names as row names of the sample table
 rownames(sampletable) <- sampletable$SampleName
 
 # display the first 6 rows
@@ -201,30 +214,33 @@ nrow(sampletable)
 ncol(sampletable)
 ```
 
-* Load count data from **STAR** into an **DESeq** object:
+* Load the count data from **STAR** into an **DESeq** object:
 
 ```{r}
-# Option that compiles one file per sample
-se_star <- DESeqDataSetFromHTSeqCount(sampleTable = sampletable,
-                        directory = "counts_star",
-                        design = ~ Time)
+# Option 1 that reads in a matrix (we will not do it here):
 
-# Option that reads in a matrix (we will not do it here)
+	# first read in the matrix
 countdata <- read.delim("raw_counts_A549_matrix.txt", header=T, sep="\t", row.names=1)
 
-# create DESeq2 object
+	# then create the DESeq object
 se_star_matrix <- DESeqDataSetFromMatrix(countData = countdata,
                                   colData = sampletable,
                                   design = ~ Time)
+
+# Option 2 that compiles one file per sample:
+
+se_star <- DESeqDataSetFromHTSeqCount(sampleTable = sampletable,
+                        directory = "counts_star",
+                        design = ~ Time)
 ```
 
-* Load count data from **SALMON** into an **DESeq** object:
+* Load the count data from **SALMON** into an **DESeq** object:
 
 ```{r}
 # Go to the deseq2 directory
 setwd("~/deseq2")
 
-# Load tximport package that we will use to import Salmon counts
+# Load the tximport package that we use to import Salmon counts
 library(tximport)
 
 # List the quantification files from Salmon: one quant.sf file per sample
@@ -245,6 +261,7 @@ rownames(sampletable) <- sampletable$SampleName
 txi <- tximport(files, 
 		type = "salmon", 
 		tx2gene = tx2gene)
+
 # check the names of the "slots" of the txi object
 names(txi)
 
@@ -257,10 +274,9 @@ se_salmon <- DESeqDataSetFromTximport(txi,
 			design = ~ Time)
 
 ```
-
-* We will focus the rest of the analysis on the **se_star**: you can proceed exactly the same way with either **se_star_matrix** or **se_salmon** !
-
-* Remove lowly expressed genes: keep only those genes that have more than 10 summed raw counts across the 6 samples
+* From that step on, you can proceed __exactly the same way__ with se_star, se_star_matrix and se_salmon !
+* We will focus the rest of the analysis on the **se_star**.
+* Remove lowly expressed genes: keep only those genes that have more than 10 summed raw counts across the 6 samples:
 
 ```{r}
 # Number of genes before filtering:
@@ -274,10 +290,9 @@ nrow(se_star)
 ```
 
 
-* Run model
+* Fit statistical model
 
 ```{r}
-# 
 se_star2 <- DESeq(se_star)
 
 ```
@@ -307,6 +322,8 @@ dev.off()
 ```
 
 <img src="images/sample_distance_heatmap_star.png" width="600"/>
+
+Here we see that the samples cluster by replicates (A549_0_1 with A549_25_2, A549_0_2 with A549_25_2, A549_0_3 with A549_25_3) rather than by experimental groups: **batch effect** or **not enough effect of the Dexamethasone treatment** ?
 
 * Principal Component Analysis
 
@@ -355,21 +372,21 @@ write.table(norm_counts_symbols, "normalized_counts.txt", quote=F, col.names=T, 
 * DESeq2 output explained
 
 To generate more accurate log2 foldchange estimates, DESeq2 allows for the **shrinkage of the LFC** estimates toward zero when the information for a gene is low, which could include:
-  * Low counts
-  * High dispersion values
+	* Low counts
+ 	* High dispersion values
 
-* **log2 fold change** 
+* **log2 fold change**:  
 A positive fold change indicates an increase of expression while a negative fold change indicates a decrease in expression for a given comparison.<br>
-This value is reported in a **logarithmic scale (base 2)**: for example, a log2 fold change of 1.5 in the "Ko vs Wt comparison" means that the expression of that gene is increased, in the Ko relative to the Wt, by a multiplicative factor of 2^1.5 ≈ 2.82.
-* **pvalue**
+This value is reported in a **logarithmic scale (base 2)**: for example, a log2 fold change of 1.5 in the "t25 vs t0 comparison" means that the expression of that gene is increased, in the t25 relative to the t0, by a multiplicative factor of 2^1.5 ≈ 2.82.
+* **pvalue**: 
 Wald test p-value: Indicates whether the gene analysed is likely to be differentially expressed in that comparison. **The lower the more significant**.
-* **padj**
+* **padj**: 
 Bonferroni-Hochberg adjusted p-values (FDR): **the lower the more significant**. More robust that the regular p-value because it controls for the occurrence of **false positives**.
-* **baseMean**
+* **baseMean**: 
 Mean of normalized counts for all samples.
-* **lfcSE**
+* **lfcSE**: 
 Standard error of the log2FoldChange.
-* **stat**
+* **stat**: 
 Wald statistic: the log2FoldChange divided by its standard error.
 
 
@@ -379,22 +396,28 @@ Wald statistic: the log2FoldChange divided by its standard error.
 * log2FC (log2 Fold Change)
 
 <br>
-the log2FoldChange only does not give an information on the **within-group variability**:
+the log2FoldChange gives a **quantitative** information about the expression changes, but does not give an information on the **within-group variability**, hence the reliability of the information:
+<br> 
+In the picture below, fold changes for gene A and for gene B between t25 and t0 are the same, however the variability between the replicated samples in gene B is higher, so the result for gene A seems more reliable.
 
 <img src="images/RNAseq_dispersion.png" width="450"/>
 
+
 We need to take into account the p-value or, better **the adjusted p-value** (padj).
 <br>
-Setting a p-value threshold of 0.05 means that there is a **5% chance that the observed result is a false positive**. For thousands of simultaneous tests (as in RNA-seq), 5% can result in a large number of false positives.	
+Setting a p-value threshold of 0.05 means that there is a **5% chance that the observed result is a false positive**.<br>
+For thousands of simultaneous tests (as in RNA-seq), 5% can result in a large number of false positives.
 <br>
-An False Discovery Rate adjusted p-value of 0.05 implies that 5% of **significant tests** will result in false positives.
+The Benjamini-Hochberg procedure controls the False Discovery Rate (FDR).
+<br>
+A FDR adjusted p-value of 0.05 implies that 5% of **significant tests** will result in false positives.
 <br>
 
-* We select our list of differentially expressed genes betwen t25 and t0 based on padj < 0.05 and log2FC > 0.5 or log2FC < -0.5
+* We select our list of differentially expressed genes betwen t25 and t0 based on padj < 0.05 and log2FC > 0.5 or log2FC < -0.5 (However, not that *selecting by log2FoldChange is not required if the selection is done using the padj*).
 
 ```{bash}
 # column 4 is the log2FoldChange, column 8 is the adjusted p-value (padj)
-# keep all columns
+	# keep all columns
 awk '($8 < 0.05 && $4 > 0.5) || ($8 < 0.05 && $4 < -0.5) {print}' deseq2_results.txt > deseq2_results_padj0.05_log2fc0.5.txt
 
 # extract only gene IDs (column 1)
@@ -403,57 +426,10 @@ cut -f1 deseq2_results_padj0.05_log2fc0.5.txt > deseq2_results_padj0.05_log2fc0.
 # extract only gene symbols (column 2)
 cut -f2 deseq2_results_padj0.05_log2fc0.5.txt > deseq2_results_padj0.05_log2fc0.5_symbols.txt
 ```
+<br>
 
+**Exercise**
 
-
-
-
-
-### Online tool
-
-This [online tool](http://52.90.192.24:3838/rnaseq2g/) provides a way to process differential expression analysis using some of the popular tools in the field (among which DESeq2, edgeR, limma), starting from raw counts, via a user Interface.
-
-<img src="images/rnaseq2g_UI.png" width="1300"/>
-
-
-* Prepare the matrix of raw counts
-
-The first column contains, in our case, the gene names.<br>
-The remaining columns contain the expression (raw counts) of each gene in each sample (one column per sample).<br>
-We will use the previously prepared **raw_counts_A549_matrix.txt**.
-
-* Prepare the sample sheet
-
-Sample names must match column names in matrix.<br>
-Add one column that corresponds to the experimental groups the samples belong to.<br>
-We will use the previously prepared **sample_sheet_A549.txt**.
-
-
-* Choose the control group name and the case group name
-
-__In our case__<br>
-Control: t0<br>
-Case: t25<br>
-
-* Choose which samples belong to which experimental group
-
-__In our case__<br>
-Control samples: A549_0_1chr10, A549_0_2chr10, A549_0_3chr10<br>
-Case samples: A549_25_1chr10, A549_25_2chr10, A549_25_3chr10<br>
-
-* Choose DE method(s):
-
-Let's try to run the analysis using both **DESeq2** and **edgeR**.
-
-* Submit DE analysis
-
-* Go to "Results" tab
-
-
-
-
-
-
-
-
+Do the same using the **Salmon counts** (se_salmon object): how many genes are found differentially expressed when using the Salmon counts ?<br> 
+How do results overlap between STAR and Salmon ?
 
