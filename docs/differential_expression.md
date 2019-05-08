@@ -89,7 +89,7 @@ mkdir deseq2
 * Create a matrix of expression:
 
 ```{bash}
-cd alignments_star
+cd counts_star
 
 # retrieve the 4th column of each "ReadsPerGene.out.tab" file + the first column that contains the gene IDs
 paste A549_*ReadsPerGene.out.tab | grep -v "_" | awk '{printf "%s\t", $1}{for (i=4;i<=NF;i+=4) printf "%s\t", $i; printf "\n" }' > tmp
@@ -132,9 +132,9 @@ mkdir counts_star
 Loop around the 6 **ReadsPerGene.out.tab** files and extract the gene ID (1rst column) and the correct counts (4th column).
 
 ```{bash}
-cd ~/alignments_star
+cd ~/counts_star
 
-for i in alignments_star/*ReadsPerGene.out.tab
+for i in counts_star/*ReadsPerGene.out.tab
 do echo $i
 # retrieve the first (gene name) and fourth column (raw reads)
 cut -f1,4 $i | grep -v "_" > ~/deseq2/counts_star/`basename $i ReadsPerGene.out.tab`_counts.txt
@@ -244,8 +244,8 @@ setwd("~/deseq2")
 library(tximport)
 
 # List the quantification files from Salmon: one quant.sf file per sample
-files <- dir("~/alignments_salmon", recursive=TRUE, pattern="quant.sf", full.names=TRUE)
-names(files) <- dir("~/alignments_salmon/")
+files <- dir("~/counts_salmon", recursive=TRUE, pattern="quant.sf", full.names=TRUE)
+names(files) <- dir("~/counts_salmon/")
 
 # Read in the two-column data.frame linking transcript id (column 1) to gene id (column 2)
 tx2gene <- read.table("tx2gene.gencode.v29.csv", 
