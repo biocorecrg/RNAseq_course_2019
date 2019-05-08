@@ -31,7 +31,9 @@ It uses the negative binomial generalized linear models.
 <br>
 This DESeq2 tutorial is widely inspired by the [RNA-seq workflow](http://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html) developped by the authors of the tool, and by the [differential gene expression course](https://hbctraining.github.io/DGE_workshop/lessons/04_DGE_DESeq2_analysis.html) from the [Harvard Chan Bioinformatics Core](http://bioinformatics.sph.harvard.edu/).
 <br><br>
-DESeq2 steps:
+
+### DESeq2 steps:
+
 * Modeling raw counts for each gene:
   * Estimate size factors
   * Estimate gene-wise dispersions
@@ -40,9 +42,13 @@ DESeq2 steps:
   * GLM (Generalized Linear Model) fit for each gene
 * Shrinking of log2FoldChanges
 * Testing for differential expression
-<br> For additional information regarding the tool and the algorithm, please refer to the [paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4302049/) and the user-friendly package [vignette](http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html).
+<br> 
 <br>
-In this tutorial, we will use the counts calculated from the mapping on **all chromosomes**:
+For additional information regarding the tool and the algorithm, please refer to the [paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4302049/) and the user-friendly package [vignette](http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html).
+
+### Tutorial on basic DESeq2 usage for differential analysis of gene expression
+
+* In this tutorial, we will use the counts calculated from the mapping on **all chromosomes**:
 <br>
 Get the data for the full data set:
 
@@ -61,13 +67,13 @@ rm full_data.tar.gz
 ```
 
 
-## Raw count matrices
+### Raw count matrices
 
 DESeq2 takes as an input raw (non normalized) counts, in various forms:
 
-### Prepare data from STAR
+#### Prepare data from STAR
 
-#### **Option 1**: a <b>matrix of integer values</b> (the value at the i-th row and j-th column tells how many reads have been assigned to gene i in sample j), such as:
+##### **Option 1**: a <b>matrix of integer values</b> (the value at the i-th row and j-th column tells how many reads have been assigned to gene i in sample j), such as:
 
 | gene | A549_0_1chr10 | A549_0_2chr10 | A549_0_3chr10 | A549_25_1chr10 | A549_25_2chr10 | A549_25_3chr10 |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -78,7 +84,7 @@ DESeq2 takes as an input raw (non normalized) counts, in various forms:
 
 Prepare the matrix for our 6 samples, from the **STAR** output.
 <br>
-The **ReadsPerGene.out.tab** output files of STAR (from option --quantMode GeneCounts) contain 4 columns that correspond to different counts / read overlap **according to the protocol's strandedness** (see Module 1):
+The **ReadsPerGene.out.tab** output files of STAR (from option --quantMode GeneCounts) contain 4 columns that correspond to different counts / read overlap **according to the protocol's strandedness** (see [Aln pratical](https://biocorecrg.github.io/RNAseq_course_2019/alnpractical.html)):
 * column 1: gene ID
 * column 2: counts for unstranded RNA-seq.
 * column 3: counts for the 1st read strand aligned with RNA
@@ -108,7 +114,7 @@ sed -e "1igene_name\t$(ls A549_*ReadsPerGene.out.tab | tr '\n' '\t' | sed 's/Rea
 rm tmp
 ```
 
-#### **Option 2**: one file per sample, each file containing the raw counts of all genes:
+##### **Option 2**: one file per sample, each file containing the raw counts of all genes:
 
 File **A549_0_1chr10_counts.txt**:
 
@@ -129,7 +135,7 @@ and so on...
 Prepare the 6 files needed for our analysis, from the STAR output, and save them in the <b>counts_star</b> directory.
 
 <br>
-Create directory **counts_4thcol** in the deseq2 directory:
+Create the sub-directory **counts_4thcol** inside the deseq2 directory:
 
 ```{bash}
 mkdir -p ~/full_data/deseq2/counts_4thcol
@@ -147,18 +153,19 @@ cut -f1,4 $i | grep -v "_" > ~/full_data/deseq2/counts_4thcol/`basename $i Reads
 done
 ```
 
-### Prepare data from Salmon
+#### Prepare data from Salmon
 
 Prepare the annotation file needed to import the **Salmon** counts: a two-column data frame linking transcript id (column 1) to gene id (column 2). Process from the **GTF file**:<br>
 
 ```{bash}
 cd ~/full_data/deseq2
+
 # first column is the transcript ID, second column is the gene ID, third column is the gene symbol
 zcat gencode.v29.annotation.gtf.gz | awk -F "\t" 'BEGIN{OFS="\t"}{if($3=="transcript"){split($9, a, "\""); print a[4],a[2],a[8]}}' > tx2gene.gencode.v29.csv
 
 ```
 
-### Sample sheet
+#### Sample sheet
 
 Additionally, DESeq2 needs a <b>sample sheet</b> that describes the samples characteristics: treatment, knock-out / wild type, replicates, time points, etc. in the form:
 
@@ -182,7 +189,7 @@ Prepare this file (tab-separated columns) in a text editor: save it as **sample_
 The same sample sheet will be used for both **the STAR and the Salmon** DESeq2 analysis.
 
 
-### Analysis
+#### Analysis
 
 The analysis is done in R ! <br>
 
@@ -202,6 +209,8 @@ setwd("~/full_data/deseq2")
 # load package DESeq2 (all functions)
 library(DESeq2)
 ```
+
+#### Load raw counts into DESeq objects
 
 * Read in the sample table that we prepared:
 
@@ -283,6 +292,10 @@ se_salmon <- DESeqDataSetFromTximport(txi,
 ```
 * From that step on, you can proceed __exactly the same way__ with se_star, se_star_matrix and se_salmon !
 * We will focus the rest of the analysis on the **se_star**.
+
+
+#### Filtering
+
 * Remove lowly expressed genes: keep only those genes that have more than 10 summed raw counts across the 6 samples:
 
 ```{r}
@@ -296,12 +309,27 @@ se_star <- se_star[rowSums(counts(se_star)) > 10, ]
 nrow(se_star)
 ```
 
-
-* Fit statistical model
+#### Fit statistical model
 
 ```{r}
 se_star2 <- DESeq(se_star)
 ```
+
+* Save the normalized counts for further usage (functional analysis, tomorrow...)
+
+```{bash}
+# compute normalized counts
+norm_counts <- log2(counts(se_star2, normalized=T)+1)
+
+# add the gene symbols
+norm_counts_symbols <- merge(unique(tx2gene[,2:3]), data.frame(ID=rownames(norm_counts), norm_counts), by=1, all=F)
+
+# write normalized counts to text file
+write.table(norm_counts_symbols, "normalized_counts.txt", quote=F, col.names=T, row.names=F, sep="\t")
+```
+
+
+#### Visualization
 
 * Transform raw counts to be able to visualize the data
 
@@ -345,7 +373,7 @@ dev.off()
 
 <img src="images/PCA_star.png" width="700"/>
 
-* Running the differential expression analysis
+#### Differential expression analysis
 
 ```{r}
 # t25 vs t0 vs WT
@@ -362,21 +390,8 @@ de_symbols <- merge(unique(tx2gene[,2:3]), data.frame(ID=rownames(de), de), by=1
 write.table(de_symbols, "deseq2_results.txt", quote=F, col.names=T, row.names=F, sep="\t")
 ```
 
-* Save the normalized counts
 
-```{bash}
-# compute normalized counts
-norm_counts <- log2(counts(se_star2, normalized=T)+1)
-
-# add the gene symbols
-norm_counts_symbols <- merge(unique(tx2gene[,2:3]), data.frame(ID=rownames(norm_counts), norm_counts), by=1, all=F)
-
-# write normalized counts to text file
-write.table(norm_counts_symbols, "normalized_counts.txt", quote=F, col.names=T, row.names=F, sep="\t")
-```
-
-
-* DESeq2 output explained
+#### DESeq2 output explained
 
 To generate more accurate log2 foldchange estimates, DESeq2 allows for the **shrinkage of the LFC** estimates toward zero when the information for a gene is low, which could include:
 	* Low counts
@@ -397,7 +412,7 @@ Standard error of the log2FoldChange.
 Wald statistic: the log2FoldChange divided by its standard error.
 
 
-## Gene selection
+#### Gene selection
 
 * padj (p-value corrected for multiple testing)
 * log2FC (log2 Fold Change)
