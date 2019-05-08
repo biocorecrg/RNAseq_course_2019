@@ -110,26 +110,23 @@ It does not require the input of a gene universe: only a selection of genes or a
 The default EnrichR interface works for *Homo sapiens* and *Mus musculus*.<br>
 However, EnrichR also provides a [set of tools](https://amp.pharm.mssm.edu/modEnrichr/) for ortholog conversion and enrichment analysis of more organisms:
 
-<img src="images/enrichr_interface2.png" width="500" align="middle" />
+<img src="images/enrichr_interface2.png" width="600" align="middle" />
 
 In the [main page](http://amp.pharm.mssm.edu/Enrichr/), paste our list of selected **gene symbols** (*deseq2_results_padj0.05_log2fc0.5_symbols.txt*) and **Submit** !
 
-<img src="images/enrichr_results_all.png" width="500" align="middle" />
-
-
-<img src="images/enrichr_results_table.png" width="500" align="middle" />
+<img src="images/enrichr_results_all.png" width="600" align="middle" />
 
 KEGG Human pathway **bar graph** vizualization:
-<img src="images/enrichr_results_bar.png" width="500" align="middle" />
+<img src="images/enrichr_results_bar.png" width="600" align="middle" />
 
 KEGG Human pathway **table** vizualization:
-<img src="images/enrichr_results_table.png" width="500" align="middle" />
+<img src="images/enrichr_results_table.png" width="600" align="middle" />
 
 KEGG Human pathway **clustergram** vizualization:
-<img src="images/enrichr_results_clustergram.png" width="500" align="middle" />
+<img src="images/enrichr_results_clustergram.png" width="600" align="middle" />
 
 For **Cell Types**, you can also visualize networks, for example **Human gene Atlas**:
-<img src="images/enrichr_results_table.network" width="500" align="middle" />
+<img src="images/enrichr_results_network.png" width="600" align="middle" />
 
 You can also export some graphs as PNG, JPEG or SVG.
 
@@ -182,11 +179,11 @@ The remaining columns contains normalized expressions: one column per sample.
 
 <b>Exercise</b>
 <br>
-GSEA will work by default with the gene symbols: add the gene symbol as a first column to *normalized_counts.txt*.
-Remember the file *tx2gene.gencode.v29_symbols.csv* that maps the **gene IDs to the gene symbols**.
+Adjust the file **normalized_counts.txt** so the first column is the gene symbol, the second is the gene ID (or anything else), and the remaining ones are the expression columns. You can save that new file as **gsea_normalized_counts.txt**.
+<br>
 
 ```{bash}
-join -1 2 -2 1 <(sort -k1,1 tx2gene.gencode.v29_symbols.csv) <(sort -k1,1 normalized_counts.txt)
+awk 'BEGIN{OFS="\t"}{print $2,$1,$3,$4,$5,$6,$7,$8}' normalized_counts.txt > gsea_normalized_counts.txt
 
 ```
 
@@ -213,31 +210,33 @@ So the phenotype file could also be:
 
 The first label **t0** in the second line is associated to the first label **0** on the third line.
 
+<b>Exercise</b>
+<br>
+Create the phenotype labels file and save it as **gsea_phenotypes.cls**.
 
-#### Gene sets
-
-
-As GSEA was created and optimized for microarray data, the authors make the [following suggestions](https://software.broadinstitute.org/cancer/software/gsea/wiki/index.php/RNA-Seq_Data_and_Ensembl_CHIP_files) for RNA-seq:
-
-*"The GSEA algorithm ranks the features listed in a GCT file.* (normalized expression values) *It provides a number of alternative statistics that can be used for feature ranking. But in all cases (or at least in the cases where the dataset represents expression profiles for differing categorical phenotypes) the ranking statistics capture some measure of genes' differential expression between a pair of categorical phenotypes. The GSEA team has yet to determine whether these ranking statistics, originally selected for their effectiveness when used with expression data derived from DNA Microarray experiments, are appropriate for use with expression data derived from RNA-seq experiments. As an alternative to standard GSEA, analysis of data derived from RNA-seq experiments may also be conducted through the*  ***GSEAPreranked tool."***
-
-
-**Enrichment score**
 
 Reflects the degree to which a set is overrepresented at the extremes (top or bottom) of the entire ranked list.
 
 
-#### Run GSEA
+#### Download and run GSEA
+
+##### Download Java application:
+
+Enter the [download page](http://software.broadinstitute.org/gsea/login.jsp), enter your Email and **login**:
+<img src="images/gsea_downloads.png" width="800" align="middle" />
+<br>
+Click on **download gsea-3.0.jar** link and save file locally to your home directory.
+
+
+##### Launch the GSEA application
 
 GSEA is Java-based. Launch it from a terminal window:
 
 ```{bash}
-java -Xmx1024m -jar gsea-3.0.jar 
+$RUN java -Xmx1024m -jar gsea-3.0.jar
 ```
 
 <img src="images/gsea_interface.png" width="800" align="middle" />
-
-
 
 ------------
 ### Hypergeometric test
