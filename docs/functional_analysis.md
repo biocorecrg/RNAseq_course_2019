@@ -1,7 +1,6 @@
 ---
 layout: page
 title: Functional analysis
-navigation_weight: 1
 navigation: 15
 ---
 
