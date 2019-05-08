@@ -306,7 +306,7 @@ Finally, we can see that the majority of reads map to the exons.
 
 <br/>
 
-# Read mapping using Salmon
+# Mapping using Salmon
 For indexing with **Salmon** we need to use transcripts sequences in a fasta file. **Salmon** does not need any decompression of the input so we can index by using this command:
 
 ```{bash}
