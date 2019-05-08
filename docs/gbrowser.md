@@ -5,7 +5,7 @@ navigation: 13
 ---
 
 # Genome Browser
-Read alignments (in the BAM. CRAM BigWig formats) can be displayed in a genome browser, which a program allowing users to browse, search, retrieve and analyze genomic sequences and annotation data using a graphical interface.
+Read alignments (in the BAM. CRAM BigWig formats) can be displayed in a genome browser, which is a program allowing users to browse, search, retrieve and analyze genomic sequences and annotation data using a graphical interface.
 
 There are two kinds of genome browsers:
 * Web-based genome browsers:
@@ -18,7 +18,7 @@ There are two kinds of genome browsers:
   * [GBrowse](http://gmod.org/wiki/GBrowse_2.0_HOWTO)
   * [IGV](https://software.broadinstitute.org/software/igv/)
   
-Small size data can be directly uploaded to the genome browser, while large files are normally placed on a web-server that is accessible to the browser. To explore BAM and CRAM files produced by the STAR mapper, we first need to sort and index the files. In our case, sorting can be skipped as we already produced BAM files sorted by coordinates. The indexing step:
+Small size data can be directly uploaded to the genome browser, while large files are normally placed on a web-server that is accessible to the browser. To explore BAM and CRAM files produced by the STAR mapper, we first need to sort and index the files. In our case, sorting has been already done by STAR because we output alignments to the BAM files sorted by coordinates. The indexing step:
 
 ```{bash}
 $RUN samtools index alignments/A549_0_1Aligned.sortedByCoord.out.bam
@@ -34,16 +34,16 @@ A549_0_1.cram                              A549_0_1Log.out        A549_0_1SJ.out
 <br/>
 
 ## UCSC Genome Browser
-**IMPORTANT!** Be careuful with the chromosome name conventions since different genome browsers name chromosomes differently. Thus UCSC names chromosomes **chr1**, **chr2**,...**chrM**; while Ensembl, **1**, **2**, ... **MT**. When you map reads to a genome with a given convention you cannot directly display BAM/CRAM files in the genome browser with a different convention.
+**IMPORTANT!** Be careful with the chromosome name conventions since different genome browsers name chromosomes differently. Thus UCSC names chromosomes **chr1**, **chr2**,...**chrM**; while Ensembl, **1**, **2**, ... **MT**. When you map reads to a genome with a given convention you cannot directly display BAM/CRAM files in the genome browser that uses a different convention.
 GENCODE, from which we downloaded a human genome, uses the UCSC convention, we therefore can directly display our BAM/CRAM files in the UCSC Genome Browser. 
 
-First, you need to upload your sorted bam (or cram) file **together with an index (.bai or .crai file)** to a http server that is accessible from the Internet. We already made our files accessible at this address:
+First, you need to upload your sorted bam (or cram) file(s) **together with an index (.bai or .crai) file(s)** to a http server that is accessible from the Internet. We already made our files accessible at this address:
 
 ```{bash}
 https://public-docs.crg.es/biocore/projects/training/RNAseq_2019/
 ```
 
-Using the mouseright click copy this URL address.  
+Using the mouse's right click copy this URL address.  
 
 Now go to the [UCSC genome browser website](https://genome-euro.ucsc.edu/cgi-bin/hgGateway?redirect=manual&source=genome.ucsc.edu).
 
@@ -57,9 +57,9 @@ At the bottom of the image click **ADD CUSTOM TRACK**
 
 <img src="images/ucsc3.png"  align="middle" />
 
-and provide information describing the loading data:
+and provide information describing the data to be displayed:
 * **track type** indicates the kind of file: **bam** (same is used for uploading .cram)
-* **name** of data 
+* **name** of the track 
 * **bigDataUrl** the URL where the BAM or CRAM file is located 
 
 ```{bash}
@@ -70,7 +70,7 @@ Click "Submit".
 
 <img src="images/ucsc4.png"  align="middle" />
 
-This indicates that everything went ok and we can now display the data. Of course our data are restricted to chromosome 10 so we have to display that chromosome. For example, let's select the gene **LARP4B**.
+This indicates that everything went ok and we can now display the data. Since our data are restricted to chromosome 10 we have to display that chromosome. For example, let's select the gene **LARP4B**.
 
 <img src="images/ucsc5.png"  align="middle" />
 
@@ -89,7 +89,7 @@ We can also display only the coverage by selecting in "My BAM Track Settings" **
 
 <img src="images/ucsc9.png"  align="middle" />
 
-These expression signal plots can be helpful to compare different samples (in this case, make sure to set comparable scales on the Y-axes). 
+These expression signal plots can be helpful for comparing different samples (in this case, make sure to set comparable scales on the Y-axes). 
 
 <img src="images/ucsc10.png"  align="middle" />
 
