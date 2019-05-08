@@ -9,9 +9,12 @@ navigation: 14
 
 <img src="images/RNAseq_workflow.png" width="1000"/>
 
-[**Salmon**](https://combine-lab.github.io/salmon/) is a tool for quantifying the expression of transcripts using RNA-seq data. It is a quasi-mapper as it doesn't produce the read alignment (and doesn't output BAM/SAM files).
+[**Salmon**](https://combine-lab.github.io/salmon/) is a tool for quantifying the expression of transcripts using RNA-seq data. It is a quasi-mapper as it doesn't produce the read alignments (and doesn't output BAM/SAM files). Salmon "quasi-maps" reads to the transcriptome rather than the genome as STAR does. Salmon can also make use of pre-computed alignments (in the form of a SAM/BAM file) to the transcripts rather than the raw reads in the FASTQ format.
 
-For indexing with **Salmon** we need to use transcripts sequences in a fasta file. **Salmon** does not need any decompression of the input so we can index by using this command:
+<br/>
+
+## Building the Salmon index
+To make an index for **Salmon**, we need transcript sequences in the FASTA format. **Salmon** does not need any decompression of the input, so we can index by using this command:
 
 ```{bash}
 $RUN salmon index -t annotations/gencode.v29.transcripts.fa.gz -i indexes/transcripts
@@ -25,7 +28,8 @@ index ["transcripts"] did not previously exist  . . . creating it
 [2019-04-30 18:18:07.251] [jLog] [info] done building index
 ```
 
-For aligning with **Salmon** we need to specify the strandess of the library (**Fragment Library Types**). In brief you have to specify three letters:
+## Quantifying transcript expression
+To quantify reads with **Salmon**, we need to specify the type of the sequencing library (**Fragment Library Types**) using three letters:
 
 **The first:**
 
@@ -49,7 +53,8 @@ For aligning with **Salmon** we need to specify the strandess of the library (**
 |F|read 1 (or single-end read) comes from the forward strand|
 |R|read 1 (or single-end read) comes from the reverse strand|
 
-In our case we have **Inward**, **Stranded** and **Reverse**. Moreover if we want to assign the reads to the genes too we need to provide a GTF file with correlation between transcripts and genes (option **-g**).
+<br/>
+From the STAR output for read counts we already know that for the analyzed experiment the **Inward**, **Stranded** and **Reverse** library was used. If we want to assign the reads to the genes (option **-g**) in addition to transcripts we have to provide a GTF file corresponding to the transcript version which was used to build the index.
 
 ```{bash}
 $RUN salmon quant -i indexes/transcripts -l ISR \
@@ -67,7 +72,7 @@ Version Info: This is the most recent version of salmon.
 ....
 ```
 
-We can check the results inside the folder 
+We can check the results inside the folder "alignments".
 
 ```{bash}
 ls alignments/salmon_A549_0_1/
@@ -75,7 +80,8 @@ ls alignments/salmon_A549_0_1/
 aux_info  cmd_info.json  lib_format_counts.json  libParams  logs  quant.genes.sf  quant.sf
 ```
 
-And in particular the file **quant.genes.sf**, that is a tabular file with the following information:
+For explanation of all output files, see the [Salmon documentation](https://salmon.readthedocs.io/en/latest/file_formats.html).
+The most interesting to us the file **quant.genes.sf**, that is a tab-separated file containing the following information:
 
 
 |Column |Meaning |   
@@ -94,6 +100,11 @@ ENSG00000285803.1	1152	1116.21	7.96961	15.764
 ENSG00000285712.1	1590	1545.58	2.19064	6
 ENSG00000285824.1	1120	860.855	6.91601	10.551
 ENSG00000285884.1	790	515.683	3.28285	3
+...
+```
+
+There is also similar formatted file providing read counts per transcript:
+```{bash}
 
 head -n 5 alignments/salmon_A549_0_1/quant.sf 
 Name	Length	EffectiveLength	TPM	NumReads
@@ -101,32 +112,11 @@ ENST00000016171.5	2356	1970.742	659.861626	2304.468
 ENST00000020673.5	4183	5925.497	0.000000	0.000
 ENST00000173785.4	925	868.802	0.000000	0.000
 ENST00000181796.6	3785	3216.057	0.000000	0.000
-```
-We will use this information for calculating differential expression (DE) analysis. 
-
-# Combining reports
-At this point we can summarize the work done by using the tool [**multiqc**](https://multiqc.info/). First we link our mapping results to QC.
-
-```{bash}
-cd QC/
-ln -s ../alignments/* .
-```
-
-Then we join the different analyses:
-
-```{bash}
-$RUN multiqc .
-[INFO   ]         multiqc : This is MultiQC v1.7 (7d02b24)
-[INFO   ]         multiqc : Template    : default
-[INFO   ]         multiqc : Searching 'QC/'
-Searching 70 files..  [####################################]  100% 
 ...
-
-firefox multiqc_report.html
 ```
 
-Here the result:
+We will use information on read counts for genes from .quant.genes.sf files for the differential expression (DE) analysis. 
 
-<img src="images/multiqc.png"  align="middle" />
+
 
 <br/>
