@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Aln practical
+title: Mapping with STAR
 navigation: 12
 ---
 
@@ -135,7 +135,7 @@ Select the output according to the strandedness of your data. Note, if you have 
 
 For example, in the stranded protocol shown in "Library preparation", Read 1 is mapped to the antisense strand (this is also true for single-end reads), while Read 2, to the sense strand.
 
-**What protocol, stranded or unstranded, was used for this RNA-seq data?**
+**Which protocol, stranded or unstranded, was used for this RNA-seq data?**
 
 ```{bash}
 more alignments/A549_0_1ReadsPerGene.out.tab
@@ -164,19 +164,19 @@ grep -v "N_" alignments/A549_0_1ReadsPerGene.out.tab | awk '{unst+=$2;forw+=$3;r
 ```
 
 It can be seen that only 153,677 Reads 1 (forward) were mapped to known genes; while 24,27,536 Reads 2 (reverse) were mapped to known genes.
-This means that the protocol used for this mRNA-Seq experiment was stranded; when the reverse complement of input mRNA was seqeunced. 
+This means that the protocol used for this mRNA-Seq experiment was stranded; and the reverse complement of mRNA was sequenced. 
 
 <br/>
 
 **EXERCISE** 
 * Scroll the file alignments/A549_0_1ReadsPerGene.out.tab further to find genes for which read 1 count was much more than read 2 count. Why is it so? (look at the gene in Ensemble)
-* Look up also some gene for which read 1 count was comparable with read 2 count. What can you tell about this gene?
+* Look up also a gene for which read 1 count was comparable with read 2 count. What can you tell about this gene?
 
 <br/>
 
 ## BAM format
 
-The **BAM** format is a compressed version of the [**SAM**](https://samtools.github.io/hts-specs/SAMv1.pdf) (which is a plain text). To explore the BAM file, we have to convert it to the SAM format by using [**samtools**](http://samtools.sourceforge.net/). Note that we use the parameter **-h** to show also the header that is hidden by default. 
+The **BAM format** is a compressed version of the [**SAM format**](https://samtools.github.io/hts-specs/SAMv1.pdf) (which is a plain text) and cannot thus being seen as a text. To explore the BAM file, we have to convert it to the SAM format by using [**samtools**](http://samtools.sourceforge.net/). Note that we use the parameter **-h** to show also the header that is hidden by default. 
 
 ```{bash}
 $RUN samtools view -h alignments/A549_0_1Aligned.sortedByCoord.out.bam | head -n 10
@@ -221,7 +221,7 @@ The rest is a read alignment.
 SIGAR string 13M174562N32M6S means 13 bases equal to the reference (M), 174562 bases were not mapping (that is, 1 insertion) (N), 32 bases were mapped (M), and 6 bases were soft clipped (S).
 You can use [this website for the translation of FLAG and SIGAR values into plain English](http://blog.biochen.com/FlagExplain.html).
 
-Extra fields are often present and are different among aligner tools [https://samtools.github.io/hts-specs/SAMtags.pdf](https://samtools.github.io/hts-specs/SAMtags.pdf). In our case we have:
+Extra fields are often present and differ among aligner tools [https://samtools.github.io/hts-specs/SAMtags.pdf](https://samtools.github.io/hts-specs/SAMtags.pdf). In our case we have:
 
 | Field|Meaning |   
 | :----: | :---- |
@@ -235,9 +235,9 @@ definition.*
 
 <br/>
 
-## File conversion and alignment QC
+## BAM/SAM/CRAM file conversion and Alignment QC
 
-Let's now convert BAM to SAM:
+Let's convert BAM to SAM:
 
 ```{bash}
 $RUN samtools view -h alignments/A549_0_1Aligned.sortedByCoord.out.bam > alignments/A549_0_1.sam
@@ -247,7 +247,9 @@ ls -alht alignments/A549_0_1*[sb]am
 -rw-r--r-- 1 lcozzuto Bioinformatics_Unit 320M Apr 30 18:55 A549_0_1Aligned.sortedByCoord.out.bam
 ```
 
-We can see that the SAM alignment is 5 times bigger than the sam one. A more efficient way to store the alignment is to use the [**CRAM format**](https://samtools.github.io/hts-specs/CRAMv3.pdf). For converting a **bam** to **cram** we need to have unzipped and indexed version of our genome.
+You can see that the SAM file is 5 times larger than the BAM file. 
+Yet, the more efficient way to store the alignment is to use the [**CRAM format**](https://samtools.github.io/hts-specs/CRAMv3.pdf). CRAM is fully compatible with BAM, and main repositories, such as GEO and SRA, accept alignments in the CRAM format. [UCSC Genome Browser can visualize both BAM and CRAM files](https://genome.ucsc.edu/goldenPath/help/cram.html). It is now a widly recommended format for storing alignments.
+To convert **BAM** to **CRAM**, we have to provide unzipped and indexed version of the genome.
 
 ```{bash}
 $RUN samtools faidx annotations/Homo_sapiens.GRCh38.dna.chromosome.10.fa
@@ -260,14 +262,16 @@ ls -alht A549_0_1*.*am
 -rw-r--r-- 1 lcozzuto Bioinformatics_Unit 320M Apr 30 18:55 A549_0_1Aligned.sortedByCoord.out.bam
 ```
 
-We saved in this way 50% more space than using the **bam** format. Let's remove the sam format.
+You can see that a .cram file is as twice as smaller than a .bam file.
+Let's remove the .sam file:
 ```{bash}
 rm alignments/*.sam 
 ```
 
+<br/>
 
-
-We can check the quality of the resulting alignment running the tool [**Qualimap**](http://qualimap.bioinfo.cipf.es/) specifying the kind of analysis (**rnaseq**), the presence of paired end reads within the bam file (**-pe**) and the strand of the library (**-p strand-specific-reverse**). 
+## ALignment QC
+The quality of the resulting alignment can be checked using the tool [**QualiMap**](http://qualimap.bioinfo.cipf.es/). To run QualiMap, we specify the kind of analysis (**rnaseq**), the presence of paired-end reads within the bam file (**-pe**) and the strand of the library (**-p strand-specific-reverse**). 
 
 ```{bash}
 $RUN qualimap rnaseq -pe -bam alignments/A549_0_1Aligned.sortedByCoord.out.bam \
@@ -283,24 +287,26 @@ Built on 2016-10-03 18:14
 ....  
 ```
 
-We can check the final report again with a browser like firefox:
+We can check the final report in a browser like Firefox:
 
 ```{bash}
 firefox QC/qualimapReport.html
 ```
 <img src="images/qualimap1.png"  align="middle" />
 
-The report gives many useful information like the total number of mapped reads, the amount of reads mapping to exons, introns or intergenics and the bias towards one of the end of the mRNA (that can give information about RNA integrity or protocol used). 
+The report gives a lot of useful information, such as the total number of mapped reads, the amount of reads mapped to exons, introns or intergenic regions, and the bias towards one of the ends of mRNA (that can give information about RNA integrity or a protocol used). 
 
 <img src="images/qualimap2.png"  align="middle" />
 
-Looking at the gene coverage we see a bias towards 5' that is compatible with the kind of stranded protocol used (it is because of reverse transcriptase).
+Looking at the gene coverage we can see a bias towards 5'-end that is compatible with the kind of stranded protocol used.
 
 <img src="images/qualimap4.png"  align="middle" />
 
-Finally we can check that most of our reads map to the exonic part, with little o no contamination of total RNA.
+Finally, we can see that the majority of reads map to the exons.
 
 <img src="images/qualimap3.png"  align="middle" />
+
+<br/>
 
 # Read mapping using Salmon
 For indexing with **Salmon** we need to use transcripts sequences in a fasta file. **Salmon** does not need any decompression of the input so we can index by using this command:
