@@ -5,8 +5,7 @@ navigation: 12
 ---
 
 # Mapping using STAR
-
-* For the STAR running options, see [STAR Manual](http://labshare.cshl.edu/shares/gingeraslab/www-data/dobin/STAR/Releases/FromGitHub/Old/STAR-2.5.3a/doc/STARmanual.pdf).
+For the **STAR** running options, see [STAR Manual](http://labshare.cshl.edu/shares/gingeraslab/www-data/dobin/STAR/Releases/FromGitHub/Old/STAR-2.5.3a/doc/STARmanual.pdf).
 
 <br/>
 
@@ -304,10 +303,7 @@ Finally we can check that most of our reads map to the exonic part, with little 
 <img src="images/qualimap3.png"  align="middle" />
 
 # Read mapping using Salmon
-
-We will make indexes using two different programs **STAR** and **Salmon**. The former will need both genome in fasta format and annotation in GTF. The latter instead needs transcripts sequences in a fasta file.
-
-**Salmon** does not need any decompression of the input so we can index by using this command:
+For indexing with **Salmon** we need to use transcripts sequences in a fasta file. **Salmon** does not need any decompression of the input so we can index by using this command:
 
 ```{bash}
 $RUN salmon index -t annotations/gencode.v29.transcripts.fa.gz -i indexes/transcripts
