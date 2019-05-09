@@ -238,6 +238,16 @@ $RUN java -Xmx1024m -jar gsea-3.0.jar
 
 <img src="images/gsea_interface.png" width="800" align="middle" />
 
+In the *Steps in GSEA analysis* (upper left corner):
+
+* Go to **Load data**: select **gsea_normalized_counts.txt** and **gsea_phenotypes.cls** and load.
+
+<img src="images/gsea_load_files.png" width="800" align="middle" />
+
+* Go to **Run GSEA**
+
+<img src="images/gsea_run_parameters.png" width="900" align="middle" />
+
 ------------
 
 PENDING FINISHING
