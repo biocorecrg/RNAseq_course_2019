@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Read trimming
+title: Read QC and trimming
 navigation: 10
 ---
 # Pre-processing of sequencing reads
@@ -50,7 +50,7 @@ Below is an example of a poor quality dataset. As you can see, the average quali
 <img src="images/bad_fastqc.png" width="800"/>
 
 
-**FastQ Screen** requires a number of databases to be installed. A number of prepared by the authors of the program databases can be downloaded by using the following command (**DO NOT LAUNCH IT IN THE CLASS!!! because it will take a while**):
+**FastQ Screen** requires a number of databases to be installed. **Note, the program is included in the Docker and Singularity images but the databases are not.**  A number of databases prepared by the authors of the program can be downloaded by using the following command (**DO NOT LAUNCH IT IN THE CLASS because it will take a while!!! But you might want to do it when doing the Final project**):
 
 ```{bash}
 $RUN fastq_screen --get_genomes
@@ -91,7 +91,7 @@ Making reduced sequence file with ratio 711:1
 ...
 ```
 
-Below is shown an example of the result aligning reads from fastq_screen.conf A549_0_1_1.fastq.gz to different databases to detect contaminations, failure of ribosomal depletion, and other artefacts of sequencing. You can download them here 
+Below is an example of the FastQ Screen results for A549_0_1_1.fastq.gz which we prepared for you. You can download the files as: 
 
 ```{bash}
 wget https://biocorecrg.github.io/RNAseq_course_2019/precomp_res/A549_0_1_fastq_screen.tar.gz
@@ -113,7 +113,7 @@ firefox QC/A549_0_1_fastq_screen/A549_0_1chr10_1_screen.html
 
 ## Initial processing of sequencing reads
 
-Before mapping reads to the genome/transcriptome or performing a de novo assembly, the reads must be pre-processed as follows: 
+Before mapping reads to the genome/transcriptome or performing a de novo assembly, the reads has to be pre-processed if needed as follows: 
 * Demultiplex by index or barcode (it is usually done in the sequencing facility)
 * Remove adapter sequences
 * Trim reads by quality
@@ -147,11 +147,11 @@ Approx 25% complete for subsample_to_trim.fq.gz
 
 Once you got the FastQC report (above), how to find out the sequence(s) of the adapter(s) that needs to be trimmed?
 
-
+<br/>
 
 There are many tools for trimming reads and removing adapters, such as **Trim Galore!**, **Trimmomatic**, **Cutadapt**, [**skewer**](https://github.com/relipmoc/skewer), **AlienTrimmer**, **BBDuk**, and the most recent **SOAPnuke** and [**fastp**](https://www.ncbi.nlm.nih.gov/pubmed/30423086). 
 
-Let's use **skewer7** to trim the Illumina small RNA 3' adapter.  
+Let's use **skewer** to trim the Illumina small RNA 3' adapter.  
 
 ```{bash}
 $RUN skewer resources/subsample_to_trim.fq.gz -x TGGAATTCTCGGGTGCCAAGG -o QC/subsample_to_trim
@@ -208,5 +208,5 @@ Let's explore the tool **skewer** in more detail, using "skewer --help" command.
 * Which parameter indicates the threshold on the average read quality to be filtered out?
 * Using skewer filter out reads in "subsample_to_trim.fq-trimmed.fastq" that have average quality below 30 and trim them on 3'-end until the base quality is reached 30. How many reads were filtered out and how many remained?
 
-
+<br/>
 
