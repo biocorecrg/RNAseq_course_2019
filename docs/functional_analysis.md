@@ -156,7 +156,7 @@ The statistical significant (nominal p-value) of the **Enrichment Score (ES)** i
 3. **Adjustment for Multiple Hypothesis Testing**
 Calculation of the FDR ti control the proportion of falses positives.
 
-<img src="images/gsea_explained.gif" width="900" align="middle" />
+<img src="images/gsea_explained.gif" width="800" align="middle" />
 
 See the [GSEA Paper](https://www.ncbi.nlm.nih.gov/pubmed/16199517) for more details on the algorithm.
 
@@ -238,11 +238,11 @@ $RUN java -Xmx1024m -jar gsea-3.0.jar
 
 <img src="images/gsea_interface.png" width="800" align="middle" />
 
-In the *Steps in GSEA analysis* (upper left corner):
+In *Steps in GSEA analysis* (upper left corner):
 
 * Go to **Load data**: select **gsea_normalized_counts.txt** and **gsea_phenotypes.cls** and load.
 
-<img src="images/gsea_load_files.png" width="800" align="middle" />
+<img src="images/gsea_load_files.png" width="650" align="middle" />
 
 * Go to **Run GSEA**
 
@@ -252,15 +252,22 @@ In the *Steps in GSEA analysis* (upper left corner):
 
 <img src="images/gsea_results_index_commented.png" width="800" align="middle" />
 
-* **enrichments results in html**
+* **Enrichments results in html**
 
-<img src="images/gsea_results_stats.png" width="800" align="middle" />
+<img src="images/gsea_results_stats.png" width="900" align="middle" />
 
-* Details
+* Details for one gene set
+  * Summary of enrichment: phenotype, stats (Nominal p-value, FDR q-value, FWER p-value), enrichment scores (ES and Normalized ES)
+  * Enrichment plot
+<img src="images/gsea_results_details1.png" width="900" align="middle" />
 
-<img src="images/gsea_results_details1.png" width="800" align="middle" />
+Table of genes: ranking, individual enrichment scores, core enrichment Yes/No.
 
-<img src="images/gsea_results_details2.png" width="600" align="middle" />
+> From GSEA documentation, regarding core enrichment genes: "*Genes with a Yes value in this column contribute to the leading-edge subset within the gene set. This is the subset of genes that contributes most to the enrichment result.*"
+
+<img src="images/gsea_results_details2.png" width="800" align="middle" />
+
+Heatmap of all genes from that gene set (ranked by GSEA) for each sample:
 
 <img src="images/gsea_results_details3.png" width="500" align="middle" />
 
