@@ -56,3 +56,6 @@ singularity pull docker://biocorecrg/rnaseq2019:1.5
 * Make sure you are set up to run the software for the analysis outside the training room.
 * Start downloading data for the [**Final project**](https://biocorecrg.github.io/RNAseq_course_2019/challenge.html).
 
+<br/>
+
+
