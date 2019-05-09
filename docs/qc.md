@@ -50,16 +50,16 @@ Below is an example of a poor quality dataset. As you can see, the average quali
 <img src="images/bad_fastqc.png" width="800"/>
 
 
-**Fastq Screen** requires a number of databases to be installed. A number of prepared by the authors of the program databases can be downloaded by using the following command (**DO NOT LAUNCH IT NOW!!!**):
+**FastQ Screen** requires a number of databases to be installed. A number of prepared by the authors of the program databases can be downloaded by using the following command (**DO NOT LAUNCH IT IN THE CLASS!!! because it will take a while**):
 
 ```{bash}
 $RUN fastq_screen --get_genomes
 ``` 
 
-This will download 11 genomes (arabidopsis, drosophila, E. coli, human, lambda, mouse, mitochondria, phiX, rat, worm and yeast) and 3 collection of sequences (adapters, vectors, rRNA) indexed with bowtie2. This step is quite slow so we are not going to launch it now. The files will be stored inside **FastQ_Screen_Genomes** folder.
-We have to modify the fastq_screen.conf file using the real path of the executable **/usr/local/bin/bowtie2** and the one of the genome.
+This will download Bowtie indexes for 11 genomes (arabidopsis, drosophila, E. coli, human, lambda, mouse, mitochondria, phiX, rat, worm and yeast) and 3 collection of sequences (adapters, vectors, rRNA). The files will be downloaded in the **FastQ_Screen_Genomes** folder. The file **fastq_screen.conf** will be also installed in this folder. You can explore this file to see which databases have been downloaded and which software the tool uses. To use the tool, you will have 
+to modify the fastq_screen.conf by providing the full path to the Bowtie2 executable **/usr/local/bin/bowtie2** and full paths to the downloaded index files files.
 
-To execute Fastq Screen: 
+To execute FastQ Screen: 
 
 ```{bash}
 $RUN fastq_screen --conf FastQ_Screen_Genomes/fastq_screen.conf \
