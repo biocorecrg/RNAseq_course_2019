@@ -1,11 +1,11 @@
 ---
 layout: page
-title: Linux Containers
+title: Linux containers
 navigation: 2
 ---
 
-# Basic concepts on Linux Containers
-During this course we will use a number of tools that are stored within a [**Linux Container**](https://en.wikipedia.org/wiki/LXC). 
+# Basic concepts on Linux containers
+During this course we will use a number of tools that are stored within a [**Linux container**](https://en.wikipedia.org/wiki/LXC). 
 
 A Linux Container can be seen as a minimal virtual environment that can be used in any Linux-compatible machine. Using this container allows researchers to save on time and resources related to installation of tools and libraries and improves the reproducibility of the analysis. 
 In order for all of us to use exactly the same tools (and their versions) during the course and when you will do your final project, we made up a [**Docker**](https://www.docker.com/) image from [this Dockerfile](https://github.com/biocorecrg/RNAseq_course_2019/blob/master/Dockerfile) and uploaded it in [DockerHub](https://cloud.docker.com/u/biocorecrg/repository/docker/biocorecrg/rnaseq2019). 
@@ -53,6 +53,6 @@ singularity pull docker://biocorecrg/rnaseq2019:1.5
 <br/>
 
 **HOMEWORK for today** 
-* Make sure you are good to run the software for the analysis outside the training room.
-* Start downloading data for the [Final project[(https://biocorecrg.github.io/RNAseq_course_2019/challenge.html).
+* Make sure you are set up to run the software for the analysis outside the training room.
+* Start downloading data for the [**Final project**](https://biocorecrg.github.io/RNAseq_course_2019/challenge.html).
 
