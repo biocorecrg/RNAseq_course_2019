@@ -45,7 +45,7 @@ If you want to run the analysis on your own computer (and if your computer has e
 singularity pull docker://biocorecrg/rnaseq2019:1.5
 ```
 
-3. (should work on any OS) Install Docker (you will ahve to register at Dockerhub) and Singularity on your computer and make the Singularity image: 
+3. (should work on any OS) [Install Docker](https://docs.docker.com/v17.12/install/) (you will have to register at Dockerhub) and [install Singularity](https://www.sylabs.io/guides/3.0/user-guide/installation.html) on your computer and make the Singularity image: 
 ```{bash}
 singularity pull docker://biocorecrg/rnaseq2019:1.5
 ```
