@@ -246,7 +246,23 @@ In the *Steps in GSEA analysis* (upper left corner):
 
 * Go to **Run GSEA**
 
-<img src="images/gsea_run_parameters.png" width="900" align="middle" />
+<img src="images/gsea_parameters_commented.png" width="800" align="middle" />
+
+* Results: **index.html**
+
+<img src="images/gsea_results_index_commented.png" width="800" align="middle" />
+
+* **enrichments results in html**
+
+<img src="images/gsea_results_stats.png" width="800" align="middle" />
+
+* Details
+
+<img src="images/gsea_results_details1.png" width="800" align="middle" />
+
+<img src="images/gsea_results_details2.png" width="600" align="middle" />
+
+<img src="images/gsea_results_details3.png" width="500" align="middle" />
 
 ------------
 
