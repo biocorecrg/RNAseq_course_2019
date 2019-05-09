@@ -50,7 +50,7 @@ Below is an example of a poor quality dataset. As you can see, the average quali
 <img src="images/bad_fastqc.png" width="800"/>
 
 
-**FastQ Screen** requires a number of databases to be installed. **Note, the program is included in the Docker and Singularity images but the databases are not.**  A number of databases prepared by the authors of the program can be downloaded by using the following command (**DO NOT LAUNCH IT IN THE CLASS because it will take a while!!! But you might want to do it when doing the Final project**):
+**FastQ Screen** requires a number of databases to be installed. **Note, the program is included in the Docker and Singularity images but the databases are not.**  A number of databases prepared by the authors of the program can be downloaded by using the following command (**DO NOT LAUNCH IT IN THE CLASS because it will take a while!!! But you will need to do it when completing the [Final project](https://biocorecrg.github.io/RNAseq_course_2019/challenge.html)**):
 
 ```{bash}
 $RUN fastq_screen --get_genomes
@@ -113,13 +113,13 @@ firefox QC/A549_0_1_fastq_screen/A549_0_1chr10_1_screen.html
 
 ## Initial processing of sequencing reads
 
-Before mapping reads to the genome/transcriptome or performing a de novo assembly, the reads has to be pre-processed if needed as follows: 
+Before mapping reads to the genome/transcriptome or performing a *de novo* assembly, the reads has to be pre-processed, if needed, as follows: 
 * Demultiplex by index or barcode (it is usually done in the sequencing facility)
 * Remove adapter sequences
 * Trim reads by quality
 * Discard reads by quality/ambiguity
-* Filter reads by k-mer coverage (recommended for the de novo assembly)
-* Normalize k-mer coverage (recommended for the de novo assembly)
+* Filter reads by k-mer coverage (recommended for the *de novo* assembly)
+* Normalize k-mer coverage (recommended for the *de novo* assembly)
 
 As shown before, both the presence of low quality reads and adapters are reported in the **fastqc** output. 
 
@@ -145,7 +145,7 @@ Approx 25% complete for subsample_to_trim.fq.gz
 
 ## EXERCISE
 
-Once you got the FastQC report (above), how to find out the sequence(s) of the adapter(s) that needs to be trimmed?
+Once you got the FastQC report (above), how to figure out the sequence(s) of the adapter(s) that needs to be trimmed?
 
 <br/>
 
