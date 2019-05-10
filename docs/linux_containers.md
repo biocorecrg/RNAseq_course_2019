@@ -38,7 +38,7 @@ If you are not a CRG user ask your IT to install this Singularity image on your 
 
 <br/>
 
-If you want to run the analysis on your own computer (**and if your computer has enough RAM; e.g., ~30GB of RAM is needed to build the STAR index for a mouse genome**), you have the following options:
+If you want to run the analysis on your own computer (**and if your computer has enough RAM; e.g., for a mouse genome, ~30GB of RAM is needed to build the STAR index and ~6GB to build the Salmon index**), you have the following options:
 
 1. *(difficult, time-consuming and might be impossible to install some software on some OSs)* Install all sofware on your own one-by-one; for detail, see [this Dockerfile](https://github.com/biocorecrg/RNAseq_course_2019/blob/master/Dockerfile).
 
