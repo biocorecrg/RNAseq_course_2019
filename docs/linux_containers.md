@@ -38,7 +38,7 @@ If you are not a CRG user ask your IT to install this Singularity image on your 
 
 <br/>
 
-If you want to run the analysis on your own computer (**and if your computer has enough RAM; e.g., 20+GB of RAM is needed to build the STAR index for a mouse genome**), you have the following options:
+If you want to run the analysis on your own computer (**and if your computer has enough RAM; e.g., ~30GB of RAM is needed to build the STAR index for a mouse genome**), you have the following options:
 
 1. *(difficult, time-consuming and might be impossible to install some software on some OSs)* Install all sofware on your own one-by-one; for detail, see [this Dockerfile](https://github.com/biocorecrg/RNAseq_course_2019/blob/master/Dockerfile).
 
@@ -56,7 +56,7 @@ singularity pull docker://biocorecrg/rnaseq2019:1.5
 
 **HOMEWORK for today** 
 * Make sure you are set up to run the software for the analysis outside the training room.
-* Start downloading data for the [**Final project**](https://biocorecrg.github.io/RNAseq_course_2019/challenge.html).
+* Start downloading data for the [**Final project**](https://biocorecrg.github.io/RNAseq_course_2019/challenge.html). Since download, as well as many other steps of the RNA-seq analysis, computationally extensive, you have to run it on the CRG cluster either interactively (via qlogin) or as a batch job (using qsub); for detail, refer to [http://www.linux.crg.es/index.php/Cluster_summary_help](http://www.linux.crg.es/index.php/Cluster_summary_help).
 
 <br/>
 
