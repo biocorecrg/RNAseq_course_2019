@@ -59,6 +59,8 @@ $RUN fastq_screen --get_genomes
 This will download Bowtie indexes for 11 genomes (arabidopsis, drosophila, E. coli, human, lambda, mouse, mitochondria, phiX, rat, worm and yeast) and 3 collection of sequences (adapters, vectors, rRNA). The files will be downloaded in the **FastQ_Screen_Genomes** folder. The file **fastq_screen.conf** will be also installed in this folder. You can explore this file to see which databases have been downloaded and which software the tool uses. To use the tool, you will have 
 to modify the fastq_screen.conf by providing the full path to the Bowtie2 executable **/usr/local/bin/bowtie2** and full paths to the downloaded index files files.
 
+FastQ Screen runs check on a random subset of 100,000 reads (that can be changed using pption --subset).
+
 To execute FastQ Screen: 
 
 ```{bash}
