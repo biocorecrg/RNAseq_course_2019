@@ -38,8 +38,10 @@ If you are not a CRG user ask your IT to install this Singularity image on your 
 
 <br/>
 
-If you want to run the analysis on your own computer (and if your computer has enough RAM), you have the following options:
+If you want to run the analysis on your own computer (**and if your computer has enough RAM; e.g., to build the STAR index for a mouse genome more than 20GB of RAM is needed**), you have the following options:
+
 1. *(difficult, time-consuming and might be impossible to install some software on some OSs)* Install all sofware on your own one-by-one; for detail, see [this Dockerfile](https://github.com/biocorecrg/RNAseq_course_2019/blob/master/Dockerfile).
+
 2. *(easiest; should work on any OS)* [Install Virtual Box](https://www.virtualbox.org/wiki/Downloads) and [download the virtual machine for this course](https://public-docs.crg.es/biocore/projects/training/vm/2019/). It contains Singularity and all the programms to run the analysis, but it doesn't contain the Singularity image used in this course; you will need to make it:
 ```{bash}
 singularity pull docker://biocorecrg/rnaseq2019:1.5
