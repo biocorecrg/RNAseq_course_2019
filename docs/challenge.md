@@ -21,7 +21,9 @@ On May 27th, we will discuss the results and questions.
 
 <br/>
 
-Since many steps of the RNA-seq analysis are computationally extensive, you have to run it on the CRG cluster either interactively (via qlogin) or as a batch job (using qsub); for detail, refer to [http://www.linux.crg.es/index.php/Cluster_summary_help](http://www.linux.crg.es/index.php/Cluster_summary_help).
+## IMPORTANT
+Since many steps of the RNA-seq analysis are computationally extensive, you have to run them on the CRG cluster either interactively (via qlogin) or as a batch job (using qsub); for detail, refer to [http://www.linux.crg.es/index.php/Cluster_summary_help](http://www.linux.crg.es/index.php/Cluster_summary_help).
+Also, make sure to check the parameters of programms you will be using as some of them allow multi-threading.
 
 <br/>
 
