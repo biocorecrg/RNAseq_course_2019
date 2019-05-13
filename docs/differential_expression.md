@@ -49,7 +49,7 @@ For additional information regarding the tool and the algorithm, please refer to
 
 ### Tutorial on basic DESeq2 usage for differential analysis of gene expression
 
-* In this tutorial, we will use the counts calculated from the mapping on **all chromosomes**:
+* In this tutorial, we will use the counts calculated from the mapping on **all chromosomes** (in the two last days we practiced QC and mapping for data of only one chromosome but here we consider all chromosomes):
 <br>
 Get the data for the full data set:
 
@@ -66,6 +66,12 @@ tar -zxvf full_data.tar.gz
 # Remove full_data.tar.gz once extraction is completed
 rm full_data.tar.gz
 ```
+
+**Exercise**
+* Explore count formats for both **STAR** and **Salmon**: what information do you get in each ?
+  * STAR: ReadsPerGene.out.tab extension.
+  * Salmon: quant.sf files.
+* How many rows are there in ~/full_data/counts_star/A549_0_1ReadsPerGene.out.tab and ~/full_data/counts_salmon/A549_0_1/quant.sf ? How do you explain the difference ?
 
 
 ### Raw count matrices
