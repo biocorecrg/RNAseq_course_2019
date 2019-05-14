@@ -408,40 +408,56 @@ resultsNames(se_star2)
 	# contrast: the column from the metadata that is used for the grouping of the samples (Time), then the baseline (t0) and the group compared to the baseline (t25) -> results will be as "t25 vs t0"
 de <- results(object = se_star2, 
 		name="Time_t25_vs_t0")
+```
+To generate more accurate log2 foldchange estimates, DESeq2 allows for the **shrinkage of the LFC** estimates toward zero when the information for a gene is low, which could include:
+        * Low counts
+        * High dispersion values
 
-# check first rows
+```{r}
+# processing the same results as above but including the log2FoldChange shrinkage
+        # useful for visualization and gene ranking
+de_shrink <- lfcShrink(dds = se_star2,
+                 coef="Time_t25_vs_t0",
+		 type="apeglm")
+
+# check first rows of both results
 head(de)
-
-# add the more comprehensive gene symbols
-de_symbols <- merge(unique(tx2gene[,2:3]), data.frame(ID=rownames(de), de), by=1, all=F)
-
-# write differential expression analysis result to text file
-write.table(de_symbols, "deseq2_results.txt", quote=F, col.names=T, row.names=F, sep="\t")
+head(de_shrink)
 ```
 
-
-#### DESeq2 output explained
-
-To generate more accurate log2 foldchange estimates, DESeq2 allows for the **shrinkage of the LFC** estimates toward zero when the information for a gene is low, which could include:
-	* Low counts
- 	* High dispersion values
+#### DESeq2 output
 
 * **log2 fold change**:  
 A positive fold change indicates an increase of expression while a negative fold change indicates a decrease in expression for a given comparison.<br>
 This value is reported in a **logarithmic scale (base 2)**: for example, a log2 fold change of 1.5 in the "t25 vs t0 comparison" means that the expression of that gene is increased, in the t25 relative to the t0, by a multiplicative factor of 2^1.5 ≈ 2.82.
-* **pvalue**: 
+* **pvalue**:
 Wald test p-value: Indicates whether the gene analysed is likely to be differentially expressed in that comparison. **The lower the more significant**.
-* **padj**: 
+* **padj**:
 Bonferroni-Hochberg adjusted p-values (FDR): **the lower the more significant**. More robust that the regular p-value because it controls for the occurrence of **false positives**.
-* **baseMean**: 
+* **baseMean**:
 Mean of normalized counts for all samples.
-* **lfcSE**: 
+* **lfcSE**:
 Standard error of the log2FoldChange.
-* **stat**: 
+* **stat**:
 Wald statistic: the log2FoldChange divided by its standard error.
 
+
+```{r}
+# check the data for a highly expressed gene
+de[rownames(de)=="ENSG00000128016.5",]
+de_shrink[rownames(de_shrink)=="ENSG00000128016.5",]
+
+# add the more comprehensive gene symbols to the de_shrink
+de_symbols <- merge(unique(tx2gene[,2:3]), data.frame(ID=rownames(de_shrink), de_shrink), by=1, all=F)
+
+# write differential expression analysis result to a text file
+write.table(de_symbols, "deseq2_results.txt", quote=F, col.names=T, row.names=F, sep="\t")
+```
+
 **Exercise**
-* What are the log2FoldChange and padj values of genes "ENSG00000157654.17" and "ENSG00000130821.15" ? What can you tell about those ?
+* What are the log2FoldChange and padj values of genes "ENSG00000128016.5" and "ENSG00000130821.15" ? What can you tell about those ?
+* What about the **padj** of those genes ?
+* Check the expression of those genes in each sample (in **normalized_counts.txt**).
 
 
 #### Gene selection
@@ -467,14 +483,14 @@ The Benjamini-Hochberg procedure controls the False Discovery Rate (FDR).
 A FDR adjusted p-value of 0.05 implies that 5% of **significant tests** will result in false positives.
 <br>
 
-* We select our list of differentially expressed genes betwen t25 and t0 based on padj < 0.05 and log2FC > 0.5 or log2FC < -0.5 (However, not that *selecting by log2FoldChange is not required if the selection is done using the padj*).
+* We select our list of differentially expressed genes betwen t25 and t0 based on padj < 0.05 and log2FC > 0.5 or log2FC < -0.5 (However, note that *selecting by log2FoldChange is not required if the selection is done using the padj*).
 
 ```{bash}
 cd ~/full_data/deseq2
 
-# column 4 is the log2FoldChange, column 8 is the adjusted p-value (padj)
+# column 4 is the log2FoldChange, column 7 is the adjusted p-value (padj)
 	# keep all columns
-awk '($8 < 0.05 && $4 > 0.5) || ($8 < 0.05 && $4 < -0.5) {print}' deseq2_results.txt > deseq2_results_padj0.05_log2fc0.5.txtl
+awk '($7 < 0.05 && $4 > 0.5) || ($7 < 0.05 && $4 < -0.5) {print}' deseq2_results.txt > deseq2_results_padj0.05_log2fc0.5.txt
 
 # extract only gene IDs (column 1)
 cut -f1 deseq2_results_padj0.05_log2fc0.5.txt > deseq2_results_padj0.05_log2fc0.5_IDs.txt
