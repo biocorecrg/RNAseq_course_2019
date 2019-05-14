@@ -145,6 +145,7 @@ and so on...
 mkdir -p ~/full_data/deseq2/counts_4thcol
 ```
   * Loop around the 6 **ReadsPerGene.out.tab** files and extract the gene ID (1rst column) and the correct counts (4th column).
+
 ```{bash}
 cd ~/full_data/counts_star
 
