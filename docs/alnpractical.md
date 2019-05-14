@@ -269,7 +269,11 @@ rm alignments/*.sam
 <br/>
 
 ## Alignment QC
-The quality of the resulting alignment can be checked using the tool [**QualiMap**](http://qualimap.bioinfo.cipf.es/). To run QualiMap, we specify the kind of analysis (**rnaseq**), the presence of paired-end reads within the bam file (**-pe**) and the strand of the library (**-p strand-specific-reverse**). 
+The quality of the resulting alignment can be checked using the tool [**QualiMap**](http://qualimap.bioinfo.cipf.es/). To run QualiMap, we specify the kind of analysis (**rnaseq**), the presence of paired-end reads within the bam file (**-pe**) and the strand of the library (**-p strand-specific-reverse**). **IMPORTANT**: before running QualiMap ensure enough disk space for a temporary directory ./tmp that the program is required, running the following command:
+```{bash}
+export _JAVA_OPTIONS="-Djava.io.tmpdir=./tmp -Xmx6G"
+```
+
 
 ```{bash}
 $RUN qualimap rnaseq -pe -bam alignments/A549_0_1Aligned.sortedByCoord.out.bam \
@@ -306,4 +310,10 @@ Finally, we can see that the majority of reads map to the exons.
 
 <br/>
 
+**IMPORTANT: When running MultiQC on many samples**
+* Make sure to give to the output folder the name corresponding to a running sample; e.g., ./QC/A549_0_1; otherwise you will end up with files and folders for the last running sample only. 
+* If you run multiqc in parallel for many samples, make sure to create a different tmp-folder for each sample; e.g., ./tmp/A549_0_1.
+* MultiQC is slow because it sorts the BAM file by read names. To speed it up, you can use samtools to sort the BAM files in parallel and using multiple CPUs.
+
+<br/>
 
