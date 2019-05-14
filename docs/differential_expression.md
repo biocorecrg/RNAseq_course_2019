@@ -140,20 +140,16 @@ and so on...
 <br><br>
 **Exercise**
 * Prepare the 6 files needed for our analysis, from the STAR output, and save them in the <b>counts_4thcol</b> directory:
-  * Create the sub-directory **counts_4thcol** inside the deseq2 directory:
+  
+
+* Create the sub-directory **counts_4thcol** inside the deseq2 directory:
 ```{bash}
 mkdir -p ~/full_data/deseq2/counts_4thcol
 ```
 
-<details>
-<summary>
-correction
-</summary>
-
-Loop around the 6 **ReadsPerGene.out.tab** files and extract the gene ID (1rst column) and the correct counts (4th column).
+* Loop around the 6 **ReadsPerGene.out.tab** files and extract the gene ID (1rst column) and the correct counts (4th column).
 
 ```{bash}
-
 cd ~/full_data/counts_star
 
 for i in *ReadsPerGene.out.tab
@@ -161,10 +157,7 @@ do echo $i
 # retrieve the first (gene name) and fourth column (raw reads)
 cut -f1,4 $i | grep -v "_" > ~/full_data/deseq2/counts_4thcol/`basename $i ReadsPerGene.out.tab`_counts.txt
 done
-
 ```
-
-</details>
 
 <br>
 
@@ -208,10 +201,6 @@ The design indicates how to model the samples: what we want to **measure** and w
 * Prepare this file (tab-separated columns) in a text editor: save it as **sample_sheet_A549.txt in the deseq2 directory**: you can do it "manually" using a text editor, or you can try using the command line.
 <br>
 
-<details>
-<summary>
-correction
-</summary>
 
 ```{bash}
 # A not so elegant solution:
@@ -220,7 +209,6 @@ cat <(echo -e "SampleName\tFileName\tTime\tDexamethasone") <(paste <(ls counts_4
 
 ```
 
-</details>
 
 *Note that the same sample sheet will be used for both **the STAR and the Salmon** DESeq2 analysis.*
 
@@ -437,9 +425,9 @@ resultsNames(se_star2)
 de <- results(object = se_star2, 
 		name="Time_t25_vs_t0")
 ```
-To generate more accurate log2 foldchange estimates, DESeq2 allows for the **shrinkage of the LFC** estimates toward zero when the information for a gene is low, which could include:
-        * Low counts
-        * High dispersion values
+To generate more accurate log2 foldchange estimates, DESeq2 allows for the **shrinkage of the LFC** estimates toward zero when the information for a gene is low, which could include:<br>
+- Low counts<br>
+- High dispersion values<br>
 
 ```{r}
 # processing the same results as above but including the log2FoldChange shrinkage
@@ -495,18 +483,18 @@ write.table(de_symbols, "deseq2_results.txt", quote=F, col.names=T, row.names=F,
 
 <br>
 the log2FoldChange gives a **quantitative** information about the expression changes, but does not give an information on the **within-group variability**, hence the reliability of the information:
-<br> 
+<br><br> 
 In the picture below, fold changes for gene A and for gene B between t25 and t0 are the same, however the variability between the replicated samples in gene B is higher, so the result for gene A will be more reliable (i.e. the p-value will be smaller).
 
 <img src="images/RNAseq_dispersion.png" width="450"/>
 
 
 We need to take into account the p-value or, better **the adjusted p-value** (padj).
-<br>
+<br><br>
 Setting a p-value threshold of 0.05 means that there is a **5% chance that the observed result is a false positive**.<br>
 For thousands of simultaneous tests (as in RNA-seq), 5% can result in a large number of false positives.
-<br>
-The Benjamini-Hochberg procedure controls the False Discovery Rate (FDR).
+<br><br>
+The Benjamini-Hochberg procedure controls the False Discovery Rate (FDR) (it is one of many methods to adjust p-values for multiple tetsing).
 <br>
 A FDR adjusted p-value of 0.05 implies that 5% of **significant tests** will result in false positives.
 <br>
