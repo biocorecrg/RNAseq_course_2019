@@ -89,10 +89,10 @@ rm full_data.tar.gz
 | ENSG00000232420.2 | 3 | 2 | 0 | 1 | 2 | 6 |
 
 Let's prepare the matrix for our 6 samples, from the **STAR** output.
+<br><br>
+__REMINDER regarding the STAR output__
 <br>
-__**REMINDER regarding the STAR output**__
-<br>
-The **ReadsPerGene.out.tab** output files of STAR (from option --quantMode GeneCounts) contain 4 columns that correspond to different counts per gene calculated **according to the protocol's strandedness** (see [Aln pratical](https://biocorecrg.github.io/RNAseq_course_2019/alnpractical.html)):
+The **ReadsPerGene.out.tab** output files of STAR (from option --quantMode GeneCounts) contain 4 columns that correspond to different counts per gene calculated **according to the protocol's strandedness** (see [Mapping with STAR pratical](https://biocorecrg.github.io/RNAseq_course_2019/alnpractical.html)):
 * column 1: gene ID
 * column 2: counts for unstranded RNA-seq.
 * column 3: counts for the 1st read strand aligned with RNA
@@ -144,6 +144,12 @@ and so on...
 ```{bash}
 mkdir -p ~/full_data/deseq2/counts_4thcol
 ```
+
+<details>
+<summary>
+correction
+</summary>
+
   * Loop around the 6 **ReadsPerGene.out.tab** files and extract the gene ID (1rst column) and the correct counts (4th column).
 
 ```{bash}
@@ -155,6 +161,9 @@ do echo $i
 cut -f1,4 $i | grep -v "_" > ~/full_data/deseq2/counts_4thcol/`basename $i ReadsPerGene.out.tab`_counts.txt
 done
 ```
+
+</details>
+
 
 #### Prepare data from Salmon
 
@@ -196,6 +205,11 @@ The design indicates how to model the samples: what we want to **measure** and w
 * Prepare this file (tab-separated columns) in a text editor: save it as **sample_sheet_A549.txt in the deseq2 directory**: you can do it "manually" using a text editor, or you can try using the command line.
 <br>
 
+<details>
+<summary>
+correction
+</summary>
+
 ```{bash}
 # A not so elegant solution:
 
@@ -203,6 +217,7 @@ cat <(echo -e "SampleName\tFileName\tTime\tDexamethasone") <(paste <(ls counts_4
 
 ```
 
+</details>
 
 *Note that the same sample sheet will be used for both **the STAR and the Salmon** DESeq2 analysis.*
 
