@@ -150,9 +150,10 @@ mkdir -p ~/full_data/deseq2/counts_4thcol
 correction
 </summary>
 
-  * Loop around the 6 **ReadsPerGene.out.tab** files and extract the gene ID (1rst column) and the correct counts (4th column).
+Loop around the 6 **ReadsPerGene.out.tab** files and extract the gene ID (1rst column) and the correct counts (4th column).
 
 ```{bash}
+
 cd ~/full_data/counts_star
 
 for i in *ReadsPerGene.out.tab
@@ -160,10 +161,12 @@ do echo $i
 # retrieve the first (gene name) and fourth column (raw reads)
 cut -f1,4 $i | grep -v "_" > ~/full_data/deseq2/counts_4thcol/`basename $i ReadsPerGene.out.tab`_counts.txt
 done
+
 ```
 
 </details>
 
+<br>
 
 #### Prepare data from Salmon
 
