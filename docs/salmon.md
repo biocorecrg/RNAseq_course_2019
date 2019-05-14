@@ -18,7 +18,7 @@ To make an index for **Salmon**, we need transcript sequences in the FASTA forma
 
 ```{bash}
 $RUN salmon index -t annotations/gencode.v29.transcripts.fa.gz \
-          -i indexes/transcripts
+          -i indexes/transcripts --gencode
 
 Version Info: This is the most recent version of salmon.
 index ["transcripts"] did not previously exist  . . . creating it
@@ -28,6 +28,8 @@ index ["transcripts"] did not previously exist  . . . creating it
 [....]
 [2019-04-30 18:18:07.251] [jLog] [info] done building index
 ```
+
+We add also the parameter **--gencode** since our data come from **Gencode version 29** and their header contains several identifiers separated by the character **|**. This parameter allows the program to parse the header and keep only the transcript identifier. 
 
 <br/>
 
@@ -57,16 +59,25 @@ To quantify reads with **Salmon**, we need to specify the type of the sequencing
 |R|read 1 (or single-end read) comes from the reverse strand|
 
 <br/>
-From the STAR output for read counts we already know that for the analyzed experiment the **ISR** (**Inward**, **Stranded** and **Reverse**) library was used. If we want to assign the reads to the genes (option **-g**) in addition to transcripts we have to provide a GTF file corresponding to the transcript version which was used to build the Salmon index.
+From the STAR output for read counts we already know that for the analyzed experiment the **ISR** (**Inward**, **Stranded** and **Reverse**) library was used. If we want to assign the reads to the genes (option **-g**) in addition to transcripts we have to provide a GTF file corresponding to the transcript version which was used to build the Salmon index. We can download the whole GTF file here:
+
+```{bash}
+cd annotations
+wget wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_29/gencode.v29.annotation.gtf.gz
+gunzip gencode.v29.annotation.gtf.gz
+cd ../
+```
+Then we can proceed with the mapping.
 
 ```{bash}
 $RUN salmon quant -i indexes/transcripts -l ISR \
     -1 resources/A549_0_1chr10_1.fastq.gz \
     -2 resources/A549_0_1chr10_2.fastq.gz \
     -o alignments/salmon_A549_0_1 \
-    -g annotations/gencode.v29.annotation_chr10.gtf \
+    -g annotations/gencode.v29.annotation.gtf \
     --seqBias \
-    --validateMappings 
+    --validateMappings \
+    -p 4
 
 Version Info: This is the most recent version of salmon.
 ### salmon (mapping-based) v0.13.1
@@ -118,7 +129,8 @@ ENST00000181796.6	3785	3216.057	0.000000	0.000
 ...
 ```
 
-We will use information on read counts for genes from .quant.genes.sf files for the differential expression (DE) analysis. 
+We will use information on read counts for genes from **quant.genes.sf** files for the differential expression (DE) analysis.
+
 
 
 
