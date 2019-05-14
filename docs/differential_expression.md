@@ -37,11 +37,8 @@ This DESeq2 tutorial is widely inspired by the [RNA-seq workflow](http://master.
 
 * Modeling raw counts for each gene:
   * Estimate size factors
-  * Estimate gene-wise dispersions
-  * Fit curve to gene-wise dispersion estimates
-  * Shrink gene-wise dispersion estimates
+  * Estimate dispersions
   * GLM (Generalized Linear Model) fit for each gene
-* Shrinking of log2FoldChanges
 * Testing for differential expression
 <br> 
 <br>
@@ -167,6 +164,9 @@ Prepare the annotation file needed to import the **Salmon** counts: a two-column
 ```{bash}
 cd ~/full_data/deseq2
 
+# Download annotation for all chromosomes
+wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_29/gencode.v29.annotation.gtf.gz
+
 # first column is the transcript ID, second column is the gene ID, third column is the gene symbol
 zcat gencode.v29.annotation.gtf.gz | awk -F "\t" 'BEGIN{OFS="\t"}{if($3=="transcript"){split($9, a, "\""); print a[4],a[2],a[8]}}' > tx2gene.gencode.v29.csv
 
@@ -235,7 +235,7 @@ head(sampletable)
 
 # check the number of rows and the number of columns
 nrow(sampletable) # if this is not 6, please raise your hand !
-ncol(sampletable)
+ncol(sampletable) # if this is not 4, also raise your hand !
 ```
 
 * Load the count data from **STAR** into an **DESeq** object:
@@ -285,7 +285,7 @@ tx2gene <- read.table("tx2gene.gencode.v29.csv",
 		header=F)
 
 # tximport can import data from Salmon, Kallisto, Sailfish, RSEM, Stringtie
-# here we summarize the transcripts counts per gene
+# here we summarize the transcript-level counts to gene-level counts
 txi <- tximport(files, 
 		type = "salmon", 
 		tx2gene = tx2gene)
@@ -401,9 +401,13 @@ The horizontal axis (PC1 = Principal Component 1) represents the highest variati
 #### Differential expression analysis
 
 ```{r}
-# contrast: the column from the metadata that is used for the grouping of the samples (Time), then the baseline (t0) and the group compared to the baseline (t25) -> results will be as "t25 vs t0"
+# check results names
+resultsNames(se_star2)
+
+# extract results for t25 vs t0
+	# contrast: the column from the metadata that is used for the grouping of the samples (Time), then the baseline (t0) and the group compared to the baseline (t25) -> results will be as "t25 vs t0"
 de <- results(object = se_star2, 
-		contrast = c("Time", "t0", "t25"))
+		name="Time_t25_vs_t0")
 
 # check first rows
 head(de)
