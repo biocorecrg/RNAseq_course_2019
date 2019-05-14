@@ -316,7 +316,8 @@ Finally, we can see that the majority of reads map to the exons.
 **IMPORTANT: When running QualiMap on many samples**
 * Make sure to give to the output folder the name corresponding to a running sample; e.g., ./QC/A549_0_1; otherwise you will end up with files and folders for the last running sample only. 
 * If you run QualiMap in parallel for many samples, make sure to create a different tmp-folder for each sample; e.g., ./tmp/A549_0_1.
-* QualiMap runs are slow because it sorts the BAM file by read names. To speed it up, you can use samtools to sort the BAM files in parallel and using multiple CPUs.
+* QualiMap sorts BAM files by read names. To speed up this part of the program execution, you can use samtools to sort the BAM files in parallel and using multiple CPUs and then to give to QualiMap a BAM file sorted by read names and provide an option --sorted.
+**For detail on the QualiMap options, see [QualiMap documentation](http://qualimap.bioinfo.cipf.es/doc_html/command_line.html#rna-seq-qc).**
 
 <br/>
 
