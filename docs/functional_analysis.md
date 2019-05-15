@@ -44,9 +44,9 @@ Example of the [*Homo sapiens* melanoma pathway](https://www.genome.jp/dbget-bin
 
 The [Molecular Signatures Database (MSigDB)](http://software.broadinstitute.org/gsea/msigdb/index.jsp) is a collection of 17810 annotated gene sets (as of May 2019) created to be used with the GSEA software (but not only). <br>
 
-It is divided into [8 major collections](http://software.broadinstitute.org/gsea/msigdb/collections.jsp) (that include the previously explained GOs and KEGG pathways):
+It is divided into [8 major collections](http://software.broadinstitute.org/gsea/msigdb/collections.jsp) (that include the previously described Gene Ontologies and KEGG pathways):
 
-<img src="images/gsea_msig_sets.png" width="300" align="middle" />
+<img src="images/gsea_msig_sets.png" width="400" align="middle" />
 
 
 ## Enrichment analysis based on gene selection
@@ -55,6 +55,8 @@ Tools based on a user-selection of genes usually require 2 inputs:
 
 * Gene Universe: in our example: all genes used in our analysis (after filtering out low counts in our case).
 * List of genes selected from the universe: our selection of genes, give the criteria we previously used: **padj < 0.05**, **&#124;log2FoldChange&#124; >= 0.5**.
+
+They are often based on the **Hypergeometric test** or on the **Fisher's exact test**. You can have a look [here](http://pedagogix-tagc.univ-mrs.fr/courses/ASG1/practicals/go_statistics_td/go_statistics_td_2015.html) for some explanation of both tests.
 
 ### GO / Panther tool
 
@@ -271,6 +273,12 @@ Heatmap of all genes from that gene set (ranked by GSEA) for each sample:
 
 <img src="images/gsea_results_details3.png" width="500" align="middle" />
 
+* Selection of pathways / gene sets: select the **lowest FDR** first. 
+
+* If you are looking for genes to validate on certain pathways:
+  * It is better if those genes belong to the **core enrichment**.
+  * It is also good to go back to the **differential expression** analysis table and make sure that their **adjusted-value** is low.
+
+
 ------------
 
-PENDING FINISHING
