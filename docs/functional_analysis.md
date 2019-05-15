@@ -273,12 +273,12 @@ Heatmap of all genes from that gene set (ranked by GSEA) for each sample:
 
 <img src="images/gsea_results_details3.png" width="500" align="middle" />
 
+**Suggestions:**
 * Selection of pathways / gene sets: select the **lowest FDR** first. 
-
 * If you are looking for genes to validate on certain pathways:
   * It is better if those genes belong to the **core enrichment**.
   * It is also good to go back to the **differential expression** analysis table and make sure that their **adjusted-value** is low.
-
+* You can also upload **your own gene sets** (for example a gene signature taken from a specific paper) to test against your list of genes, using one of the [GSEA gene set database formats](http://software.broadinstitute.org/cancer/software/gsea/wiki/index.php/Data_formats#Gene_Set_Database_Formats).
 
 ------------
 
