@@ -25,11 +25,18 @@ drwxr-xr-x 2 lcozzuto Bioinformatics_Unit  253 Apr 30 17:37 .
 -rw-r--r-- 1 lcozzuto Bioinformatics_Unit 1.5M Apr 17 16:08 gencode.v29.annotation_chr10.gtf.gz
 ```
 
-STAR requires unzipped .fa and .gtf files. Let's unzip them, using the option -k which allows to keep .gz files: 
+STAR requires unzipped .fa and .gtf files. Let's unzip them, using the option -k which allows to keep .gz files.
+This works on Mac, but dpending on the version might not work on the cluster:
 
 ```{bash}
 gunzip -k gencode.v29.annotation_chr10.gtf.gz
 gunzip -k Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz
+```
+
+This works on any Linux:
+```{bash}
+zcat gencode.v29.annotation_chr10.gtf.gz > gencode.v29.annotation_chr10.gtf
+zcat Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz > Homo_sapiens.GRCh38.dna.chromosome.10.fa
 ```
 
 **Q. How much (in percentage) disk space is saved when those two files are kept zipped vs unzipped?**
