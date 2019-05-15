@@ -125,7 +125,8 @@ paste A549_*ReadsPerGene.out.tab | grep -v "_" | awk '{printf "%s\t", $1}{for (i
 sed -e "1igene_name\t$(ls A549_*ReadsPerGene.out.tab | tr '\n' '\t' | sed 's/ReadsPerGene.out.tab//g')" tmp | cut -f1-7 > ../deseq2/raw_counts_A549_matrix.txt
 
 # another way can be the following one
-ls *.tab | awk '{ORS=" "; print "gene name "$0}END{print "\n"}'| sed 's/ReadsPerGene.out.tab//g' > ../deseq2/raw_counts_A549_matrix.txt; cat tmp >> ../deseq2/raw_counts_A549_matrix.txt
+ls *.tab | awk 'BEGIN{ORS="";print "gene name\t"}{print $0"\t"}END{print "\n"}'| sed 's/ReadsPerGene.out.tab//g' > ../deseq2/raw_counts_A549_matrix.txt; cat tmp >> ../deseq2/raw_counts_A549_matrix.txt
+
 
 # remove temporary file
 rm tmp
