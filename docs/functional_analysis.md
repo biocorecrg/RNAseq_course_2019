@@ -56,7 +56,7 @@ Tools based on a user-selection of genes usually require 2 inputs:
 * Gene Universe: in our example: all genes used in our analysis (after filtering out low counts in our case).
 * List of genes selected from the universe: our selection of genes, give the criteria we previously used: **padj < 0.05**, **&#124;log2FoldChange&#124; >= 0.5**.
 
-They are often based on the **Hypergeometric test** or on the **Fisher's exact test**. You can have a look [here](http://pedagogix-tagc.univ-mrs.fr/courses/ASG1/practicals/go_statistics_td/go_statistics_td_2015.html) for some explanation of both tests.
+They are often based on the **Hypergeometric test** or on the **Fisher's exact test**. You can have a look at this [page](http://pedagogix-tagc.univ-mrs.fr/courses/ASG1/practicals/go_statistics_td/go_statistics_td_2015.html) for some explanation of both tests.
 
 ### GO / Panther tool
 
@@ -273,7 +273,7 @@ Heatmap of all genes from that gene set (ranked by GSEA) for each sample:
 
 <img src="images/gsea_results_details3.png" width="500" align="middle" />
 
-**Suggestions:**
+**Suggestions for GSEA:**
 * Selection of pathways / gene sets: select the **lowest FDR** first. 
 * If you are looking for genes to validate on certain pathways:
   * It is better if those genes belong to the **core enrichment**.
