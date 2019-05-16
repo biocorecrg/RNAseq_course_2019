@@ -383,8 +383,8 @@ write.table(norm_counts_symbols, "normalized_counts.txt", quote=F, col.names=T, 
 
 * Transform raw counts to be able to visualize the data
 
-DESeq2 developper advice to use: **rlog** or **vst** transformations for visualization and other applications that other than differential testing:<br>
-VST runs faster than rlog. If the library size of the samples and therefore their size factors vary widely, the rlog transformation is a better option than VST. 
+DESeq2 developper advice to use: **rlog** (Regularized log) or **vst** (Variance Stabilizing Transformation)transformations for visualization and other applications other than differential testing:<br>
+VST runs faster than rlog. If the library size of the samples and therefore their size factors vary widely, the rlog transformation is more robust.
 <br>
 Both options produce log2 scale data which has been normalized by the DESeq2 method with respect to library size.
 
