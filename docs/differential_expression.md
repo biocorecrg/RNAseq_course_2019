@@ -415,13 +415,11 @@ dev.off()
 
 <img src="images/sample_distance_heatmap_star.png" width="600"/>
 
-**Exercise**
-* Do samples cluster how you would expect ?
-<br>
-<br>
-* Principal Component Analysis
+Do samples cluster how you would expect ?
 
-Reduction of dimensionality to be able to retrieve main differences between samples.
+* **Principal Component Analysis** (PCA)
+
+Reduction of dimensionality to be able to retrieve main differences / underlying variance between samples.
 
 ```{r}
 png("PCA_star.png")
@@ -432,7 +430,7 @@ dev.off()
 
 <img src="images/PCA_star.png" width="700"/>
 
-The horizontal axis (PC1 = Principal Component 1) represents the highest variation between the samples.
+The horizontal axis (PC1 = Principal Component 1) represents the highest variation between the samples. Differences along PC1 are more important than differences along PC2.
 
 #### Differential expression analysis
 
