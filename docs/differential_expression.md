@@ -340,6 +340,7 @@ se_salmon <- DESeqDataSetFromTximport(txi,
 
 * Remove lowly expressed genes: we want to remove genes that have no or very little expression. It will allow us to proceed with the statistical analysis using less genes. Working with less genes increases the **statistical power**.
   * We choose to keep only those genes that have **more than 10 summed raw counts across the 6 samples**: this is not very stringent. You can refer to that [paper](https://f1000research.com/articles/5-1438/v2) for suggestions on how to filter out genes with low counts.
+  * **UPDATE** From DESeq2 vignette: *While it is not necessary to pre-filter low count genes before running the DESeq2 functions, there are two reasons which make pre-filtering useful: by removing rows in which there are very few reads, we reduce the memory size of the dds data object, and we increase the speed of the transformation and testing functions within DESeq2.*
   * Let's filter:
 
 ```{r}
@@ -383,7 +384,7 @@ write.table(norm_counts_symbols, "normalized_counts.txt", quote=F, col.names=T, 
 * Transform raw counts to be able to visualize the data
 
 ```{r}
-# Use the rlog transformation for visualization (adviced by the DESeq2 authors).
+# Use the rlog transformation for visualization. DESeq2 developper advice to use: rlog or vst transformation for visualization and other applications that other than differential testing
 rld <- rlog(se_star2)
 ```
 
