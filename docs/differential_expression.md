@@ -383,9 +383,16 @@ write.table(norm_counts_symbols, "normalized_counts.txt", quote=F, col.names=T, 
 
 * Transform raw counts to be able to visualize the data
 
+DESeq2 developper advice to use: **rlog** or **vst** transformations for visualization and other applications that other than differential testing:<br>
+VST runs faster than rlog. If the library size of the samples and therefore their size factors vary widely, the rlog transformation is a better option than VST. 
+<br>
+Both options produce log2 scale data which has been normalized by the DESeq2 method with respect to library size.
+
 ```{r}
-# Use the rlog transformation for visualization. DESeq2 developper advice to use: rlog or vst transformation for visualization and other applications that other than differential testing
-rld <- rlog(se_star2)
+# Try with the vst transformation
+vsd <- vst(se_star2)
+
+# You can also try the same with the rlog transformation as a homework, running: rld <- rlog(se_star2)
 ```
 
 * Samples correlation
@@ -397,7 +404,7 @@ Calculate the sample-to-sample distances:
 library(pheatmap)
 
 # calculate between-sample distance matrix
-sampleDistMatrix <- as.matrix(dist(t(assay(rld))))
+sampleDistMatrix <- as.matrix(dist(t(assay(vsd))))
 
 # create figure in PNG format
 png("sample_distance_heatmap_star.png")
@@ -410,20 +417,15 @@ dev.off()
 
 **Exercise**
 * Do samples cluster how you would expect ?
-* How do samples cluster ?
-* What could be the issue ?
-<br><br>
-Here we see that the samples cluster by replicates (A549_0_1 with A549_25_1, A549_0_2 with A549_25_2, A549_0_3 with A549_25_3) rather than by experimental groups: **batch effect** or **not enough effect of the Dexamethasone treatment** ?
 <br>
-> In order to **control** for the batch effect, we could introduce it in the statistical design: **design = ~ batch + Time**. You can try it as a homework (and check the [DESeq2 vignette](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#quick-start) for more details)!
-
+<br>
 * Principal Component Analysis
 
 Reduction of dimensionality to be able to retrieve main differences between samples.
 
 ```{r}
 png("PCA_star.png")
-plotPCA(object = rld,
+plotPCA(object = vsd,
 		intgroup = "Time")
 dev.off()
 ```
@@ -477,7 +479,7 @@ Wald statistic: the log2FoldChange divided by its standard error.
 
 
 ```{r}
-# check the data for a highly expressed gene
+# check the data for a very differentially expressed gene
 de[rownames(de)=="ENSG00000128016.5",]
 de_shrink[rownames(de_shrink)=="ENSG00000128016.5",]
 
@@ -489,7 +491,7 @@ write.table(de_symbols, "deseq2_results.txt", quote=F, col.names=T, row.names=F,
 ```
 
 **Exercise**
-* What are the log2FoldChange and padj values of genes "ENSG00000128016.5" and "ENSG00000130821.15" ? What can you tell about those ?
+* What are the log2FoldChange and padj values of genes "ENSG00000010017.12" and "ENSG00000163874.10" ? What can you tell about those ?
 * What about the **padj** of those genes ?
 * Check the expression of those genes in each sample (in **normalized_counts.txt**).
 
