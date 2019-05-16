@@ -58,6 +58,40 @@ Tools based on a user-selection of genes usually require 2 inputs:
 
 They are often based on the **Hypergeometric test** or on the **Fisher's exact test**. You can have a look at this [page](http://pedagogix-tagc.univ-mrs.fr/courses/ASG1/practicals/go_statistics_td/go_statistics_td_2015.html) for some explanation of both tests.
 
+
+### enrichR
+
+[EnrichR](http://amp.pharm.mssm.edu/Enrichr/) is a gene-list enrichment tool developped at the Icahn Schoold of Medicine (Mount Sinai).
+
+<img src="images/enrichr_interface.png" width="500" align="middle" />
+
+It does not require the input of a gene universe: only a selection of genes or a BED file.
+
+<img src="images/enrichr_paper1.jpg" width="500" align="middle" />
+
+The default EnrichR interface works for *Homo sapiens* and *Mus musculus*.<br>
+However, EnrichR also provides a [set of tools](https://amp.pharm.mssm.edu/modEnrichr/) for ortholog conversion and enrichment analysis of more organisms:
+
+<img src="images/enrichr_interface2.png" width="600" align="middle" />
+
+In the [main page](http://amp.pharm.mssm.edu/Enrichr/), paste our list of selected **gene symbols** (*deseq2_results_padj0.05_log2fc0.5_symbols.txt*) and **Submit** !
+
+<img src="images/enrichr_results_all.png" width="600" align="middle" />
+
+KEGG Human pathway **bar graph** vizualization:
+<img src="images/enrichr_results_bar.png" width="600" align="middle" />
+
+KEGG Human pathway **table** vizualization:
+<img src="images/enrichr_results_table.png" width="600" align="middle" />
+
+KEGG Human pathway **clustergram** vizualization:
+<img src="images/enrichr_results_clustergram.png" width="600" align="middle" />
+
+For **Cell Types**, you can also visualize networks, for example **Human gene Atlas**:
+<img src="images/enrichr_results_network.png" width="600" align="middle" />
+
+You can also export some graphs as PNG, JPEG or SVG.
+
 ### GO / Panther tool
 
 The [main page of GO](http://geneontology.org/) provides a tool to test the enrichment of gene ontologies or Panther/Reactome pathways in pre-selected gene lists.
@@ -96,41 +130,6 @@ cut -f2 deseq2_results.txt | sed '1d' > deseq2_universe_symbols.txt
 ```
 * **Launch** !
 <img src="images/GO_tool_results_symbols.png" width="800" align="middle" />
-
-
-
-### enrichR
-
-[EnrichR](http://amp.pharm.mssm.edu/Enrichr/) is a gene-list enrichment tool developped at the Icahn Schoold of Medicine (Mount Sinai).
-
-<img src="images/enrichr_interface.png" width="500" align="middle" />
-
-It does not require the input of a gene universe: only a selection of genes or a BED file.
-
-<img src="images/enrichr_paper1.jpg" width="500" align="middle" />
-
-The default EnrichR interface works for *Homo sapiens* and *Mus musculus*.<br>
-However, EnrichR also provides a [set of tools](https://amp.pharm.mssm.edu/modEnrichr/) for ortholog conversion and enrichment analysis of more organisms:
-
-<img src="images/enrichr_interface2.png" width="600" align="middle" />
-
-In the [main page](http://amp.pharm.mssm.edu/Enrichr/), paste our list of selected **gene symbols** (*deseq2_results_padj0.05_log2fc0.5_symbols.txt*) and **Submit** !
-
-<img src="images/enrichr_results_all.png" width="600" align="middle" />
-
-KEGG Human pathway **bar graph** vizualization:
-<img src="images/enrichr_results_bar.png" width="600" align="middle" />
-
-KEGG Human pathway **table** vizualization:
-<img src="images/enrichr_results_table.png" width="600" align="middle" />
-
-KEGG Human pathway **clustergram** vizualization:
-<img src="images/enrichr_results_clustergram.png" width="600" align="middle" />
-
-For **Cell Types**, you can also visualize networks, for example **Human gene Atlas**:
-<img src="images/enrichr_results_network.png" width="600" align="middle" />
-
-You can also export some graphs as PNG, JPEG or SVG.
 
 
 ## Enrichment based on ranked lists of genes using GSEA
