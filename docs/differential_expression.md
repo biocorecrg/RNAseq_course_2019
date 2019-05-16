@@ -364,7 +364,8 @@ se_star2 <- DESeq(se_star)
 
 ```{bash}
 # compute normalized counts (log2 transformed); + 1 is a count added to avoid errors during the log2 transformation: log2(0) gives an infinite number, but log2(1) is 0.
-norm_counts <- log2(counts(se_star2, normalized=T)+1)
+# normalized = TRUE: divide the counts by the size factors calculated by the DESeq function
+norm_counts <- log2(counts(se_star2, normalized = TRUE)+1)
 
 # add the gene symbols
 norm_counts_symbols <- merge(unique(tx2gene[,2:3]), data.frame(ID=rownames(norm_counts), norm_counts), by=1, all=F)
