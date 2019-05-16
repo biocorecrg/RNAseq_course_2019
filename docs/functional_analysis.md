@@ -216,8 +216,6 @@ The first label **t0** in the second line is associated to the first label **0**
 Create the phenotype labels file and save it as **gsea_phenotypes.cls**.
 
 
-Reflects the degree to which a set is overrepresented at the extremes (top or bottom) of the entire ranked list.
-
 
 #### Download and run GSEA
 
@@ -278,6 +276,10 @@ Heatmap of all genes from that gene set (ranked by GSEA) for each sample:
   * It is better if those genes belong to the **core enrichment**.
   * It is also good to go back to the **differential expression** analysis table and make sure that their **adjusted-value** is low.
 * You can also upload **your own gene sets** (for example a gene signature taken from a specific paper) to test against your list of genes, using one of the [GSEA gene set database formats](http://software.broadinstitute.org/cancer/software/gsea/wiki/index.php/Data_formats#Gene_Set_Database_Formats).
+
+
+
+
 
 ------------
 
