@@ -376,7 +376,7 @@ write.table(norm_counts_symbols, "normalized_counts.txt", quote=F, col.names=T, 
 ```
 
 **Exercise**
-* What are the normalized counts corresponding to genes "ENSG00000157654.17" and "ENSG00000130821.15" in each sample ?
+* What are the normalized counts corresponding to genes "ENSG00000010017.12" and "ENSG00000163874.10" in each sample ?
 * How do they differ ? What can you tell about them ?
 
 #### Visualization
