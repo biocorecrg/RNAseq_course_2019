@@ -21,14 +21,14 @@ singularity pull docker://biocorecrg/rnaseq2019:1.5
 And access it as
 
 ```{bash}
-export RUN="singularity exec $PWD/rnaseq2019-1.5.simg"
+export RUN="singularity exec -e $PWD/rnaseq2019-1.5.simg"
 $RUN STAR --help
 ```
 
 If you are a CRG user with an access to the CRG cluster you can access the image as 
 
 ```{bash}
-export RUN="singularity exec /db/images/rnaseq2019-1.5.simg"
+export RUN="singularity exec -e /db/images/rnaseq2019-1.5.simg"
 $RUN STAR --help
 ```
 
