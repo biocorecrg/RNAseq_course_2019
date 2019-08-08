@@ -171,11 +171,12 @@ done
 
 <br>
 
-#### Prepare data from Salmon
+#### Prepare transcript-to-gene annotation file
 
-DESeq2 needs an annotation file to import **summarize all transcripts** data from the per-transcript count data into a per-gene count data.
+Prepare the annotation file needed to import the **Salmon** counts: a two-column data frame linking transcript id (column 1) to gene id (column 2). <br>
+We will add the gene symbol in column 3, for a more comprehensive annotation (that will also be used when processing the **STAR** counts.
 <br>
-Prepare the annotation file needed to import the **Salmon** counts: a two-column data frame linking transcript id (column 1) to gene id (column 2). Process from the **GTF file**:<br>
+Process from the **GTF file**:<br>
 
 ```{bash}
 cd ~/full_data/deseq2
