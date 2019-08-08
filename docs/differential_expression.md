@@ -174,7 +174,7 @@ done
 #### Prepare transcript-to-gene annotation file
 
 Prepare the annotation file needed to import the **Salmon** counts: a two-column data frame linking transcript id (column 1) to gene id (column 2). <br>
-We will add the gene symbol in column 3, for a more comprehensive annotation (that will also be used when processing the **STAR** counts.
+We will add the gene symbol in column 3, for a more comprehensive annotation (that will also be used when processing the **STAR** counts).
 <br>
 Process from the **GTF file**:<br>
 
